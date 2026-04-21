@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<!-- saved from url=(0191)file:///C:/Users/User-PC/AppData/Local/Packages/5319275A.WhatsAppDesktop_cv1g1gvanyjgm/LocalState/sessions/53E9E5CC9A9097FF50A9422FA4EA026E19CCF81E/transfers/2026-16/proyecto%20final%201.html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cajero Automático — Grupo 4</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    /* ── CONTENEDOR PRINCIPAL ── */
+    #cajero {
+      max-width: 420px;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
+
+    /* ── CABECERA ── */
+    .header {
+      background: #0C447C;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-icon svg { width: 20px; height: 20px; fill: white; }
+    .header h1 { color: white; font-size: 16px; font-weight: 500; }
+    .header p  { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 2px; }
+
+    /* ── PANTALLA ── */
+    .screen {
+      background: #0a1628;
+      margin: 1rem 1rem 0;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      min-height: 68px;
+      display: flex; flex-direction: column; justify-content: center;
+      border: 1px solid #1a3a6e;
+    }
+    .screen-label {
+      color: #4a7cc7; font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .screen-text { color: #85B7EB; font-size: 13px; line-height: 1.5; }
+    .screen-text.error   { color: #F09595; }
+    .screen-text.success { color: #5DCAA5; }
+
+    /* ── BARRA DE PROGRESO ── */
+    .progress-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0.6rem 1rem 0;
+    }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #d1d5db; transition: background 0.3s;
+    }
+    .step-dot.done    { background: #5DCAA5; }
+    .step-dot.current { background: #185FA5; }
+    .step-label { font-size: 11px; color: #9ca3af; margin-left: 4px; }
+
+    /* ── CUERPO ── */
+    .body { padding: 1rem 1rem 1.2rem; }
+    .step { display: none; }
+    .step.active { display: block; }
+
+    /* ── CAMPOS ── */
+    .field-label {
+      font-size: 12px; color: #6b7280;
+      margin-bottom: 6px; margin-top: 14px;
+    }
+    .field-label:first-child { margin-top: 0; }
+    input[type="number"] {
+      width: 100%; padding: 9px 12px; font-size: 14px;
+      border: 1px solid #d1d5db; border-radius: 8px;
+      background: #fff; color: #111827; outline: none;
+    }
+    input[type="number"]:focus { border-color: #185FA5; }
+    .error-msg {
+      font-size: 12px; color: #dc2626;
+      margin-top: 5px; min-height: 16px;
+    }
+
+    /* ── PIN ── */
+    .pin-dots {
+      display: flex; gap: 10px; justify-content: center; padding: 12px 0 4px;
+    }
+    .dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid #d1d5db; background: transparent;
+      transition: background 0.2s;
+    }
+    .dot.hidden { display: none; }
+    .dot.filled      { background: #0C447C; border-color: #0C447C; }
+    .dot.error-flash { background: #E24B4A; border-color: #E24B4A; }
+
+    /* ── INDICADOR DE INTENTOS ── */
+    .intentos-bar {
+      display: flex; gap: 5px; justify-content: center; margin-top: 8px;
+    }
+    .intento-pip {
+      width: 28px; height: 5px; border-radius: 3px;
+      background: #185FA5; transition: background 0.3s;
+    }
+    .intento-pip.used { background: #E24B4A; }
+
+    /* ── TECLADO NUMÉRICO ── */
+    .numpad {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; margin-top: 12px;
+    }
+    .numpad button {
+      padding: 12px; font-size: 16px; font-weight: 500;
+      background: #f9fafb; border: 1px solid #e5e7eb;
+      border-radius: 8px; cursor: pointer; color: #111827;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .numpad button:hover  { background: #f3f4f6; }
+    .numpad button:active { transform: scale(0.95); background: #e5e7eb; }
+    .numpad button.del    { color: #dc2626; }
+    .numpad button.ok     { background: #0C447C; color: white; border-color: #0C447C; }
+    .numpad button.ok:hover  { background: #185FA5; }
+    .numpad button.ok:active { background: #185FA5; }
+    .numpad.blocked { opacity: 0.35; pointer-events: none; }
+
+    /* ── RADIO OPCIONES ── */
+    .radio-group { display: flex; gap: 8px; margin-top: 4px; }
+    .radio-opt {
+      flex: 1; padding: 9px 10px;
+      border: 1px solid #d1d5db; border-radius: 8px;
+      text-align: center; cursor: pointer;
+      font-size: 13px; color: #6b7280;
+      transition: all 0.15s; user-select: none;
+    }
+    .radio-opt.selected {
+      background: #EFF6FF; border-color: #185FA5;
+      color: #0C447C; font-weight: 500;
+    }
+    .login-help {
+      font-size: 12px; color: #6b7280;
+      margin-top: 10px; text-align: center; line-height: 1.5;
+    }
+    .pending-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 10px;
+    }
+    .pending-pill {
+      background: #EFF6FF; border: 1px solid #93c5fd;
+      color: #0C447C; border-radius: 999px;
+      padding: 6px 10px; font-size: 12px; font-weight: 500;
+    }
+
+    /* ── BOTONES ── */
+    .btn-primary {
+      width: 100%; margin-top: 16px; padding: 11px;
+      background: #0C447C; color: white; border: none;
+      border-radius: 8px; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover  { background: #185FA5; }
+    .btn-primary:active { transform: scale(0.99); }
+
+    /* ── BARRA DE SALDO ── */
+    .saldo-bar {
+      background: #f9fafb; border-radius: 8px;
+      padding: 10px 14px; margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      border: 1px solid #e5e7eb;
+    }
+    .saldo-bar span:first-child { font-size: 12px; color: #6b7280; }
+    .saldo-bar span:last-child  { font-size: 15px; font-weight: 500; color: #111827; }
+
+    /* ── ALERTA INFO ── */
+    .alert-box {
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 13px; margin-bottom: 12px; border: 1px solid;
+    }
+    .alert-box.info {
+      background: #EFF6FF; color: #1e3a5f; border-color: #93c5fd;
+    }
+
+    /* ── BILLETES GRID ── */
+    .billetes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .billete-card {
+      border-radius: 8px; border: 1px solid #e5e7eb;
+      padding: 10px 6px; text-align: center; background: #f9fafb;
+    }
+    .billete-card.active { border-color: #185FA5; background: #EFF6FF; }
+    .billete-card.zero   { opacity: 0.3; }
+    .billete-val  { font-size: 10px; color: #6b7280; }
+    .billete-num  { font-size: 22px; font-weight: 500; color: #111827; margin: 2px 0; }
+    .billete-num.blue { color: #0C447C; }
+    .billete-label { font-size: 10px; color: #6b7280; }
+
+    /* ── TICKET FINAL ── */
+    .ticket {
+      background: #fff; border: 1px solid #d1d5db;
+      border-radius: 12px; overflow: hidden; margin-bottom: 12px;
+    }
+    .ticket-header {
+      background: #0C447C; padding: 14px 16px; text-align: center;
+    }
+    .ticket-header .t-logo  { color: rgba(255,255,255,0.5); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .ticket-header .t-title { color: white; font-size: 17px; font-weight: 500; margin: 4px 0 2px; }
+    .ticket-header .t-ref   { color: rgba(255,255,255,0.6); font-size: 12px; }
+
+    .ticket-body { padding: 14px 16px; }
+    .t-section-label {
+      font-size: 10px; color: #9ca3af;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin: 14px 0 6px;
+      border-top: 1px dashed #e5e7eb; padding-top: 12px;
+    }
+    .t-section-label:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+    .t-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 4px 0; font-size: 13px;
+    }
+    .t-row .lbl { color: #6b7280; }
+    .t-row .val { color: #111827; font-weight: 500; }
+    .t-row .val.green { color: #0F6E56; }
+    .t-row .val.red   { color: #A32D2D; }
+    .t-row.total-row {
+      border-top: 1px solid #e5e7eb; margin-top: 8px; padding-top: 10px;
+    }
+    .t-row.total-row .lbl { font-size: 14px; font-weight: 500; color: #111827; }
+    .t-row.total-row .val { font-size: 16px; font-weight: 500; color: #0C447C; }
+
+    /* ── BADGE DONACIÓN ── */
+    .donacion-badge {
+      display: flex; align-items: center; gap: 10px;
+      border-radius: 8px; padding: 10px 14px;
+      margin-top: 8px; font-size: 13px; border: 1px solid;
+    }
+    .donacion-badge.confirmed { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+    .donacion-badge.declined  { background: #f9fafb; border-color: #e5e7eb; color: #6b7280; }
+    .donacion-badge .db-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .donacion-badge.confirmed .db-icon { background: #5DCAA5; }
+    .donacion-badge.declined  .db-icon { background: #d1d5db; }
+    .donacion-badge .db-icon svg { width: 14px; height: 14px; fill: white; }
+    .donacion-badge .db-main { font-weight: 500; }
+    .donacion-badge .db-sub  { font-size: 11px; opacity: 0.7; margin-top: 1px; }
+
+    .ticket-footer {
+      background: #f9fafb; border-top: 1px dashed #e5e7eb;
+      padding: 10px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .ticket-footer span { font-size: 11px; color: #9ca3af; }
+
+    /* ── ÍCONO ÉXITO ── */
+    .success-icon {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #E1F5EE; border: 1px solid #5DCAA5;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+    }
+    .success-icon svg { width: 24px; height: 24px; fill: #0F6E56; }
+
+    /* ── MENÚ PRINCIPAL ── */
+    .menu-title {
+      text-align: center; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.15em; color: #9ca3af;
+      text-transform: uppercase; padding: 4px 0 10px;
+      border-bottom: 1px dashed #e5e7eb; margin-bottom: 10px;
+    }
+    .menu-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .menu-btn {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; padding: 14px 8px;
+      background: #f9fafb; border: 1px solid #e5e7eb;
+      border-radius: 10px; cursor: pointer;
+      transition: all 0.15s; text-align: center;
+      color: #374151; font-size: 12px; font-weight: 500;
+    }
+    .menu-btn:hover  { background: #EFF6FF; border-color: #185FA5; color: #0C447C; }
+    .menu-btn:active { transform: scale(0.97); }
+    .menu-btn .mb-num {
+      font-size: 10px; color: #9ca3af; font-weight: 400;
+    }
+    .menu-btn .mb-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: #e0eaf6; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .menu-btn .mb-icon svg { width: 16px; height: 16px; fill: #0C447C; }
+    .menu-btn:hover .mb-icon { background: #185FA5; }
+    .menu-btn:hover .mb-icon svg { fill: white; }
+
+    /* ── PANTALLAS OPCIONES SIMPLES ── */
+    .opcion-form { padding: 4px 0; }
+    .opcion-form .field-label { margin-top: 10px; }
+
+    /* ── DESPEDIDA ── */
+    .farewell-wrap {
+      text-align: center; padding: 10px 0 6px;
+    }
+    .farewell-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #0C447C, #185FA5);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+      box-shadow: 0 4px 14px rgba(12,68,124,0.3);
+    }
+    .farewell-icon svg { width: 28px; height: 28px; fill: white; }
+    .farewell-title {
+      font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 6px;
+    }
+    .farewell-msg {
+      font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 16px;
+    }
+    .farewell-badge {
+      background: #EFF6FF; border: 1px solid #93c5fd;
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 12px; color: #1e40af; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .farewell-badge svg { width: 14px; height: 14px; fill: #1e40af; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<div id="cajero">
+
+  <!-- CABECERA -->
+  <div class="header">
+    <div class="header-icon">
+      <svg viewBox="0 0 24 24">
+        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1
+                 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path>
+      </svg>
+    </div>
+    <div>
+      <h1>BancoCajero</h1>
+      <p>Cajero Automático — Grupo 4</p>
+    </div>
+  </div>
+
+  <!-- BARRA DE PROGRESO -->
+  <div class="progress-bar">
+    <div class="step-dot current" id="pd1"></div>
+    <div class="step-dot" id="pd2"></div>
+    <div class="step-dot" id="pd3"></div>
+    <div class="step-dot" id="pd4"></div>
+    <div class="step-dot" id="pd5"></div>
+    <div class="step-dot" id="pd6"></div>
+    <span class="step-label" id="stepLabel">Cedula o PIN</span>
+  </div>
+
+  <!-- PANTALLA -->
+  <div class="screen">
+    <div class="screen-label" id="screenLabel">Bienvenido</div>
+    <div class="screen-text" id="screenText">Ingrese su cedula de 8 digitos para continuar o cambie a PIN.</div>
+  </div>
+
+  <div class="body">
+
+    <!-- ══ PASO 1: CÉDULA ══ -->
+    <div class="step active" id="step1">
+      <div class="field-label">Elegir ingreso</div>
+      <div class="radio-group">
+        <div class="radio-opt selected" id="modoCedula" onclick="setModoIngreso(&#39;cedula&#39;)">Cedula</div>
+        <div class="radio-opt" id="modoPin" onclick="setModoIngreso(&#39;pin&#39;)">PIN</div>
+      </div>
+      <div class="login-help" id="loginHelp">Ingrese su cedula de 8 digitos.</div>
+      <div class="pin-dots">
+        <div class="dot" id="dot0"></div>
+        <div class="dot" id="dot1"></div>
+        <div class="dot" id="dot2"></div>
+        <div class="dot" id="dot3"></div>
+        <div class="dot" id="dot4"></div>
+        <div class="dot" id="dot5"></div>
+        <div class="dot" id="dot6"></div>
+        <div class="dot" id="dot7"></div>
+      </div>
+      <div class="error-msg" id="pinError"></div>
+      <!-- Teclado numérico -->
+      <div class="numpad" id="numpadGrid">
+        <button onclick="np(&#39;1&#39;)">1</button>
+        <button onclick="np(&#39;2&#39;)">2</button>
+        <button onclick="np(&#39;3&#39;)">3</button>
+        <button onclick="np(&#39;4&#39;)">4</button>
+        <button onclick="np(&#39;5&#39;)">5</button>
+        <button onclick="np(&#39;6&#39;)">6</button>
+        <button onclick="np(&#39;7&#39;)">7</button>
+        <button onclick="np(&#39;8&#39;)">8</button>
+        <button onclick="np(&#39;9&#39;)">9</button>
+        <button class="del" onclick="nd()">⌫</button>
+        <button onclick="np(&#39;0&#39;)">0</button>
+        <button class="ok" onclick="confirmAcceso()">OK</button>
+      </div>
+    </div>
+
+    <!-- ══ PASO 2: USUARIO REGISTRADO ══ -->
+    <div class="step" id="step2">
+      <div class="alert-box info" id="usuarioIngresoInfo">
+        Usuario encontrado en la base de datos local del cajero.
+      </div>
+      <div class="saldo-bar">
+        <span>Nombre</span>
+        <span id="usuarioNombreDisplay">-</span>
+      </div>
+      <div class="saldo-bar">
+        <span>Cédula</span>
+        <span id="usuarioCedulaDisplay">-</span>
+      </div>
+      <div class="saldo-bar">
+        <span>Ingreso con</span>
+        <span id="usuarioIngresoDisplay">-</span>
+      </div>
+      <div class="field-label">Recibos por pagar</div>
+      <div class="alert-box info" id="usuarioRecibosResumen">No tiene recibos por pagar.</div>
+      <div class="pending-list" id="usuarioRecibosLista" style="display:none;"></div>
+      <div class="error-msg" id="saldoError"></div>
+      <button class="btn-primary" onclick="confirmSaldo()">Continuar al menu</button>
+    </div>
+
+    <!-- ══ PASO MENÚ: MENÚ PRINCIPAL ══ -->
+    <div class="step" id="stepMenu">
+      <div class="alert-box info" id="menuRecibosAlert" style="margin-bottom:12px;display:none;"></div>
+      <div class="menu-title">═══ MENÚ ═══</div>
+      <div class="menu-grid">
+
+        <button class="menu-btn" onclick="irOpcion(&#39;consultar&#39;)">
+          <div class="mb-icon">
+            <svg viewBox="0 0 24 24"><path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"></path></svg>
+          </div>
+          <span>Consultar saldo</span>
+          <span class="mb-num">Opción 1</span>
+        </button>
+
+        <button class="menu-btn" onclick="irOpcion(&#39;retirar&#39;)">
+          <div class="mb-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path></svg>
+          </div>
+          <span>Retirar</span>
+          <span class="mb-num">Opción 2</span>
+        </button>
+
+        <button class="menu-btn" onclick="irOpcion(&#39;pagar&#39;)">
+          <div class="mb-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"></path></svg>
+          </div>
+          <span>Pagar servicio</span>
+          <span class="mb-num">Opción 3</span>
+        </button>
+
+        <button class="menu-btn" onclick="irOpcion(&#39;depositar&#39;)">
+          <div class="mb-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path></svg>
+          </div>
+          <span>Depositar</span>
+          <span class="mb-num">Opción 4</span>
+        </button>
+
+        <button class="menu-btn" onclick="reiniciar()">
+          <div class="mb-icon">
+            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path></svg>
+          </div>
+          <span>Cambiar usuario</span>
+          <span class="mb-num">Opción 5</span>
+        </button>
+
+        <button class="menu-btn" onclick="irOpcion(&#39;salir&#39;)" style="border-color:#fca5a5;color:#dc2626;">
+          <div class="mb-icon" style="background:#fee2e2;">
+            <svg viewBox="0 0 24 24" style="fill:#dc2626;"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2z"></path></svg>
+          </div>
+          <span>Salir</span>
+          <span class="mb-num">Opción 6</span>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ══ OPCIÓN 1: CONSULTAR SALDO ══ -->
+    <div class="step" id="stepConsultar">
+      <div class="saldo-bar" style="margin-bottom:10px;">
+        <span>Tipo de cuenta</span>
+        <span id="tipoDisplay">Ahorro</span>
+      </div>
+      <div class="saldo-bar">
+        <span>Saldo disponible</span>
+        <span id="saldoConsultaDisplay" style="color:#0C447C;font-weight:600;">$0</span>
+      </div>
+      <div class="alert-box info" style="margin-top:10px;margin-bottom:0;">
+        Saldo consultado exitosamente. Los movimientos recientes pueden tardar hasta 24 h en reflejarse.
+      </div>
+      <button class="btn-primary" onclick="finalizarOpcion(&#39;Consulta de saldo realizada con éxito.&#39;)">Finalizar</button>
+      <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;" onclick="volverMenu()">← Volver al menu</button>
+    </div>
+
+    <!-- ══ OPCIÓN 3: PAGAR SERVICIO ══ -->
+    <div class="step" id="stepPagar">
+      <div class="opcion-form">
+        <div class="field-label">Tipo de servicio</div>
+        <div class="radio-group" style="flex-wrap:wrap;">
+          <div class="radio-opt selected" id="srvAgua" onclick="setSrv(&#39;Agua&#39;,   this)">Agua</div>
+          <div class="radio-opt" id="srvLuz" onclick="setSrv(&#39;Luz&#39;,    this)">Luz</div>
+          <div class="radio-opt" id="srvGas" onclick="setSrv(&#39;Gas&#39;,    this)">Gas</div>
+          <div class="radio-opt" id="srvInternet" onclick="setSrv(&#39;Internet&#39;, this)">Internet</div>
+        </div>
+        <div class="field-label">Referencia / Número de factura</div>
+        <input type="text" id="pagarRef" inputmode="numeric" autocomplete="off" placeholder="Ej: 123456" oninput="this.value=this.value.replace(/\D/g,&#39;&#39;).slice(0,6)" style="width:100%;padding:9px 12px;font-size:14px;border:1px solid #d1d5db;border-radius:8px;">
+        <div class="field-label">Valor a pagar ($)</div>
+        <input type="number" id="pagarMonto" placeholder="Ej: 85000" min="1000" oninput="valPago()" style="width:100%;padding:9px 12px;font-size:14px;border:1px solid #d1d5db;border-radius:8px;">
+        <div class="error-msg" id="pagarError"></div>
+
+        <div class="field-label">Tipo de pago</div>
+        <div class="radio-group">
+          <div class="radio-opt selected" id="pagoCompleto" onclick="setTipoPago(&#39;completo&#39;)">Pago completo</div>
+          <div class="radio-opt" id="pagoAbono" onclick="setTipoPago(&#39;abono&#39;)">Abonar</div>
+        </div>
+
+        <button class="btn-primary" onclick="confirmarPago()">Pagar servicio</button>
+      </div>
+    </div>
+
+    <!-- ══ OPCIÓN 4: DEPOSITAR ══ -->
+    <div class="step" id="stepDepositar">
+      <div class="opcion-form">
+        <div class="field-label">Monto a depositar ($)</div>
+        <input type="number" id="depositoMonto" placeholder="Ej: 200000" min="10000" oninput="valDeposito()" style="width:100%;padding:9px 12px;font-size:14px;border:1px solid #d1d5db;border-radius:8px;">
+        <div class="error-msg" id="depositoError"></div>
+        <div id="depositoPreview"></div>
+        <button class="btn-primary" onclick="confirmarDeposito()">Confirmar depósito</button>
+        <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;" onclick="volverMenu()">← Volver al menu</button>
+      </div>
+    </div>
+
+    <!-- ══ OPCIÓN 5: CAMBIAR CLAVE ══ -->
+    <div class="step" id="stepClave">
+      <div class="opcion-form">
+        <div class="field-label">PIN actual</div>
+        <div class="pin-dots" id="claveActualDots">
+          <div class="dot" id="ca0"></div><div class="dot" id="ca1"></div>
+          <div class="dot" id="ca2"></div><div class="dot" id="ca3"></div>
+        </div>
+        <div class="numpad" id="numpadClave1" style="margin-top:8px;">
+          <button onclick="npClave(&#39;actual&#39;,&#39;1&#39;)">1</button><button onclick="npClave(&#39;actual&#39;,&#39;2&#39;)">2</button><button onclick="npClave(&#39;actual&#39;,&#39;3&#39;)">3</button>
+          <button onclick="npClave(&#39;actual&#39;,&#39;4&#39;)">4</button><button onclick="npClave(&#39;actual&#39;,&#39;5&#39;)">5</button><button onclick="npClave(&#39;actual&#39;,&#39;6&#39;)">6</button>
+          <button onclick="npClave(&#39;actual&#39;,&#39;7&#39;)">7</button><button onclick="npClave(&#39;actual&#39;,&#39;8&#39;)">8</button><button onclick="npClave(&#39;actual&#39;,&#39;9&#39;)">9</button>
+          <button class="del" onclick="ndClave(&#39;actual&#39;)">⌫</button><button onclick="npClave(&#39;actual&#39;,&#39;0&#39;)">0</button><button class="ok" onclick="siguienteClave()">OK</button>
+        </div>
+        <div class="error-msg" id="claveError"></div>
+        <div class="field-label" id="lblNuevaClave" style="display:none;">Nueva clave (4 dígitos)</div>
+        <div class="pin-dots" id="claveNuevaDots" style="display:none;">
+          <div class="dot" id="cn0"></div><div class="dot" id="cn1"></div>
+          <div class="dot" id="cn2"></div><div class="dot" id="cn3"></div>
+        </div>
+        <div class="numpad" id="numpadClave2" style="margin-top:8px;display:none;">
+          <button onclick="npClave(&#39;nueva&#39;,&#39;1&#39;)">1</button><button onclick="npClave(&#39;nueva&#39;,&#39;2&#39;)">2</button><button onclick="npClave(&#39;nueva&#39;,&#39;3&#39;)">3</button>
+          <button onclick="npClave(&#39;nueva&#39;,&#39;4&#39;)">4</button><button onclick="npClave(&#39;nueva&#39;,&#39;5&#39;)">5</button><button onclick="npClave(&#39;nueva&#39;,&#39;6&#39;)">6</button>
+          <button onclick="npClave(&#39;nueva&#39;,&#39;7&#39;)">7</button><button onclick="npClave(&#39;nueva&#39;,&#39;8&#39;)">8</button><button onclick="npClave(&#39;nueva&#39;,&#39;9&#39;)">9</button>
+          <button class="del" onclick="ndClave(&#39;nueva&#39;)">⌫</button><button onclick="npClave(&#39;nueva&#39;,&#39;0&#39;)">0</button><button class="ok" onclick="confirmarClave()">OK</button>
+        </div>
+        <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:12px;" onclick="volverMenu()">← Volver al menu</button>
+      </div>
+    </div>
+
+    <!-- ══ PASO 3: MONTO A RETIRAR ══ -->
+    <div class="step" id="step3">
+      <div class="saldo-bar">
+        <span>Saldo disponible</span>
+        <span id="saldoDisplay">$0</span>
+      </div>
+      <div class="field-label">Monto a retirar ($)</div>
+      <input type="number" id="montoInput" min="10000" step="10000" placeholder="Múltiplo de $10.000" oninput="valMonto()">
+      <div class="error-msg" id="montoError"></div>
+      <!-- Preview de billetes en tiempo real -->
+      <div id="billetesPreview"></div>
+      <button class="btn-primary" onclick="confirmMonto()">Continuar</button>
+    </div>
+
+    <!-- ══ PASO 4: DONACIÓN UNICEF ══ -->
+    <div class="step" id="step4">
+      <div class="alert-box info" id="donacionInfo"></div>
+      <div class="field-label">¿Desea donar $1.000 a Unicef?</div>
+      <div class="radio-group">
+        <div class="radio-opt" id="optSi" onclick="setDon(&#39;S&#39;)">Sí, donar $1.000</div>
+        <div class="radio-opt selected" id="optNo" onclick="setDon(&#39;N&#39;)">No, gracias</div>
+      </div>
+      <div id="donWarn" class="error-msg"></div>
+      <button class="btn-primary" onclick="confirmarDonacion()">
+        Confirmar y retirar
+      </button>
+    </div>
+
+    <!-- ══ PASO 5: RECIBO FINAL (OUTPUTS) ══ -->
+    <div class="step" id="step5">
+      <!-- Ícono de éxito -->
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
+        </svg>
+      </div>
+      <!-- Ticket: cantidad de billetes + saldo final + recibo + donación -->
+      <div class="ticket" id="ticketFinal"></div>
+      <button class="btn-primary" id="reciboVolverBtn" onclick="volverMenu()">← Volver al menu</button>
+      <button class="btn-primary" id="reciboSalirBtn" style="background:#f3f4f6;color:#dc2626;border:1px solid #fca5a5;margin-top:8px;" onclick="irOpcion(&#39;salir&#39;)">Finalizar sesión</button>
+    </div>
+
+    <!-- ══ PASO DESPEDIDA ══ -->
+    <div class="step" id="stepDespedida">
+      <div class="farewell-wrap">
+        <div class="farewell-icon">
+          <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"></path></svg>
+        </div>
+        <div class="farewell-title">¡Hasta pronto!</div>
+        <div class="farewell-msg">
+          Gracias por su transacción y uso de nuestro banco.<br>
+          <strong>¡Vuelva pronto!</strong>
+        </div>
+        <div class="farewell-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"></path></svg>
+          Recuerde retirar su tarjeta y comprobante.
+        </div>
+        <button class="btn-primary" onclick="reiniciar()">Nueva sesión</button>
+      </div>
+    </div>
+
+  </div><!-- /.body -->
+</div><!-- /#cajero -->
+
+<script>
+  /* ══════════════════════════════════════════════
+     VARIABLES GLOBALES (Diccionario de Variables)
+     ══════════════════════════════════════════════
+     PIN_OK    : string  — PIN correcto hardcodeado para demo
+     pin       : string  — PIN que va ingresando el usuario
+     intentos  : int     — Intentos restantes (máx. 3)
+     saldo     : float   — Saldo actual de la cuenta
+     tipo      : string  — Tipo de cuenta: "Ahorro" | "Corriente"
+     monto     : float   — Monto a retirar
+     don       : string  — Donación Unicef: "S" | "N"
+     labels    : array   — Etiquetas de cada paso para la barra de progreso
+  ══════════════════════════════════════════════ */
+  const BASE_USUARIOS = {
+    "12345678": {
+      cedula: "12345678",
+      nombre: "MARIA JOSE",
+      pin: "1234",
+      saldo: 1500000,
+      tipo: "Ahorro",
+      recibosPendientes: ["Agua", "Gas"]
+    },
+    "91011121": {
+      cedula: "91011121",
+      nombre: "JOSE ANDRES",
+      pin: "5678",
+      saldo: 500000,
+      tipo: "Ahorro",
+      recibosPendientes: ["Agua"]
+    },
+    "31415161": {
+      cedula: "31415161",
+      nombre: "LUISA FERNANDA",
+      pin: "9101",
+      saldo: 3000000,
+      tipo: "Ahorro",
+      recibosPendientes: ["Internet"]
+    }
+  };
+
+  let accesoIngresado = "";
+  let modoIngreso = "cedula";
+  let usuarioActual = null;
+  let intentos  = 3;
+  let saldo     = 0;
+  let tipo      = "Ahorro";
+  let monto     = 0;
+  let don       = "N";
+  let claveActual = "";
+  let claveNueva  = "";
+  let claveEtapa  = "actual"; // "actual" | "nueva"
+  let servicioSel = "Agua";
+  let tipoPago = "completo";
+  let opcionActual = "";
+
+  const STEP_INFO = {
+    step1:         { progress: 1, label: "Cedula o PIN" },
+    step2:         { progress: 2, label: "Usuario validado" },
+    stepMenu:      { progress: 3, label: "Menu principal" },
+    stepConsultar: { progress: 3, label: "Consulta de saldo" },
+    stepPagar:     { progress: 3, label: "Pago de servicios" },
+    stepDepositar: { progress: 3, label: "Deposito" },
+    stepClave:     { progress: 3, label: "Cambio de usuario" },
+    step3:         { progress: 4, label: "Monto a retirar" },
+    step4:         { progress: 5, label: "Donacion Unicef" },
+    step5:         { progress: 6, label: "Recibo de transaccion" },
+    stepDespedida: { progress: 6, label: "Sesion finalizada" }
+  };
+
+  function fmtCOP(valor) {
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
+      maximumFractionDigits: 0
+    }).format(valor);
+  }
+
+  /* ── Actualiza pantalla ── */
+  function scr(lbl, txt, cls = "") {
+    document.getElementById("screenLabel").textContent = lbl;
+    const e = document.getElementById("screenText");
+    e.textContent = txt;
+    e.className = "screen-text" + (cls ? " " + cls : "");
+  }
+
+  /* ── Muestra cualquier paso por ID de elemento ── */
+  const TODOS_PASOS = ["step1","step2","stepMenu","step3","step4","step5",
+                       "stepConsultar","stepPagar","stepDepositar","stepClave","stepDespedida"];
+
+  function showStep(id) {
+    TODOS_PASOS.forEach(s => {
+      const el = document.getElementById(s);
+      if (el) el.classList.remove("active");
+    });
+    document.getElementById(id).classList.add("active");
+    const stepInfo = STEP_INFO[id] || STEP_INFO.stepMenu;
+    const n = stepInfo.progress;
+    document.getElementById("stepLabel").textContent = stepInfo.label;
+    for (let i = 1; i <= 6; i++) {
+      const d = document.getElementById("pd" + i);
+      if (d) d.className = "step-dot" + (i < n ? " done" : i === n ? " current" : "");
+    }
+  }
+
+  /* ── Compatibilidad con llamadas numéricas antiguas ── */
+  function showStepNum(n) {
+    const mapa = {1:"step1",2:"step2",3:"step3",4:"step4",5:"step5"};
+    showStep(mapa[n] || "step1");
+  }
+
+  function configurarBotonesRecibo(mostrarVolver, mostrarSalir = true) {
+    document.getElementById("reciboVolverBtn").style.display = mostrarVolver ? "block" : "none";
+    document.getElementById("reciboSalirBtn").style.display = mostrarSalir ? "block" : "none";
+  }
+
+  /* ── Actualiza pips de intentos ── */
+  function updPips() {}
+
+  function obtenerLongitudAcceso() {
+    return modoIngreso === "pin" ? 4 : 8;
+  }
+
+  function obtenerTextoIngreso(modo = modoIngreso) {
+    return modo === "pin" ? "PIN" : "Cedula";
+  }
+
+  function obtenerUsuarioPorPin(pin) {
+    return Object.values(BASE_USUARIOS).find(usuario => usuario.pin === pin) || null;
+  }
+
+  function formatearListaRecibos(recibos) {
+    if (!recibos || !recibos.length) return "";
+    if (recibos.length === 1) return recibos[0];
+    if (recibos.length === 2) return `${recibos[0]} y ${recibos[1]}`;
+    return `${recibos.slice(0, -1).join(", ")} y ${recibos[recibos.length - 1]}`;
+  }
+
+  function crearResumenRecibos(recibos) {
+    if (!recibos || !recibos.length) {
+      return "No tiene recibos por pagar.";
+    }
+    if (recibos.length === 1) {
+      return "Tiene 1 recibo por pagar.";
+    }
+    return `Tiene ${recibos.length} recibos por pagar.`;
+  }
+
+  function renderRecibosPendientes(idLista, recibos) {
+    const contenedor = document.getElementById(idLista);
+    contenedor.innerHTML = (recibos || [])
+      .map(recibo => `<span class="pending-pill">${recibo}</span>`)
+      .join("");
+    contenedor.style.display = recibos && recibos.length ? "flex" : "none";
+  }
+
+  function actualizarAvisosRecibos() {
+    const recibos = usuarioActual?.recibosPendientes || [];
+    const resumen = crearResumenRecibos(recibos);
+    document.getElementById("usuarioRecibosResumen").textContent = resumen;
+    document.getElementById("menuRecibosAlert").textContent = resumen;
+    document.getElementById("menuRecibosAlert").style.display = usuarioActual ? "block" : "none";
+    renderRecibosPendientes("usuarioRecibosLista", recibos);
+  }
+
+  function setModoIngreso(modo) {
+    modoIngreso = modo;
+    accesoIngresado = "";
+    document.getElementById("modoCedula").className =
+      "radio-opt" + (modo === "cedula" ? " selected" : "");
+    document.getElementById("modoPin").className =
+      "radio-opt" + (modo === "pin" ? " selected" : "");
+    document.getElementById("loginHelp").textContent =
+      modo === "pin"
+        ? "Ingrese su PIN de 4 digitos."
+        : "Ingrese su cedula de 8 digitos.";
+    document.getElementById("pinError").textContent = "";
+    updDots();
+    scr(
+      "Bienvenido",
+      modo === "pin"
+        ? "Ingrese su PIN de 4 digitos para continuar o cambie a cedula."
+        : "Ingrese su cedula de 8 digitos para continuar o cambie a PIN."
+    );
+  }
+
+  function cargarUsuario(usuario, metodo) {
+    usuarioActual = {
+      ...usuario,
+      recibosPendientes: [...(usuario.recibosPendientes || [])]
+    };
+    saldo = usuario.saldo;
+    tipo = usuario.tipo;
+    document.getElementById("usuarioNombreDisplay").textContent = usuario.nombre;
+    document.getElementById("usuarioCedulaDisplay").textContent = usuario.cedula;
+    document.getElementById("usuarioIngresoDisplay").textContent = metodo;
+    document.getElementById("usuarioIngresoInfo").textContent = `Ingreso correcto por ${metodo}.`;
+    document.getElementById("pinError").textContent = "";
+    actualizarAvisosRecibos();
+    scr("Usuario validado", `Ingreso correcto por ${metodo}.`, "success");
+    setTimeout(() => {
+      scr("Usuario registrado", crearResumenRecibos(usuarioActual.recibosPendientes));
+      showStep("step2");
+    }, 700);
+  }
+
+  function marcarReciboComoPagado(servicio) {
+    if (!usuarioActual) return;
+    usuarioActual.recibosPendientes =
+      (usuarioActual.recibosPendientes || []).filter(recibo => recibo !== servicio);
+    if (BASE_USUARIOS[usuarioActual.cedula]) {
+      BASE_USUARIOS[usuarioActual.cedula].recibosPendientes =
+        [...usuarioActual.recibosPendientes];
+    }
+    actualizarAvisosRecibos();
+  }
+
+  function obtenerIdServicio(servicio) {
+    const mapa = {
+      Agua: "srvAgua",
+      Luz: "srvLuz",
+      Gas: "srvGas",
+      Internet: "srvInternet"
+    };
+    return mapa[servicio] || "srvAgua";
+  }
+
+  function obtenerPinUsuarioActual() {
+    if (!usuarioActual) return "";
+    return BASE_USUARIOS[usuarioActual.cedula]?.pin || usuarioActual.pin || "";
+  }
+
+  /* ══ PASO 1: LÓGICA DE LA CÉDULA ══ */
+
+  /* Agrega dígito a la cédula */
+  function np(d) {
+    if (accesoIngresado.length < obtenerLongitudAcceso()) {
+      accesoIngresado += d;
+      document.getElementById("pinError").textContent = "";
+      updDots();
+    }
+  }
+
+  /* Borra último dígito */
+  function nd() {
+    if (accesoIngresado.length > 0) {
+      accesoIngresado = accesoIngresado.slice(0, -1);
+      document.getElementById("pinError").textContent = "";
+      updDots();
+    }
+  }
+
+  /* Actualiza puntos visuales de la cédula */
+  function updDots() {
+    const total = obtenerLongitudAcceso();
+    for (let i = 0; i < 8; i++) {
+      let clase = "dot";
+      if (i >= total) clase += " hidden";
+      else if (i < accesoIngresado.length) clase += " filled";
+      document.getElementById("dot" + i).className = clase;
+    }
+  }
+
+  /* Animación de error en puntos */
+  function flashErr() {
+    const total = obtenerLongitudAcceso();
+    for (let i = 0; i < 8; i++) {
+      document.getElementById("dot" + i).className =
+        i < total ? "dot error-flash" : "dot hidden";
+    }
+    setTimeout(() => {
+      updDots();
+    }, 600);
+  }
+
+  /* Validar cédula contra la base local */
+  function confirmCedula() {
+    if (cedulaIngresada.length < 8) {
+      document.getElementById("pinError").textContent =
+        "Ingrese los 8 dígitos completos.";
+      return;
+    }
+
+    const usuario = BASE_USUARIOS[cedulaIngresada];
+    if (!usuario) {
+      document.getElementById("pinError").textContent = "Usuario no registrado.";
+      scr("Usuario no registrado", "La cédula ingresada no existe en la base de datos.", "error");
+      cedulaIngresada = "";
+      flashErr();
+      return;
+    }
+
+    usuarioActual = { ...usuario };
+    saldo = usuario.saldo;
+    tipo = usuario.tipo;
+    document.getElementById("usuarioNombreDisplay").textContent = usuario.nombre;
+    document.getElementById("usuarioCedulaDisplay").textContent = usuario.cedula;
+    document.getElementById("usuarioSaldoDisplay").textContent = fmtCOP(usuario.saldo);
+    document.getElementById("pinError").textContent = "";
+    scr("Usuario validado", "Cédula reconocida correctamente.", "success");
+    setTimeout(() => {
+      scr("Usuario registrado", "Revise los datos cargados desde la base local.");
+      showStep("step2");
+    }, 700);
+  }
+
+  /* ══ PASO 2: DATOS DEL USUARIO ══ */
+
+  function confirmAcceso() {
+    const longitud = obtenerLongitudAcceso();
+    if (accesoIngresado.length < longitud) {
+      document.getElementById("pinError").textContent =
+        `Ingrese los ${longitud} digitos completos.`;
+      return;
+    }
+
+    const usuario = modoIngreso === "pin"
+      ? obtenerUsuarioPorPin(accesoIngresado)
+      : BASE_USUARIOS[accesoIngresado];
+
+    if (!usuario) {
+      document.getElementById("pinError").textContent = "Usuario no registrado.";
+      scr(
+        "Usuario no registrado",
+        modoIngreso === "pin"
+          ? "El PIN ingresado no existe en la base de datos."
+          : "La cedula ingresada no existe en la base de datos.",
+        "error"
+      );
+      accesoIngresado = "";
+      flashErr();
+      return;
+    }
+
+    cargarUsuario(usuario, obtenerTextoIngreso());
+  }
+
+  function setCuenta(t) {
+    tipo = t;
+  }
+
+  /* Confirmar datos del usuario */
+  function confirmCedula() {
+    confirmAcceso();
+  }
+
+  function confirmSaldo() {
+    if (!usuarioActual) {
+      document.getElementById("saldoError").textContent =
+        "Primero debe ingresar una cédula registrada.";
+      return;
+    }
+    document.getElementById("saldoError").textContent = "";
+    document.getElementById("saldoDisplay").textContent =
+      fmtCOP(saldo);
+    scr("Menú principal", "Seleccione una operación.");
+    showStep("stepMenu");
+  }
+
+  /* ══ PASO 3: MONTO A RETIRAR ══ */
+
+  /* Calcula desglose en billetes de $50k, $20k, $10k */
+  function bills(m) {
+    let r = m;
+    const b50 = Math.floor(r / 50000); r -= b50 * 50000;
+    const b20 = Math.floor(r / 20000); r -= b20 * 20000;
+    const b10 = Math.floor(r / 10000);
+    return { b50, b20, b10 };
+  }
+
+  /* HTML del preview de billetes */
+  function billPreviewHTML(m) {
+    const b = bills(m);
+    return `
+      <div style="font-size:11px;color:#6b7280;margin:10px 0 6px;">
+        Desglose estimado de billetes
+      </div>
+      <div class="billetes-grid">
+        <div class="billete-card${b.b50 > 0 ? " active" : " zero"}">
+          <div class="billete-val">$50.000</div>
+          <div class="billete-num${b.b50 > 0 ? " blue" : ""}">${b.b50}</div>
+          <div class="billete-label">billete${b.b50 !== 1 ? "s" : ""}</div>
+        </div>
+        <div class="billete-card${b.b20 > 0 ? " active" : " zero"}">
+          <div class="billete-val">$20.000</div>
+          <div class="billete-num${b.b20 > 0 ? " blue" : ""}">${b.b20}</div>
+          <div class="billete-label">billete${b.b20 !== 1 ? "s" : ""}</div>
+        </div>
+        <div class="billete-card${b.b10 > 0 ? " active" : " zero"}">
+          <div class="billete-val">$10.000</div>
+          <div class="billete-num${b.b10 > 0 ? " blue" : ""}">${b.b10}</div>
+          <div class="billete-label">billete${b.b10 !== 1 ? "s" : ""}</div>
+        </div>
+      </div>`;
+  }
+
+  /* Validación en tiempo real del monto */
+  function valMonto() {
+    const v   = parseFloat(document.getElementById("montoInput").value);
+    const err = document.getElementById("montoError");
+    const prev = document.getElementById("billetesPreview");
+    if (isNaN(v) || v <= 0)      { err.textContent = ""; prev.innerHTML = ""; return; }
+    if (v % 10000 !== 0)         { err.textContent = "Debe ser múltiplo de $10.000."; prev.innerHTML = ""; return; }
+    if (v > saldo)               { err.textContent = "Fondos insuficientes. Saldo: " + fmtCOP(saldo); prev.innerHTML = ""; return; }
+    err.textContent = "";
+    prev.innerHTML = billPreviewHTML(v);
+  }
+
+  /* Confirmar monto */
+  function confirmMonto() {
+    const v = parseFloat(document.getElementById("montoInput").value);
+    if (isNaN(v) || v <= 0) {
+      document.getElementById("montoError").textContent = "Ingrese un monto válido."; return;
+    }
+    if (v % 10000 !== 0) {
+      document.getElementById("montoError").textContent = "Debe ser múltiplo de $10.000."; return;
+    }
+    if (v > saldo) {
+      document.getElementById("montoError").textContent =
+        "Fondos insuficientes. Saldo: " + fmtCOP(saldo); return;
+    }
+    monto = v;
+    const restante = saldo - monto;
+    document.getElementById("donacionInfo").textContent =
+      "Retiro aprobado: " + fmtCOP(monto) +
+      " | Saldo tras retiro: " + fmtCOP(restante);
+    /* Desactivar donación si no alcanza el saldo */
+    if (restante < 1000) {
+      document.getElementById("optSi").style.cssText = "opacity:0.4;pointer-events:none;";
+      document.getElementById("donWarn").textContent =
+        "Saldo insuficiente para incluir la donación.";
+      don = "N";
+    } else {
+      document.getElementById("optSi").style.cssText = "";
+      document.getElementById("donWarn").textContent = "";
+    }
+    scr("Paso 4 de 5", "¿Desea añadir una donación de $1.000 a Unicef?");
+    showStep("step4");
+  }
+
+  /* ══ PASO 4: DONACIÓN ══ */
+
+  function setDon(op) {
+    don = op;
+    document.getElementById("optSi").className =
+      "radio-opt" + (op === "S" ? " selected" : "");
+    document.getElementById("optNo").className =
+      "radio-opt" + (op === "N" ? " selected" : "");
+  }
+
+  /* ══ PASO 5: GENERAR RECIBO FINAL (OUTPUTS) ══ */
+  function confirmarDonacion() {
+    const saldoAnterior = saldo;
+    const donVal       = don === "S" ? 1000 : 0;
+    const totalDesc    = monto + donVal;
+    const saldoFinal   = saldoAnterior - totalDesc;
+    const b            = bills(monto);
+    const totalBillets = b.b50 + b.b20 + b.b10;
+    const ref  = Math.floor(Math.random() * 900000 + 100000);
+    const fecha = new Date().toLocaleString("es-CO", {
+      hour: "2-digit", minute: "2-digit",
+      day: "2-digit", month: "short", year: "numeric"
+    });
+
+    /* OUTPUT 1: Recibo de transacción + OUTPUT 2: Saldo final
+       OUTPUT 3: Cantidad de billetes   + OUTPUT 4: Confirmación de donación */
+    document.getElementById("ticketFinal").innerHTML = `
+      <div class="ticket-header">
+        <div class="t-logo">BancoCajero • Comprobante oficial</div>
+        <div class="t-title">Transacción Exitosa</div>
+        <div class="t-ref">Ref. #${ref} &nbsp;|&nbsp; ${fecha}</div>
+      </div>
+      <div class="ticket-body">
+
+        <!-- OUTPUT: Recibo de transacción -->
+        <div class="t-section-label">Información de cuenta</div>
+        <div class="t-row">
+          <span class="lbl">Tipo de cuenta</span>
+          <span class="val">${tipo}</span>
+        </div>
+        <div class="t-row">
+          <span class="lbl">Saldo anterior</span>
+          <span class="val">${fmtCOP(saldoAnterior)}</span>
+        </div>
+
+        <div class="t-section-label">Detalle del retiro</div>
+        <div class="t-row">
+          <span class="lbl">Monto retirado</span>
+          <span class="val red">- ${fmtCOP(monto)}</span>
+        </div>
+        ${don === "S"
+          ? `<div class="t-row">
+               <span class="lbl">Donación Unicef</span>
+               <span class="val green">- $1.000</span>
+             </div>`
+          : ""}
+
+        <!-- OUTPUT: Saldo final -->
+        <div class="t-row total-row">
+          <span class="lbl">Saldo final</span>
+          <span class="val">${fmtCOP(saldoFinal)}</span>
+        </div>
+
+        <!-- OUTPUT: Cantidad de billetes -->
+        <div class="t-section-label">Billetes entregados</div>
+        <div class="billetes-grid">
+          <div class="billete-card${b.b50 > 0 ? " active" : " zero"}">
+            <div class="billete-val">$50.000</div>
+            <div class="billete-num${b.b50 > 0 ? " blue" : ""}">${b.b50}</div>
+            <div class="billete-label">billete${b.b50 !== 1 ? "s" : ""}</div>
+          </div>
+          <div class="billete-card${b.b20 > 0 ? " active" : " zero"}">
+            <div class="billete-val">$20.000</div>
+            <div class="billete-num${b.b20 > 0 ? " blue" : ""}">${b.b20}</div>
+            <div class="billete-label">billete${b.b20 !== 1 ? "s" : ""}</div>
+          </div>
+          <div class="billete-card${b.b10 > 0 ? " active" : " zero"}">
+            <div class="billete-val">$10.000</div>
+            <div class="billete-num${b.b10 > 0 ? " blue" : ""}">${b.b10}</div>
+            <div class="billete-label">billete${b.b10 !== 1 ? "s" : ""}</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#6b7280;margin-top:8px;text-align:right;">
+          Total: <strong>${totalBillets} billete${totalBillets !== 1 ? "s" : ""}</strong>
+        </div>
+
+        <!-- OUTPUT: Confirmación de donación -->
+        <div class="t-section-label">Estado de donación</div>
+        <div class="donacion-badge ${don === "S" ? "confirmed" : "declined"}">
+          <div class="db-icon">
+            ${don === "S"
+              ? `<svg viewBox="0 0 24 24">
+                   <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                            2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09
+                            C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22
+                            8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                 </svg>`
+              : `<svg viewBox="0 0 24 24">
+                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41
+                            10.59 12 5 17.59 6.41 19 12 13.41 17.59 19
+                            19 17.59 13.41 12z"/>
+                 </svg>`}
+          </div>
+          <div class="db-text">
+            <div class="db-main">
+              ${don === "S"
+                ? "Donación confirmada a Unicef"
+                : "Sin donación en esta transacción"}
+            </div>
+            <div class="db-sub">
+              ${don === "S"
+                ? "$1.000 serán enviados a Unicef. ¡Gracias!"
+                : "Puede donar en su próxima visita."}
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="ticket-footer">
+        <span>BancoCajero S.A.</span>
+        <span>Conserve este comprobante</span>
+      </div>
+    `;
+
+    saldo = saldoFinal;
+
+    scr("Transacción completada",
+        "Retire su efectivo. ¡Gracias por usar BancoCajero!", "success");
+    configurarBotonesRecibo(true, true);
+    showStep("step5");
+  }
+
+  function resetRetiroForm() {
+    monto = 0;
+    don = "N";
+    document.getElementById("montoInput").value = "";
+    document.getElementById("montoError").textContent = "";
+    document.getElementById("billetesPreview").innerHTML = "";
+    document.getElementById("donacionInfo").textContent = "";
+    document.getElementById("donWarn").textContent = "";
+    document.getElementById("optSi").style.cssText = "";
+    setDon("N");
+  }
+
+  function resetPagoForm() {
+    document.getElementById("pagarRef").value = "";
+    document.getElementById("pagarMonto").value = "";
+    document.getElementById("pagarError").textContent = "";
+    setSrv("Agua", document.getElementById("srvAgua"));
+    setTipoPago("completo");
+  }
+
+  function resetDepositoForm() {
+    document.getElementById("depositoMonto").value = "";
+    document.getElementById("depositoError").textContent = "";
+    document.getElementById("depositoPreview").innerHTML = "";
+  }
+
+  function resetCambioClaveForm() {
+    claveActual = "";
+    claveNueva = "";
+    claveEtapa = "actual";
+    document.getElementById("claveError").textContent = "";
+    document.getElementById("lblNuevaClave").style.display = "none";
+    document.getElementById("claveNuevaDots").style.display = "none";
+    document.getElementById("numpadClave2").style.display = "none";
+    document.getElementById("numpadClave1").style.display = "grid";
+    ["ca0","ca1","ca2","ca3","cn0","cn1","cn2","cn3"].forEach(id => {
+      document.getElementById(id).className = "dot";
+    });
+  }
+
+  /* ── Reiniciar todo ── */
+  function reiniciar() {
+    cedulaIngresada = "";
+    usuarioActual = null;
+    intentos = 3;
+    saldo = 0;
+    tipo = "Ahorro";
+    servicioSel = "Agua";
+    updDots();
+    updPips();
+    document.getElementById("numpadGrid").classList.remove("blocked");
+    document.getElementById("pinError").textContent = "";
+    document.getElementById("saldoError").textContent = "";
+    document.getElementById("usuarioNombreDisplay").textContent = "-";
+    document.getElementById("usuarioCedulaDisplay").textContent = "-";
+    document.getElementById("usuarioSaldoDisplay").textContent = fmtCOP(0);
+    document.getElementById("ticketFinal").innerHTML = "";
+    resetRetiroForm();
+    resetPagoForm();
+    resetDepositoForm();
+    resetCambioClaveForm();
+    setCuenta("Ahorro");
+    scr("Bienvenido", "Ingrese su cédula de 8 dígitos para continuar.");
+    showStep("step1");
+  }
+
+  /* ── Volver al menú sin reiniciar sesión ── */
+  function volverMenu() {
+    opcionActual = "";
+    resetRetiroForm();
+    resetPagoForm();
+    resetDepositoForm();
+    resetCambioClaveForm();
+    scr("Menú principal", "Seleccione una operación.");
+    showStep("stepMenu");
+  }
+
+  /* ── Navegar a una opción del menú ── */
+  function irOpcion(op) {
+    opcionActual = op;
+    if (op === "retirar") {
+      resetRetiroForm();
+      document.getElementById("saldoDisplay").textContent =
+        fmtCOP(saldo);
+      scr("Retiro de efectivo", "Ingrese el monto a retirar.");
+      showStep("step3");
+    } else if (op === "consultar") {
+      document.getElementById("saldoConsultaDisplay").textContent =
+        fmtCOP(saldo);
+      document.getElementById("tipoDisplay").textContent = tipo;
+      scr("Consulta de saldo", "Saldo disponible en su cuenta.");
+      showStep("stepConsultar");
+    } else if (op === "pagar") {
+      resetPagoForm();
+      scr("Pago de servicios", "Seleccione el servicio y el valor a pagar.");
+      showStep("stepPagar");
+    } else if (op === "depositar") {
+      resetDepositoForm();
+      scr("Depósito", "Ingrese el monto a depositar.");
+      showStep("stepDepositar");
+    } else if (op === "clave") {
+      reiniciar();
+    } else if (op === "salir") {
+      scr("Sesión finalizada", "Gracias por usar BancoCajero. ¡Hasta pronto!", "success");
+      showStep("stepDespedida");
+    }
+  }
+
+  /* ── Finalizar cualquier operación simple con mensaje de despedida ── */
+  function finalizarOpcion(msg) {
+    scr("Operación exitosa", msg, "success");
+    setTimeout(() => {
+      scr("Sesión finalizada", "Gracias por usar BancoCajero. ¡Hasta pronto!", "success");
+      showStep("stepDespedida");
+    }, 1000);
+  }
+
+  /* ══ OPCIÓN 3: PAGAR SERVICIO ══ */
+  function setSrv(nombre, el) {
+    servicioSel = nombre;
+    ["srvAgua","srvLuz","srvGas","srvInternet"].forEach(id => {
+      document.getElementById(id).className = "radio-opt";
+    });
+    el.className = "radio-opt selected";
+  }
+
+  
+function setTipoPago(t) {
+  tipoPago = t;
+  document.getElementById("pagoCompleto").className =
+    "radio-opt" + (t === "completo" ? " selected" : "");
+  document.getElementById("pagoAbono").className =
+    "radio-opt" + (t === "abono" ? " selected" : "");
+}
+
+function volverServicios() {
+  resetPagoForm();
+  scr("Pago de servicios", "Seleccione el servicio y el valor a pagar.");
+  showStep("stepPagar");
+}
+
+function valPago() {
+
+    const v = parseFloat(document.getElementById("pagarMonto").value);
+    const err = document.getElementById("pagarError");
+    if (isNaN(v) || v <= 0) { err.textContent = ""; return; }
+    if (v > saldo) {
+      err.textContent = "Fondos insuficientes. Saldo: " + fmtCOP(saldo);
+    } else {
+      err.textContent = "";
+    }
+  }
+
+  function renderPagoTicket(data) {
+    document.getElementById("ticketFinal").innerHTML = `
+      <div class="ticket-header">
+        <div class="t-logo">BancoCajero • Comprobante oficial</div>
+        <div class="t-title">Pago de servicio</div>
+        <div class="t-ref">Ref. #${data.refOperacion} &nbsp;|&nbsp; ${data.fecha}</div>
+      </div>
+      <div class="ticket-body">
+        <div class="t-section-label">Detalle del pago</div>
+        <div class="t-row">
+          <span class="lbl">Servicio</span>
+          <span class="val">${data.servicio}</span>
+        </div>
+        <div class="t-row">
+          <span class="lbl">Referencia</span>
+          <span class="val">${data.referencia}</span>
+        </div>
+        <div class="t-row">
+          <span class="lbl">Tipo de pago</span>
+          <span class="val">${data.tipoPago}</span>
+        </div>
+        <div class="t-row">
+          <span class="lbl">Valor pagado</span>
+          <span class="val red">- ${fmtCOP(data.valor)}</span>
+        </div>
+
+        <div class="t-section-label">Saldo</div>
+        <div class="t-row">
+          <span class="lbl">Saldo anterior</span>
+          <span class="val">${fmtCOP(data.saldoAnterior)}</span>
+        </div>
+        <div class="t-row total-row">
+          <span class="lbl">Saldo disponible</span>
+          <span class="val">${fmtCOP(data.saldoActual)}</span>
+        </div>
+      </div>
+      <div class="ticket-footer">
+        <span>BancoCajero S.A.</span>
+        <span>Conserve este comprobante</span>
+      </div>
+    `;
+  }
+
+  function renderDepositoTicket(data) {
+    document.getElementById("ticketFinal").innerHTML = `
+      <div class="ticket-header">
+        <div class="t-logo">BancoCajero • Comprobante oficial</div>
+        <div class="t-title">Depósito realizado</div>
+        <div class="t-ref">Ref. #${data.refOperacion} &nbsp;|&nbsp; ${data.fecha}</div>
+      </div>
+      <div class="ticket-body">
+        <div class="t-section-label">Detalle del depósito</div>
+        <div class="t-row">
+          <span class="lbl">Monto depositado</span>
+          <span class="val green">+ ${fmtCOP(data.valor)}</span>
+        </div>
+
+        <div class="t-section-label">Saldo</div>
+        <div class="t-row">
+          <span class="lbl">Saldo anterior</span>
+          <span class="val">${fmtCOP(data.saldoAnterior)}</span>
+        </div>
+        <div class="t-row total-row">
+          <span class="lbl">Saldo disponible</span>
+          <span class="val">${fmtCOP(data.saldoActual)}</span>
+        </div>
+      </div>
+      <div class="ticket-footer">
+        <span>BancoCajero S.A.</span>
+        <span>Conserve este comprobante</span>
+      </div>
+    `;
+  }
+
+  function confirmarPago() {
+    const ref = document.getElementById("pagarRef").value.trim();
+    const v   = parseFloat(document.getElementById("pagarMonto").value);
+    const err = document.getElementById("pagarError");
+    if (!/^\d{6}$/.test(ref)) { err.textContent = "La referencia debe tener exactamente 6 dígitos."; return; }
+    if (isNaN(v) || v <= 0) { err.textContent = "Ingrese un valor válido."; return; }
+    if (v > saldo) { err.textContent = "Fondos insuficientes."; return; }
+    const saldoAnterior = saldo;
+    saldo -= v;
+    err.textContent = "";
+
+    const mensaje = (tipoPago === "abono")
+      ? "Abono realizado correctamente."
+      : "Pago realizado correctamente.";
+
+    const fecha = new Date().toLocaleString("es-CO", {
+      hour: "2-digit", minute: "2-digit",
+      day: "2-digit", month: "short", year: "numeric"
+    });
+    const refOperacion = Math.floor(Math.random() * 900000 + 100000);
+
+    renderPagoTicket({
+      servicio: servicioSel,
+      referencia: ref,
+      tipoPago: tipoPago === "abono" ? "Abono" : "Pago completo",
+      valor: v,
+      saldoAnterior,
+      saldoActual: saldo,
+      fecha,
+      refOperacion
+    });
+
+    scr(
+      "Pago exitoso",
+      mensaje + " Revise su comprobante.",
+      "success"
+    );
+    configurarBotonesRecibo(false, true);
+    showStep("step5");
+
+  }
+
+  /* ══ OPCIÓN 4: DEPOSITAR ══ */
+  function valDeposito() {
+    const v   = parseFloat(document.getElementById("depositoMonto").value);
+    const err = document.getElementById("depositoError");
+    const prv = document.getElementById("depositoPreview");
+    if (isNaN(v) || v <= 0) { err.textContent = ""; prv.innerHTML = ""; return; }
+    if (v < 10000) { err.textContent = "El mínimo de depósito es $10.000."; prv.innerHTML = ""; return; }
+    err.textContent = "";
+    prv.innerHTML = `<div class="alert-box info" style="margin-top:10px;">
+      Nuevo saldo tras depósito: <strong>${fmtCOP(saldo + v)}</strong>
+    </div>`;
+  }
+
+  function confirmarDeposito() {
+    const v   = parseFloat(document.getElementById("depositoMonto").value);
+    const err = document.getElementById("depositoError");
+    if (isNaN(v) || v <= 0) { err.textContent = "Ingrese un monto válido."; return; }
+    if (v < 10000) { err.textContent = "El mínimo de depósito es $10.000."; return; }
+    const saldoAnterior = saldo;
+    saldo += v;
+    err.textContent = "";
+
+    const fecha = new Date().toLocaleString("es-CO", {
+      hour: "2-digit", minute: "2-digit",
+      day: "2-digit", month: "short", year: "numeric"
+    });
+    const refOperacion = Math.floor(Math.random() * 900000 + 100000);
+
+    renderDepositoTicket({
+      valor: v,
+      saldoAnterior,
+      saldoActual: saldo,
+      fecha,
+      refOperacion
+    });
+
+    scr(
+      "Depósito exitoso",
+      "Revise su comprobante de depósito.",
+      "success"
+    );
+    configurarBotonesRecibo(true, true);
+    showStep("step5");
+  }
+
+  /* ══ OPCIÓN 5: CAMBIAR CLAVE ══ */
+  function npClave(campo, d) {
+    if (campo === "actual" && claveActual.length < 4) {
+      claveActual += d;
+      document.getElementById("claveError").textContent = "";
+      updClaveDotsA();
+    } else if (campo === "nueva" && claveNueva.length < 4) {
+      claveNueva += d;
+      document.getElementById("claveError").textContent = "";
+      updClaveDotsN();
+    }
+  }
+  function ndClave(campo) {
+    if (campo === "actual" && claveActual.length > 0) {
+      claveActual = claveActual.slice(0,-1); updClaveDotsA();
+    } else if (campo === "nueva" && claveNueva.length > 0) {
+      claveNueva = claveNueva.slice(0,-1); updClaveDotsN();
+    }
+  }
+  function updClaveDotsA() {
+    for (let i = 0; i < 4; i++)
+      document.getElementById("ca"+i).className = "dot" + (i < claveActual.length ? " filled" : "");
+  }
+  function updClaveDotsN() {
+    for (let i = 0; i < 4; i++)
+      document.getElementById("cn"+i).className = "dot" + (i < claveNueva.length ? " filled" : "");
+  }
+  function siguienteClave() {
+    if (claveActual.length < 4) {
+      document.getElementById("claveError").textContent = "Ingrese los 4 dígitos completos."; return;
+    }
+    if (claveActual !== PIN_OK) {
+      document.getElementById("claveError").textContent = "Clave actual incorrecta.";
+      claveActual = ""; updClaveDotsA(); return;
+    }
+    document.getElementById("claveError").textContent = "";
+    document.getElementById("lblNuevaClave").style.display = "block";
+    document.getElementById("claveNuevaDots").style.display = "flex";
+    document.getElementById("numpadClave2").style.display = "grid";
+    document.getElementById("numpadClave1").style.display = "none";
+  }
+  function confirmarClave() {
+    if (claveNueva.length < 4) {
+      document.getElementById("claveError").textContent = "Ingrese los 4 dígitos de la nueva clave."; return;
+    }
+    if (claveNueva === PIN_OK) {
+      document.getElementById("claveError").textContent = "La nueva clave debe ser diferente a la actual."; return;
+    }
+    PIN_OK = claveNueva;
+    finalizarOpcion("Clave actualizada correctamente.");
+  }
+  function confirmSaldo() {
+    if (!usuarioActual) {
+      document.getElementById("saldoError").textContent =
+        "Primero debe ingresar con una cedula o PIN registrados.";
+      return;
+    }
+    document.getElementById("saldoError").textContent = "";
+    scr("Menu principal", crearResumenRecibos(usuarioActual.recibosPendientes));
+    showStep("stepMenu");
+  }
+
+  function resetPagoForm() {
+    document.getElementById("pagarRef").value = "";
+    document.getElementById("pagarMonto").value = "";
+    document.getElementById("pagarError").textContent = "";
+    const servicioInicial = usuarioActual?.recibosPendientes?.[0] || "Agua";
+    setSrv(servicioInicial, document.getElementById(obtenerIdServicio(servicioInicial)));
+    setTipoPago("completo");
+  }
+
+  function reiniciar() {
+    accesoIngresado = "";
+    modoIngreso = "cedula";
+    usuarioActual = null;
+    intentos = 3;
+    saldo = 0;
+    tipo = "Ahorro";
+    servicioSel = "Agua";
+    updDots();
+    updPips();
+    document.getElementById("numpadGrid").classList.remove("blocked");
+    document.getElementById("pinError").textContent = "";
+    document.getElementById("saldoError").textContent = "";
+    document.getElementById("usuarioIngresoInfo").textContent =
+      "Usuario encontrado en la base de datos local del cajero.";
+    document.getElementById("usuarioNombreDisplay").textContent = "-";
+    document.getElementById("usuarioCedulaDisplay").textContent = "-";
+    document.getElementById("usuarioIngresoDisplay").textContent = "-";
+    document.getElementById("usuarioRecibosResumen").textContent =
+      "No tiene recibos por pagar.";
+    document.getElementById("usuarioRecibosLista").innerHTML = "";
+    document.getElementById("usuarioRecibosLista").style.display = "none";
+    document.getElementById("menuRecibosAlert").textContent = "";
+    document.getElementById("menuRecibosAlert").style.display = "none";
+    document.getElementById("ticketFinal").innerHTML = "";
+    resetRetiroForm();
+    resetPagoForm();
+    resetDepositoForm();
+    resetCambioClaveForm();
+    setCuenta("Ahorro");
+    setModoIngreso("cedula");
+    showStep("step1");
+  }
+
+  function volverMenu() {
+    opcionActual = "";
+    resetRetiroForm();
+    resetPagoForm();
+    resetDepositoForm();
+    resetCambioClaveForm();
+    scr("Menu principal", crearResumenRecibos(usuarioActual?.recibosPendientes || []));
+    showStep("stepMenu");
+  }
+
+  function confirmarPago() {
+    const ref = document.getElementById("pagarRef").value.trim();
+    const v   = parseFloat(document.getElementById("pagarMonto").value);
+    const err = document.getElementById("pagarError");
+    if (!/^\d{6}$/.test(ref)) { err.textContent = "La referencia debe tener exactamente 6 digitos."; return; }
+    if (isNaN(v) || v <= 0) { err.textContent = "Ingrese un valor valido."; return; }
+    if (v > saldo) { err.textContent = "Fondos insuficientes."; return; }
+    const saldoAnterior = saldo;
+    saldo -= v;
+    err.textContent = "";
+
+    const mensaje = (tipoPago === "abono")
+      ? "Abono realizado correctamente."
+      : "Pago realizado correctamente.";
+
+    const fecha = new Date().toLocaleString("es-CO", {
+      hour: "2-digit", minute: "2-digit",
+      day: "2-digit", month: "short", year: "numeric"
+    });
+    const refOperacion = Math.floor(Math.random() * 900000 + 100000);
+
+    renderPagoTicket({
+      servicio: servicioSel,
+      referencia: ref,
+      tipoPago: tipoPago === "abono" ? "Abono" : "Pago completo",
+      valor: v,
+      saldoAnterior,
+      saldoActual: saldo,
+      fecha,
+      refOperacion
+    });
+
+    if (tipoPago === "completo") {
+      marcarReciboComoPagado(servicioSel);
+    }
+
+    scr(
+      "Pago exitoso",
+      mensaje + " Revise su comprobante.",
+      "success"
+    );
+    configurarBotonesRecibo(false, true);
+    showStep("step5");
+  }
+
+  function siguienteClave() {
+    if (!usuarioActual) {
+      document.getElementById("claveError").textContent = "Primero debe iniciar sesion."; return;
+    }
+    if (claveActual.length < 4) {
+      document.getElementById("claveError").textContent = "Ingrese los 4 digitos completos."; return;
+    }
+    if (claveActual !== obtenerPinUsuarioActual()) {
+      document.getElementById("claveError").textContent = "Clave actual incorrecta.";
+      claveActual = ""; updClaveDotsA(); return;
+    }
+    document.getElementById("claveError").textContent = "";
+    document.getElementById("lblNuevaClave").style.display = "block";
+    document.getElementById("claveNuevaDots").style.display = "flex";
+    document.getElementById("numpadClave2").style.display = "grid";
+    document.getElementById("numpadClave1").style.display = "none";
+  }
+
+  function confirmarClave() {
+    if (!usuarioActual) {
+      document.getElementById("claveError").textContent = "Primero debe iniciar sesion."; return;
+    }
+    if (claveNueva.length < 4) {
+      document.getElementById("claveError").textContent = "Ingrese los 4 digitos de la nueva clave."; return;
+    }
+    if (claveNueva === obtenerPinUsuarioActual()) {
+      document.getElementById("claveError").textContent = "La nueva clave debe ser diferente a la actual."; return;
+    }
+    BASE_USUARIOS[usuarioActual.cedula].pin = claveNueva;
+    usuarioActual.pin = claveNueva;
+    finalizarOpcion("Clave actualizada correctamente.");
+  }
+
+  setModoIngreso("cedula");
+  showStep("step1");
+</script>
+
+
+</body></html>
