@@ -1,0 +1,384 @@
+/* ═══════════════════════════════════════════
+   BancoCajero — Grupo 4
+   styles.css
+═══════════════════════════════════════════ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: linear-gradient(135deg, #0C447C 0%, #1a6bbf 50%, #0e3a6a 100%);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ── CAJERO CONTAINER ── */
+#cajero {
+  background: #fff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,255,255,0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #0C447C, #1565C0);
+  color: #fff;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-icon svg {
+  width: 36px; height: 36px;
+  fill: rgba(255,255,255,0.9);
+}
+.header h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.5px; }
+.header p  { font-size: 11px; opacity: 0.75; margin-top: 2px; }
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  background: #f0f4f8;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+.step-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #d1d5db;
+  transition: background 0.3s, transform 0.3s;
+}
+.step-dot.current  { background: #0C447C; transform: scale(1.3); }
+.step-dot.done     { background: #22c55e; }
+.step-label {
+  margin-left: auto;
+  font-size: 11px;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── SCREEN ── */
+.screen {
+  background: #0C1F35;
+  color: #a5f3fc;
+  padding: 10px 16px;
+  font-family: 'Courier New', monospace;
+  border-bottom: 3px solid #0C447C;
+}
+.screen-label { font-size: 10px; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; }
+.screen-text  { font-size: 13px; margin-top: 2px; }
+
+/* ── BODY ── */
+.body {
+  padding: 20px 18px;
+  min-height: 320px;
+}
+
+/* ── STEPS ── */
+.step { display: none; animation: fadeIn 0.3s ease; }
+.step.active { display: block; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── TIPO CAJERO (paso 0) ── */
+.tipo-cajero-title {
+  font-size: 13px; color: #6b7280; font-weight: 600;
+  margin-bottom: 14px; text-align: center; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.tipo-cajero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.tipo-cajero-card {
+  border: 2px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 18px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.tipo-cajero-card:hover { border-color: #0C447C; background: #eff6ff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(12,68,124,0.15); }
+.tc-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+.tc-icon svg { width: 26px; height: 26px; }
+.sin-tarjeta .tc-icon { background: #dbeafe; }
+.sin-tarjeta .tc-icon svg { fill: #1d4ed8; }
+.con-tarjeta .tc-icon { background: #dcfce7; }
+.con-tarjeta .tc-icon svg { fill: #16a34a; }
+.tc-label { font-size: 14px; font-weight: 700; color: #111827; }
+.tc-sub   { font-size: 11px; color: #6b7280; line-height: 1.4; }
+
+/* ── TARJETA STEP ── */
+.tarjeta-wrap { text-align: center; margin-bottom: 16px; }
+.tarjeta-anim { width: 60px; height: 60px; background: #dbeafe; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; }
+.tarjeta-anim svg { width: 36px; height: 36px; fill: #1d4ed8; }
+.tarjeta-title { font-size: 17px; font-weight: 700; color: #111827; }
+.tarjeta-msg   { font-size: 12px; color: #6b7280; margin-top: 4px; line-height: 1.5; }
+.tarjeta-numero-wrap { margin: 14px 0 10px; }
+
+/* ── RADIO GROUP ── */
+.radio-group {
+  display: flex; gap: 8px; margin: 8px 0 12px;
+  flex-wrap: wrap;
+}
+.radio-opt {
+  flex: 1; min-width: 80px;
+  padding: 8px 10px;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  transition: all 0.15s;
+  background: #f9fafb;
+}
+.radio-opt:hover   { border-color: #93c5fd; }
+.radio-opt.selected { border-color: #0C447C; background: #eff6ff; color: #0C447C; }
+
+/* ── LOGIN HELP ── */
+.login-help { font-size: 12px; color: #6b7280; margin-bottom: 10px; text-align: center; }
+
+/* ── PIN DOTS ── */
+.pin-dots {
+  display: flex; gap: 8px; justify-content: center;
+  margin: 10px 0;
+}
+.dot {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background: transparent;
+  transition: all 0.15s;
+}
+.dot.filled { background: #0C447C; border-color: #0C447C; }
+
+/* ── NUMPAD ── */
+.numpad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+.numpad button {
+  padding: 14px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: all 0.1s;
+  color: #111827;
+}
+.numpad button:hover  { background: #eff6ff; border-color: #93c5fd; }
+.numpad button:active { transform: scale(0.93); }
+.numpad button.del { background: #fef2f2; border-color: #fecaca; color: #dc2626; font-size: 16px; }
+.numpad button.ok  { background: #0C447C; border-color: #0C447C; color: #fff; font-size: 14px; }
+.numpad button.ok:hover { background: #1565C0; }
+
+/* ── SALDO BAR ── */
+.saldo-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px;
+  background: #f0f4f8;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+.saldo-bar span:first-child { color: #6b7280; }
+.saldo-bar span:last-child  { font-weight: 700; color: #111827; }
+
+/* ── ALERT BOXES ── */
+.alert-box {
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 12px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.alert-box.info    { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af; }
+.alert-box.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+.alert-box.warning { background: #fffbeb; border: 1px solid #fde68a; color: #92400e; }
+.alert-box.danger  { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+
+/* ── PENDING LIST ── */
+.pending-list { margin-bottom: 10px; }
+.pending-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 12px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+}
+.pending-item span:last-child { font-weight: 700; color: #92400e; }
+
+/* ── MENU ── */
+.menu-title {
+  font-size: 13px; font-weight: 700; color: #6b7280; text-align: center;
+  margin-bottom: 12px; letter-spacing: 1px;
+}
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.menu-btn {
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  background: #f9fafb;
+  transition: all 0.2s;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+.menu-btn:hover { border-color: #0C447C; background: #eff6ff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(12,68,124,0.15); }
+.mb-icon {
+  width: 38px; height: 38px;
+  background: #dbeafe;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 2px;
+}
+.mb-icon svg { width: 22px; height: 22px; fill: #1d4ed8; }
+.mb-num { font-size: 10px; color: #9ca3af; font-weight: 400; }
+
+/* ── FIELD LABEL ── */
+.field-label {
+  font-size: 12px; font-weight: 700;
+  color: #374151; text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 6px; margin-top: 10px;
+}
+
+/* ── FORM INPUTS ── */
+input[type="number"], input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  transition: border-color 0.2s;
+  outline: none;
+}
+input:focus { border-color: #0C447C; box-shadow: 0 0 0 3px rgba(12,68,124,0.1); }
+
+/* ── BILLETES PREVIEW ── */
+#billetesPreview, #depositoPreview {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  color: #166534;
+  margin: 8px 0;
+  display: none;
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+  width: 100%;
+  padding: 13px;
+  background: linear-gradient(135deg, #0C447C, #1565C0);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 14px;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.btn-primary:hover  { background: linear-gradient(135deg, #1565C0, #1976D2); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(12,68,124,0.3); }
+.btn-primary:active { transform: translateY(0); }
+
+/* ── ERROR MSG ── */
+.error-msg {
+  font-size: 12px; color: #dc2626;
+  min-height: 18px; margin: 4px 0;
+  font-weight: 600;
+}
+
+/* ── SUCCESS ICON ── */
+.success-icon {
+  width: 64px; height: 64px;
+  background: #22c55e;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+}
+.success-icon svg { width: 36px; height: 36px; fill: #fff; }
+
+/* ── TICKET ── */
+.ticket {
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #374151;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 4px;
+  white-space: pre-line;
+}
+
+/* ── FAREWELL ── */
+.farewell-wrap { text-align: center; padding: 10px 0; }
+.farewell-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+}
+.farewell-icon svg { width: 36px; height: 36px; fill: #fff; }
+.farewell-title { font-size: 22px; font-weight: 800; color: #111827; margin-bottom: 8px; }
+.farewell-msg   { font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 14px; }
+.farewell-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #eff6ff; border: 1px solid #bfdbfe;
+  border-radius: 20px; padding: 6px 14px;
+  font-size: 11px; color: #1e40af;
+  margin-bottom: 16px;
+}
+.farewell-badge svg { width: 14px; height: 14px; fill: #1e40af; }
+
+/* ── OPCION FORM ── */
+.opcion-form { display: flex; flex-direction: column; gap: 2px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 460px) {
+  body { padding: 10px; }
+  .menu-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tipo-cajero-grid { grid-template-columns: 1fr 1fr; }
+}
