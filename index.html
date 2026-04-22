@@ -1,54 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Cajero Automático</title>
-<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Cajero Automático</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<div class="atm">
+<div class="container">
 
-    <div class="screen">
+  <!-- ACCESO SIN TARJETA -->
+  <div class="card green">
+    <h3>ACCESO SIN TARJETA</h3>
+    <p>(Cédula y PIN)</p>
 
-        <!-- LOGIN -->
-        <div id="login">
-            <h2>Acceso</h2>
+    <input type="text" placeholder="Ingrese su cédula" id="cedula">
+    <input type="password" placeholder="Ingrese su PIN" id="pin1">
 
-            <input id="pin" type="password" placeholder="PIN (4 dígitos)">
-            <input id="saldo" type="number" placeholder="Saldo inicial">
+    <button onclick="login()">INGRESAR</button>
+  </div>
 
-            <select id="tipoCuenta">
-                <option value="">Tipo de cuenta</option>
-                <option>Ahorro</option>
-                <option>Corriente</option>
-            </select>
+  <!-- ACCESO CON TARJETA -->
+  <div class="card blue">
+    <h3>ACCESO CON TARJETA</h3>
+    <p>(Tarjeta y PIN)</p>
 
-            <input id="monto" type="number" placeholder="Monto a retirar">
+    <input type="text" placeholder="Número de tarjeta">
+    <input type="password" placeholder="Ingrese su PIN" id="pin2">
 
-            <select id="donacion">
-                <option value="">¿Donar $1000?</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-            </select>
+    <button onclick="login()">INGRESAR</button>
+  </div>
 
-            <button onclick="validar()">Ingresar</button>
-            <p id="error"></p>
-        </div>
+  <!-- MENÚ PRINCIPAL -->
+  <div class="card menu">
+    <h3>MENÚ PRINCIPAL</h3>
 
-        <!-- MENU -->
-        <div id="menu" class="hidden">
-            <h2>Menú</h2>
-
-            <button onclick="consultar()">Consultar saldo</button>
-            <button onclick="retirar()">Retirar dinero</button>
-            <button onclick="salir()">Salir</button>
-
-            <div id="resultado"></div>
-        </div>
-
-    </div>
+    <button onclick="accion('Saldo: $5000')">Consultar saldo</button>
+    <button onclick="accion('Retiro exitoso')">Retirar dinero</button>
+    <button onclick="accion('Depósito exitoso')">Depositar dinero</button>
+    <button onclick="accion('Pago realizado')">Pagar servicios</button>
+    <button onclick="accion('Clave cambiada')">Cambiar clave</button>
+    <button onclick="accion('Sesión cerrada')">Salir</button>
+  </div>
 
 </div>
 
