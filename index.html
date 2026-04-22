@@ -1,424 +1,402 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cajero Automático — Grupo 4</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
 
-<div id="cajero">
+    /* ── CONTENEDOR PRINCIPAL ── */
+    #cajero {
+      max-width: 420px;
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    }
 
-  <!-- CABECERA -->
-  <div class="header">
-    <div class="header-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1
-                 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-      </svg>
-    </div>
-    <div>
-      <h1>BancoCajero</h1>
-      <p>Cajero Automático — Grupo 4</p>
-    </div>
-  </div>
+    /* ── CABECERA ── */
+    .header {
+      background: #0C447C;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-icon {
+      width: 36px; height: 36px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .header-icon svg { width: 20px; height: 20px; fill: white; }
+    .header h1 { color: white; font-size: 16px; font-weight: 500; }
+    .header p  { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 2px; }
 
-  <!-- BARRA DE PROGRESO -->
-  <div class="progress-bar">
-    <div class="step-dot current" id="pd1"></div>
-    <div class="step-dot" id="pd2"></div>
-    <div class="step-dot" id="pd3"></div>
-    <div class="step-dot" id="pd4"></div>
-    <div class="step-dot" id="pd5"></div>
-    <div class="step-dot" id="pd6"></div>
-    <span class="step-label" id="stepLabel">Tipo de acceso</span>
-  </div>
+    /* ── PANTALLA ── */
+    .screen {
+      background: #0a1628;
+      margin: 1rem 1rem 0;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      min-height: 68px;
+      display: flex; flex-direction: column; justify-content: center;
+      border: 1px solid #1a3a6e;
+    }
+    .screen-label {
+      color: #4a7cc7; font-size: 10px;
+      letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .screen-text { color: #85B7EB; font-size: 13px; line-height: 1.5; }
+    .screen-text.error   { color: #F09595; }
+    .screen-text.success { color: #5DCAA5; }
 
-  <!-- PANTALLA -->
-  <div class="screen">
-    <div class="screen-label" id="screenLabel">Bienvenido</div>
-    <div class="screen-text" id="screenText">Seleccione cómo desea acceder al cajero.</div>
-  </div>
+    /* ── BARRA DE PROGRESO ── */
+    .progress-bar {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0.6rem 1rem 0;
+    }
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #d1d5db; transition: background 0.3s;
+    }
+    .step-dot.done    { background: #5DCAA5; }
+    .step-dot.current { background: #185FA5; }
+    .step-label { font-size: 11px; color: #9ca3af; margin-left: 4px; }
 
-  <div class="body">
+    /* ── CUERPO ── */
+    .body { padding: 1rem 1rem 1.2rem; }
+    .step { display: none; }
+    .step.active { display: block; }
 
-    <!-- ══ PASO 0: TIPO DE CAJERO ══ -->
-    <div class="step active" id="step0">
-      <div class="tipo-cajero-title">⬇ Seleccione tipo de acceso</div>
-      <div class="tipo-cajero-grid">
+    /* ── CAMPOS ── */
+    .field-label {
+      font-size: 12px; color: #6b7280;
+      margin-bottom: 6px; margin-top: 14px;
+    }
+    .field-label:first-child { margin-top: 0; }
+    input[type="number"] {
+      width: 100%; padding: 9px 12px; font-size: 14px;
+      border: 1px solid #d1d5db; border-radius: 8px;
+      background: #fff; color: #111827; outline: none;
+    }
+    input[type="number"]:focus { border-color: #185FA5; }
+    .error-msg {
+      font-size: 12px; color: #dc2626;
+      margin-top: 5px; min-height: 16px;
+    }
 
-        <div class="tipo-cajero-card sin-tarjeta" onclick="seleccionarTipoCajero('sinTarjeta')">
-          <div class="tc-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1
-                       0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6
-                       10h5v2H6zm0 3h5v2H6zm7-3h3v5h-3z"/>
-            </svg>
-          </div>
-          <span class="tc-label">Sin Tarjeta</span>
-          <span class="tc-sub">Acceso con<br>cédula y PIN</span>
-        </div>
+    /* ── PIN ── */
+    .pin-dots {
+      display: flex; gap: 10px; justify-content: center; padding: 12px 0 4px;
+    }
+    .dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid #d1d5db; background: transparent;
+      transition: background 0.2s;
+    }
+    .dot.hidden { display: none; }
+    .dot.filled      { background: #0C447C; border-color: #0C447C; }
+    .dot.error-flash { background: #E24B4A; border-color: #E24B4A; }
 
-        <div class="tipo-cajero-card con-tarjeta" onclick="seleccionarTipoCajero('conTarjeta')">
-          <div class="tc-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16
-                       c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-            </svg>
-          </div>
-          <span class="tc-label">Con Tarjeta</span>
-          <span class="tc-sub">Acceso con<br>tarjeta y PIN</span>
-        </div>
+    /* ── INDICADOR DE INTENTOS ── */
+    .intentos-bar {
+      display: flex; gap: 5px; justify-content: center; margin-top: 8px;
+    }
+    .intento-pip {
+      width: 28px; height: 5px; border-radius: 3px;
+      background: #185FA5; transition: background 0.3s;
+    }
+    .intento-pip.used { background: #E24B4A; }
 
-      </div>
-      <p style="font-size:11px;color:#9ca3af;text-align:center;margin-top:14px;">
-        Seleccione cómo desea autenticarse en el cajero.
-      </p>
-    </div>
+    /* ── TECLADO NUMÉRICO ── */
+    .numpad {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 8px; margin-top: 12px;
+    }
+    .numpad button {
+      padding: 12px; font-size: 16px; font-weight: 500;
+      background: #f9fafb; border: 1px solid #e5e7eb;
+      border-radius: 8px; cursor: pointer; color: #111827;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .numpad button:hover  { background: #f3f4f6; }
+    .numpad button:active { transform: scale(0.95); background: #e5e7eb; }
+    .numpad button.del    { color: #dc2626; }
+    .numpad button.ok     { background: #0C447C; color: white; border-color: #0C447C; }
+    .numpad button.ok:hover  { background: #185FA5; }
+    .numpad button.ok:active { background: #185FA5; }
+    .numpad.blocked { opacity: 0.35; pointer-events: none; }
 
-    <!-- ══ PASO TARJETA: INSERTAR TARJETA ══ -->
-    <div class="step" id="stepTarjeta">
-      <div class="tarjeta-wrap">
-        <div class="tarjeta-anim">
-          <svg viewBox="0 0 24 24">
-            <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16
-                     c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-          </svg>
-        </div>
-        <div class="tarjeta-title">Inserte su tarjeta</div>
-        <div class="tarjeta-msg">
-          Introduzca su tarjeta débito o crédito en el lector del cajero para continuar.
-        </div>
-      </div>
-      <div class="tarjeta-numero-wrap">
-        <div class="field-label">Número de tarjeta (16 dígitos)</div>
-        <input type="text" id="tarjetaNumero" inputmode="numeric" autocomplete="off"
-               placeholder="XXXX XXXX XXXX XXXX" maxlength="19"
-               oninput="formatTarjeta(this)"
-               style="width:100%;padding:9px 12px;font-size:15px;letter-spacing:0.1em;
-                      border:1px solid #d1d5db;border-radius:8px;">
-        <div class="error-msg" id="tarjetaError"></div>
-      </div>
-      <button class="btn-primary" onclick="confirmarTarjeta()">Validar tarjeta</button>
-      <button class="btn-primary"
-              style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;"
-              onclick="volverTipoCajero()">← Cambiar tipo de acceso</button>
-    </div>
+    /* ── RADIO OPCIONES ── */
+    .radio-group { display: flex; gap: 8px; margin-top: 4px; }
+    .radio-opt {
+      flex: 1; padding: 9px 10px;
+      border: 1px solid #d1d5db; border-radius: 8px;
+      text-align: center; cursor: pointer;
+      font-size: 13px; color: #6b7280;
+      transition: all 0.15s; user-select: none;
+    }
+    .radio-opt.selected {
+      background: #EFF6FF; border-color: #185FA5;
+      color: #0C447C; font-weight: 500;
+    }
+    .login-help {
+      font-size: 12px; color: #6b7280;
+      margin-top: 10px; text-align: center; line-height: 1.5;
+    }
+    .pending-list {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 10px;
+    }
+    .pending-pill {
+      background: #EFF6FF; border: 1px solid #93c5fd;
+      color: #0C447C; border-radius: 999px;
+      padding: 6px 10px; font-size: 12px; font-weight: 500;
+    }
 
-    <!-- ══ PASO 1: CÉDULA / PIN ══ -->
-    <div class="step" id="step1">
-      <div class="field-label">Elegir ingreso</div>
-      <div class="radio-group">
-        <div class="radio-opt selected" id="modoCedula" onclick="setModoIngreso('cedula')">Cedula</div>
-        <div class="radio-opt" id="modoPin" onclick="setModoIngreso('pin')">PIN</div>
-      </div>
-      <div class="login-help" id="loginHelp">Ingrese su cedula de 8 digitos.</div>
-      <div class="pin-dots">
-        <div class="dot" id="dot0"></div>
-        <div class="dot" id="dot1"></div>
-        <div class="dot" id="dot2"></div>
-        <div class="dot" id="dot3"></div>
-        <div class="dot" id="dot4"></div>
-        <div class="dot" id="dot5"></div>
-        <div class="dot" id="dot6"></div>
-        <div class="dot" id="dot7"></div>
-      </div>
-      <div class="error-msg" id="pinError"></div>
-      <div class="numpad" id="numpadGrid">
-        <button onclick="np('1')">1</button>
-        <button onclick="np('2')">2</button>
-        <button onclick="np('3')">3</button>
-        <button onclick="np('4')">4</button>
-        <button onclick="np('5')">5</button>
-        <button onclick="np('6')">6</button>
-        <button onclick="np('7')">7</button>
-        <button onclick="np('8')">8</button>
-        <button onclick="np('9')">9</button>
-        <button class="del" onclick="nd()">⌫</button>
-        <button onclick="np('0')">0</button>
-        <button class="ok" onclick="confirmAcceso()">OK</button>
-      </div>
-      <button class="btn-primary"
-              style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:10px;font-size:12px;"
-              onclick="volverTipoCajero()">← Cambiar tipo de acceso</button>
-    </div>
+    /* ── BOTONES ── */
+    .btn-primary {
+      width: 100%; margin-top: 16px; padding: 11px;
+      background: #0C447C; color: white; border: none;
+      border-radius: 8px; font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover  { background: #185FA5; }
+    .btn-primary:active { transform: scale(0.99); }
 
-    <!-- ══ PASO 2: USUARIO REGISTRADO ══ -->
-    <div class="step" id="step2">
-      <div class="alert-box info" id="usuarioIngresoInfo">
-        Usuario encontrado en la base de datos local del cajero.
-      </div>
-      <div class="saldo-bar">
-        <span>Nombre</span>
-        <span id="usuarioNombreDisplay">-</span>
-      </div>
-      <div class="saldo-bar">
-        <span>Cédula</span>
-        <span id="usuarioCedulaDisplay">-</span>
-      </div>
-      <div class="saldo-bar">
-        <span>Ingreso con</span>
-        <span id="usuarioIngresoDisplay">-</span>
-      </div>
-      <div class="field-label">Recibos por pagar</div>
-      <div class="alert-box info" id="usuarioRecibosResumen">No tiene recibos por pagar.</div>
-      <div class="pending-list" id="usuarioRecibosLista" style="display:none;"></div>
-      <div class="error-msg" id="saldoError"></div>
-      <button class="btn-primary" onclick="confirmSaldo()">Continuar al menu</button>
-    </div>
+    /* ── BARRA DE SALDO ── */
+    .saldo-bar {
+      background: #f9fafb; border-radius: 8px;
+      padding: 10px 14px; margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center;
+      border: 1px solid #e5e7eb;
+    }
+    .saldo-bar span:first-child { font-size: 12px; color: #6b7280; }
+    .saldo-bar span:last-child  { font-size: 15px; font-weight: 500; color: #111827; }
 
-    <!-- ══ PASO MENÚ: MENÚ PRINCIPAL ══ -->
-    <div class="step" id="stepMenu">
-      <div class="alert-box info" id="menuRecibosAlert" style="margin-bottom:12px;display:none;"></div>
-      <div class="menu-title">═══ MENÚ ═══</div>
-      <div class="menu-grid">
+    /* ── ALERTA INFO ── */
+    .alert-box {
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 13px; margin-bottom: 12px; border: 1px solid;
+    }
+    .alert-box.info {
+      background: #EFF6FF; color: #1e3a5f; border-color: #93c5fd;
+    }
 
-        <button class="menu-btn" onclick="irOpcion('consultar')">
-          <div class="mb-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/>
-            </svg>
-          </div>
-          <span>Consultar saldo</span>
-          <span class="mb-num">Opción 1</span>
-        </button>
+    /* ── BILLETES GRID ── */
+    .billetes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .billete-card {
+      border-radius: 8px; border: 1px solid #e5e7eb;
+      padding: 10px 6px; text-align: center; background: #f9fafb;
+    }
+    .billete-card.active { border-color: #185FA5; background: #EFF6FF; }
+    .billete-card.zero   { opacity: 0.3; }
+    .billete-val  { font-size: 10px; color: #6b7280; }
+    .billete-num  { font-size: 22px; font-weight: 500; color: #111827; margin: 2px 0; }
+    .billete-num.blue { color: #0C447C; }
+    .billete-label { font-size: 10px; color: #6b7280; }
 
-        <button class="menu-btn" onclick="irOpcion('retirar')">
-          <div class="mb-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
-            </svg>
-          </div>
-          <span>Retirar</span>
-          <span class="mb-num">Opción 2</span>
-        </button>
+    /* ── TICKET FINAL ── */
+    .ticket {
+      background: #fff; border: 1px solid #d1d5db;
+      border-radius: 12px; overflow: hidden; margin-bottom: 12px;
+    }
+    .ticket-header {
+      background: #0C447C; padding: 14px 16px; text-align: center;
+    }
+    .ticket-header .t-logo  { color: rgba(255,255,255,0.5); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+    .ticket-header .t-title { color: white; font-size: 17px; font-weight: 500; margin: 4px 0 2px; }
+    .ticket-header .t-ref   { color: rgba(255,255,255,0.6); font-size: 12px; }
 
-        <button class="menu-btn" onclick="irOpcion('pagar')">
-          <div class="mb-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/>
-            </svg>
-          </div>
-          <span>Pagar servicio</span>
-          <span class="mb-num">Opción 3</span>
-        </button>
+    .ticket-body { padding: 14px 16px; }
+    .t-section-label {
+      font-size: 10px; color: #9ca3af;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin: 14px 0 6px;
+      border-top: 1px dashed #e5e7eb; padding-top: 12px;
+    }
+    .t-section-label:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+    .t-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 4px 0; font-size: 13px;
+    }
+    .t-row .lbl { color: #6b7280; }
+    .t-row .val { color: #111827; font-weight: 500; }
+    .t-row .val.green { color: #0F6E56; }
+    .t-row .val.red   { color: #A32D2D; }
+    .t-row.total-row {
+      border-top: 1px solid #e5e7eb; margin-top: 8px; padding-top: 10px;
+    }
+    .t-row.total-row .lbl { font-size: 14px; font-weight: 500; color: #111827; }
+    .t-row.total-row .val { font-size: 16px; font-weight: 500; color: #0C447C; }
 
-        <button class="menu-btn" onclick="irOpcion('depositar')">
-          <div class="mb-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-            </svg>
-          </div>
-          <span>Depositar</span>
-          <span class="mb-num">Opción 4</span>
-        </button>
+    /* ── BADGE DONACIÓN ── */
+    .donacion-badge {
+      display: flex; align-items: center; gap: 10px;
+      border-radius: 8px; padding: 10px 14px;
+      margin-top: 8px; font-size: 13px; border: 1px solid;
+    }
+    .donacion-badge.confirmed { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+    .donacion-badge.declined  { background: #f9fafb; border-color: #e5e7eb; color: #6b7280; }
+    .donacion-badge .db-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .donacion-badge.confirmed .db-icon { background: #5DCAA5; }
+    .donacion-badge.declined  .db-icon { background: #d1d5db; }
+    .donacion-badge .db-icon svg { width: 14px; height: 14px; fill: white; }
+    .donacion-badge .db-main { font-weight: 500; }
+    .donacion-badge .db-sub  { font-size: 11px; opacity: 0.7; margin-top: 1px; }
 
-        <button class="menu-btn" onclick="reiniciar()">
-          <div class="mb-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
-            </svg>
-          </div>
-          <span>Cambiar usuario</span>
-          <span class="mb-num">Opción 5</span>
-        </button>
+    .ticket-footer {
+      background: #f9fafb; border-top: 1px dashed #e5e7eb;
+      padding: 10px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .ticket-footer span { font-size: 11px; color: #9ca3af; }
 
-        <button class="menu-btn" onclick="irOpcion('salir')" style="border-color:#fca5a5;color:#dc2626;">
-          <div class="mb-icon" style="background:#fee2e2;">
-            <svg viewBox="0 0 24 24" style="fill:#dc2626;">
-              <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2z"/>
-            </svg>
-          </div>
-          <span>Salir</span>
-          <span class="mb-num">Opción 6</span>
-        </button>
+    /* ── ÍCONO ÉXITO ── */
+    .success-icon {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: #E1F5EE; border: 1px solid #5DCAA5;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px;
+    }
+    .success-icon svg { width: 24px; height: 24px; fill: #0F6E56; }
 
-      </div>
-    </div>
+    /* ── MENÚ PRINCIPAL ── */
+    .menu-title {
+      text-align: center; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.15em; color: #9ca3af;
+      text-transform: uppercase; padding: 4px 0 10px;
+      border-bottom: 1px dashed #e5e7eb; margin-bottom: 10px;
+    }
+    .menu-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    .menu-btn {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; padding: 14px 8px;
+      background: #f9fafb; border: 1px solid #e5e7eb;
+      border-radius: 10px; cursor: pointer;
+      transition: all 0.15s; text-align: center;
+      color: #374151; font-size: 12px; font-weight: 500;
+    }
+    .menu-btn:hover  { background: #EFF6FF; border-color: #185FA5; color: #0C447C; }
+    .menu-btn:active { transform: scale(0.97); }
+    .menu-btn .mb-num {
+      font-size: 10px; color: #9ca3af; font-weight: 400;
+    }
+    .menu-btn .mb-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      background: #e0eaf6; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .menu-btn .mb-icon svg { width: 16px; height: 16px; fill: #0C447C; }
+    .menu-btn:hover .mb-icon { background: #185FA5; }
+    .menu-btn:hover .mb-icon svg { fill: white; }
 
-    <!-- ══ OPCIÓN 1: CONSULTAR SALDO ══ -->
-    <div class="step" id="stepConsultar">
-      <div class="saldo-bar" style="margin-bottom:10px;">
-        <span>Tipo de cuenta</span>
-        <span id="tipoDisplay">Ahorro</span>
-      </div>
-      <div class="saldo-bar">
-        <span>Saldo disponible</span>
-        <span id="saldoConsultaDisplay" style="color:#0C447C;font-weight:600;">$0</span>
-      </div>
-      <div class="alert-box info" style="margin-top:10px;margin-bottom:0;">
-        Saldo consultado exitosamente. Los movimientos recientes pueden tardar hasta 24 h en reflejarse.
-      </div>
-      <button class="btn-primary" onclick="finalizarOpcion('Consulta de saldo realizada con éxito.')">Finalizar</button>
-      <button class="btn-primary"
-              style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;"
-              onclick="volverMenu()">← Volver al menu</button>
-    </div>
+    /* ── PANTALLAS OPCIONES SIMPLES ── */
+    .opcion-form { padding: 4px 0; }
+    .opcion-form .field-label { margin-top: 10px; }
 
-    <!-- ══ OPCIÓN 3: PAGAR SERVICIO ══ -->
-    <div class="step" id="stepPagar">
-      <div class="opcion-form">
-        <div class="field-label">Tipo de servicio</div>
-        <div class="radio-group" style="flex-wrap:wrap;">
-          <div class="radio-opt selected" id="srvAgua" onclick="setSrv('Agua', this)">Agua</div>
-          <div class="radio-opt" id="srvLuz" onclick="setSrv('Luz', this)">Luz</div>
-          <div class="radio-opt" id="srvGas" onclick="setSrv('Gas', this)">Gas</div>
-          <div class="radio-opt" id="srvInternet" onclick="setSrv('Internet', this)">Internet</div>
-        </div>
-        <div class="field-label">Referencia / Número de factura</div>
-        <input type="text" id="pagarRef" inputmode="numeric" autocomplete="off"
-               placeholder="Ej: 123456"
-               oninput="this.value=this.value.replace(/\D/g,'').slice(0,6)"
-               style="width:100%;padding:9px 12px;font-size:14px;border:1px solid #d1d5db;border-radius:8px;">
-        <div class="field-label">Valor a pagar ($)</div>
-        <input type="number" id="pagarMonto" placeholder="Ej: 85000" min="1000"
-               oninput="valPago()"
-               style="width:100%;padding:9px 12px;font-size:14px;border:1px solid #d1d5db;border-radius:8px;">
-        <div class="error-msg" id="pagarError"></div>
-        <div class="field-label">Tipo de pago</div>
-        <div class="radio-group">
-          <div class="radio-opt selected" id="pagoCompleto" onclick="setTipoPago('completo')">Pago completo</div>
-          <div class="radio-opt" id="pagoAbono" onclick="setTipoPago('abono')">Abonar</div>
-        </div>
-        <button class="btn-primary" onclick="confirmarPago()">Pagar servicio</button>
-      </div>
-    </div>
+    /* ── SELECTOR TIPO CAJERO ── */
+    .tipo-cajero-title {
+      text-align: center;
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0.12em; color: #9ca3af;
+      text-transform: uppercase;
+      padding: 2px 0 14px;
+      border-bottom: 1px dashed #e5e7eb;
+      margin-bottom: 16px;
+    }
+    .tipo-cajero-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    }
+    .tipo-cajero-card {
+      border: 2px solid #e5e7eb; border-radius: 14px;
+      padding: 20px 10px; text-align: center; cursor: pointer;
+      background: #f9fafb; transition: all 0.18s;
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+    }
+    .tipo-cajero-card:hover {
+      border-color: #185FA5; background: #EFF6FF;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(12,68,124,0.12);
+    }
+    .tipo-cajero-card:active { transform: scale(0.97); }
+    .tipo-cajero-card .tc-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: #e0eaf6;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .tipo-cajero-card .tc-icon svg { width: 26px; height: 26px; fill: #0C447C; }
+    .tipo-cajero-card .tc-label {
+      font-size: 13px; font-weight: 600; color: #111827;
+    }
+    .tipo-cajero-card .tc-sub {
+      font-size: 11px; color: #6b7280; line-height: 1.4;
+    }
+    .tipo-cajero-card.sin-tarjeta:hover { border-color: #0C447C; }
+    .tipo-cajero-card.con-tarjeta:hover { border-color: #0F6E56; }
+    .tipo-cajero-card.con-tarjeta .tc-icon { background: #d1fae5; }
+    .tipo-cajero-card.con-tarjeta .tc-icon svg { fill: #0F6E56; }
+    .tipo-cajero-card.con-tarjeta:hover { background: #ecfdf5; }
 
-    <!-- ══ OPCIÓN 4: DEPOSITAR ══ -->
-    <div class="step" id="stepDepositar">
-      <div class="opcion-form">
-        <div class="field-label">Monto a depositar ($)</div>
-        <input type="number" id="depositoMonto" placeholder="Ej: 200000" min="10000"
-               oninput="valDeposito()"
-               style="width:100%;padding:9px 12px;font-size:14px;border:1px solid #d1d5db;border-radius:8px;">
-        <div class="error-msg" id="depositoError"></div>
-        <div id="depositoPreview"></div>
-        <button class="btn-primary" onclick="confirmarDeposito()">Confirmar depósito</button>
-        <button class="btn-primary"
-                style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;"
-                onclick="volverMenu()">← Volver al menu</button>
-      </div>
-    </div>
+    /* ── INSERTAR TARJETA ── */
+    .tarjeta-wrap {
+      text-align: center; padding: 8px 0 4px;
+    }
+    .tarjeta-anim {
+      width: 80px; height: 52px;
+      background: linear-gradient(135deg, #185FA5, #0C447C);
+      border-radius: 8px; margin: 0 auto 14px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 14px rgba(12,68,124,0.3);
+      animation: tarjetaPulse 1.8s ease-in-out infinite;
+    }
+    .tarjeta-anim svg { width: 32px; height: 32px; fill: rgba(255,255,255,0.85); }
+    @keyframes tarjetaPulse {
+      0%, 100% { transform: translateY(0); box-shadow: 0 4px 14px rgba(12,68,124,0.3); }
+      50%       { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(12,68,124,0.4); }
+    }
+    .tarjeta-title {
+      font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 6px;
+    }
+    .tarjeta-msg {
+      font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 14px;
+    }
+    .tarjeta-numero-wrap { margin-bottom: 4px; }
 
-    <!-- ══ OPCIÓN 5: CAMBIAR CLAVE ══ -->
-    <div class="step" id="stepClave">
-      <div class="opcion-form">
-        <div class="field-label">PIN actual</div>
-        <div class="pin-dots" id="claveActualDots">
-          <div class="dot" id="ca0"></div>
-          <div class="dot" id="ca1"></div>
-          <div class="dot" id="ca2"></div>
-          <div class="dot" id="ca3"></div>
-        </div>
-        <div class="numpad" id="numpadClave1" style="margin-top:8px;">
-          <button onclick="npClave('actual','1')">1</button>
-          <button onclick="npClave('actual','2')">2</button>
-          <button onclick="npClave('actual','3')">3</button>
-          <button onclick="npClave('actual','4')">4</button>
-          <button onclick="npClave('actual','5')">5</button>
-          <button onclick="npClave('actual','6')">6</button>
-          <button onclick="npClave('actual','7')">7</button>
-          <button onclick="npClave('actual','8')">8</button>
-          <button onclick="npClave('actual','9')">9</button>
-          <button class="del" onclick="ndClave('actual')">⌫</button>
-          <button onclick="npClave('actual','0')">0</button>
-          <button class="ok" onclick="siguienteClave()">OK</button>
-        </div>
-        <div class="error-msg" id="claveError"></div>
-        <div class="field-label" id="lblNuevaClave" style="display:none;">Nueva clave (4 dígitos)</div>
-        <div class="pin-dots" id="claveNuevaDots" style="display:none;">
-          <div class="dot" id="cn0"></div>
-          <div class="dot" id="cn1"></div>
-          <div class="dot" id="cn2"></div>
-          <div class="dot" id="cn3"></div>
-        </div>
-        <div class="numpad" id="numpadClave2" style="margin-top:8px;display:none;">
-          <button onclick="npClave('nueva','1')">1</button>
-          <button onclick="npClave('nueva','2')">2</button>
-          <button onclick="npClave('nueva','3')">3</button>
-          <button onclick="npClave('nueva','4')">4</button>
-          <button onclick="npClave('nueva','5')">5</button>
-          <button onclick="npClave('nueva','6')">6</button>
-          <button onclick="npClave('nueva','7')">7</button>
-          <button onclick="npClave('nueva','8')">8</button>
-          <button onclick="npClave('nueva','9')">9</button>
-          <button class="del" onclick="ndClave('nueva')">⌫</button>
-          <button onclick="npClave('nueva','0')">0</button>
-          <button class="ok" onclick="confirmarClave()">OK</button>
-        </div>
-        <button class="btn-primary"
-                style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:12px;"
-                onclick="volverMenu()">← Volver al menu</button>
-      </div>
-    </div>
-
-    <!-- ══ PASO 3: MONTO A RETIRAR ══ -->
-    <div class="step" id="step3">
-      <div class="saldo-bar">
-        <span>Saldo disponible</span>
-        <span id="saldoDisplay">$0</span>
-      </div>
-      <div class="field-label">Monto a retirar ($)</div>
-      <input type="number" id="montoInput" min="10000" step="10000"
-             placeholder="Múltiplo de $10.000" oninput="valMonto()">
-      <div class="error-msg" id="montoError"></div>
-      <div id="billetesPreview"></div>
-      <button class="btn-primary" onclick="confirmMonto()">Continuar</button>
-    </div>
-
-    <!-- ══ PASO 4: DONACIÓN UNICEF ══ -->
-    <div class="step" id="step4">
-      <div class="alert-box info" id="donacionInfo"></div>
-      <div class="field-label">¿Desea donar $1.000 a Unicef?</div>
-      <div class="radio-group">
-        <div class="radio-opt" id="optSi" onclick="setDon('S')">Sí, donar $1.000</div>
-        <div class="radio-opt selected" id="optNo" onclick="setDon('N')">No, gracias</div>
-      </div>
-      <div id="donWarn" class="error-msg"></div>
-      <button class="btn-primary" onclick="confirmarDonacion()">Confirmar y retirar</button>
-    </div>
-
-    <!-- ══ PASO 5: RECIBO FINAL ══ -->
-    <div class="step" id="step5">
-      <div class="success-icon">
-        <svg viewBox="0 0 24 24">
-          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-        </svg>
-      </div>
-      <div class="ticket" id="ticketFinal"></div>
-      <button class="btn-primary" id="reciboVolverBtn" onclick="volverMenu()">← Volver al menu</button>
-      <button class="btn-primary" id="reciboSalirBtn"
-              style="background:#f3f4f6;color:#dc2626;border:1px solid #fca5a5;margin-top:8px;"
-              onclick="irOpcion('salir')">Finalizar sesión</button>
-    </div>
-
-    <!-- ══ PASO DESPEDIDA ══ -->
-    <div class="step" id="stepDespedida">
-      <div class="farewell-wrap">
-        <div class="farewell-icon">
-          <svg viewBox="0 0 24 24">
-            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/>
-          </svg>
-        </div>
-        <div class="farewell-title">¡Hasta pronto!</div>
-        <div class="farewell-msg">
-          Gracias por su transacción y uso de nuestro banco.<br>
-          <strong>¡Vuelva pronto!</strong>
-        </div>
-        <div class="farewell-badge">
-          <svg viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
-          </svg>
-          Recuerde retirar su tarjeta y comprobante.
-        </div>
-        <button class="btn-primary" onclick="reiniciar()">Nueva sesión</button>
-      </div>
-    </div>
-
-  </div><!-- /.body -->
-</div><!-- /#cajero -->
-
-<script src="script.js"></script>
-</body>
-</html>
+    /* ── DESPEDIDA ── */
+    .farewell-wrap {
+      text-align: center; padding: 10px 0 6px;
+    }
+    .farewell-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #0C447C, #185FA5);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 12px;
+      box-shadow: 0 4px 14px rgba(12,68,124,0.3);
+    }
+    .farewell-icon svg { width: 28px; height: 28px; fill: white; }
+    .farewell-title {
+      font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 6px;
+    }
+    .farewell-msg {
+      font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 16px;
+    }
+    .farewell-badge {
+      background: #EFF6FF; border: 1px solid #93c5fd;
+      border-radius: 8px; padding: 10px 14px;
+      font-size: 12px; color: #1e40af; margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .farewell-badge svg { width: 14px; height: 14px; fill: #1e40af; flex-shrink: 0; }
