@@ -1,591 +1,402 @@
-/* ============================================================
-   VARIABLES GLOBALES
-   ============================================================ */
-:root {
-  --green: #00ff88;
-  --green-dim: #00cc66;
-  --green-glow: rgba(0,255,136,0.25);
-  --red: #ff3355;
-  --red-dim: #cc2244;
-  --blue: #0088ff;
-  --gold: #ffcc00;
-  --bg: #060d10;
-  --panel: #0d1a1f;
-  --panel2: #0a1418;
-  --border: rgba(0,255,136,0.2);
-  --text: #c8f0d8;
-  --mono: 'Share Tech Mono', monospace;
-  --sans: 'Exo 2', sans-serif;
-}
-
-/* ============================================================
-   RESET Y BASE
-   ============================================================ */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background: var(--bg);
-  font-family: var(--sans);
-  color: var(--text);
+  font-family: system-ui, sans-serif;
+  background: #f0f2f5;
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,255,136,0.07) 0%, transparent 70%),
-    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,255,136,0.03) 39px, rgba(0,255,136,0.03) 40px),
-    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,255,136,0.03) 39px, rgba(0,255,136,0.03) 40px);
+  padding: 2rem 1rem;
 }
 
-/* ============================================================
-   CARCASA DEL CAJERO
-   ============================================================ */
-.atm-shell {
+/* ── CONTENEDOR PRINCIPAL ── */
+#cajero {
+  max-width: 420px;
   width: 100%;
-  max-width: 480px;
-  background: linear-gradient(160deg, #1a2830 0%, #0d1a1f 50%, #0a1218 100%);
+  background: #ffffff;
+  border: 1px solid #d1d5db;
   border-radius: 20px;
-  border: 1px solid rgba(0,255,136,0.15);
-  box-shadow:
-    0 0 60px rgba(0,255,136,0.08),
-    0 40px 80px rgba(0,0,0,0.7),
-    inset 0 1px 0 rgba(255,255,255,0.05);
   overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
 }
 
-/* ============================================================
-   CABECERA
-   ============================================================ */
-.atm-header {
-  background: linear-gradient(90deg, #061018, #0d2030, #061018);
-  padding: 14px 24px;
+/* ── CABECERA ── */
+.header {
+  background: #0C447C;
+  padding: 1.2rem 1.5rem;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(0,255,136,0.15);
+  gap: 12px;
 }
-
-.bank-name {
-  font-family: var(--sans);
-  font-weight: 900;
-  font-size: 1.1rem;
-  letter-spacing: 2px;
-  color: var(--green);
-  text-shadow: 0 0 12px var(--green-glow);
+.header-icon {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
 }
+.header-icon svg { width: 20px; height: 20px; fill: white; }
+.header h1 { color: white; font-size: 16px; font-weight: 500; }
+.header p  { color: rgba(255,255,255,0.6); font-size: 12px; margin-top: 2px; }
 
-.bank-sub {
-  font-size: 0.6rem;
-  color: rgba(0,255,136,0.5);
-  letter-spacing: 3px;
-}
-
-.status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 8px var(--green);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-/* ============================================================
-   PANTALLA
-   ============================================================ */
+/* ── PANTALLA ── */
 .screen {
-  margin: 16px;
-  background: var(--panel2);
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  min-height: 380px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: inset 0 0 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,136,0.05);
+  background: #0a1628;
+  margin: 1rem 1rem 0;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  min-height: 68px;
+  display: flex; flex-direction: column; justify-content: center;
+  border: 1px solid #1a3a6e;
+}
+.screen-label {
+  color: #4a7cc7; font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+}
+.screen-text { color: #85B7EB; font-size: 13px; line-height: 1.5; }
+.screen-text.error   { color: #F09595; }
+.screen-text.success { color: #5DCAA5; }
+
+/* ── BARRA DE PROGRESO ── */
+.progress-bar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0.6rem 1rem 0;
+}
+.step-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #d1d5db; transition: background 0.3s;
+}
+.step-dot.done    { background: #5DCAA5; }
+.step-dot.current { background: #185FA5; }
+.step-label { font-size: 11px; color: #9ca3af; margin-left: 4px; }
+
+/* ── CUERPO ── */
+.body { padding: 1rem 1rem 1.2rem; }
+.step { display: none; }
+.step.active { display: block; }
+
+/* ── CAMPOS ── */
+.field-label {
+  font-size: 12px; color: #6b7280;
+  margin-bottom: 6px; margin-top: 14px;
+}
+.field-label:first-child { margin-top: 0; }
+input[type="number"] {
+  width: 100%; padding: 9px 12px; font-size: 14px;
+  border: 1px solid #d1d5db; border-radius: 8px;
+  background: #fff; color: #111827; outline: none;
+}
+input[type="number"]:focus { border-color: #185FA5; }
+.error-msg {
+  font-size: 12px; color: #dc2626;
+  margin-top: 5px; min-height: 16px;
 }
 
-.screen::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,255,136,0.015) 2px,
-    rgba(0,255,136,0.015) 3px
-  );
-  pointer-events: none;
-  z-index: 10;
+/* ── PIN ── */
+.pin-dots {
+  display: flex; gap: 10px; justify-content: center; padding: 12px 0 4px;
 }
-
-/* ============================================================
-   VISTAS
-   ============================================================ */
-.view {
-  display: none;
-  padding: 28px 24px;
-  animation: fadeIn 0.3s ease;
+.dot {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid #d1d5db; background: transparent;
+  transition: background 0.2s;
 }
+.dot.hidden { display: none; }
+.dot.filled      { background: #0C447C; border-color: #0C447C; }
+.dot.error-flash { background: #E24B4A; border-color: #E24B4A; }
 
-.view.active {
-  display: block;
+/* ── INDICADOR DE INTENTOS ── */
+.intentos-bar {
+  display: flex; gap: 5px; justify-content: center; margin-top: 8px;
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: none; }
+.intento-pip {
+  width: 28px; height: 5px; border-radius: 3px;
+  background: #185FA5; transition: background 0.3s;
 }
+.intento-pip.used { background: #E24B4A; }
 
-/* ============================================================
-   TIPOGRAFÍA
-   ============================================================ */
-.screen-title {
-  font-size: 0.65rem;
-  letter-spacing: 3px;
-  color: rgba(0,255,136,0.5);
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  font-family: var(--mono);
+/* ── TECLADO NUMÉRICO ── */
+.numpad {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 8px; margin-top: 12px;
 }
-
-h2 {
-  font-weight: 700;
-  font-size: 1.3rem;
-  color: #fff;
-  margin-bottom: 6px;
-  line-height: 1.2;
+.numpad button {
+  padding: 12px; font-size: 16px; font-weight: 500;
+  background: #f9fafb; border: 1px solid #e5e7eb;
+  border-radius: 8px; cursor: pointer; color: #111827;
+  transition: background 0.15s, transform 0.1s;
 }
+.numpad button:hover  { background: #f3f4f6; }
+.numpad button:active { transform: scale(0.95); background: #e5e7eb; }
+.numpad button.del    { color: #dc2626; }
+.numpad button.ok     { background: #0C447C; color: white; border-color: #0C447C; }
+.numpad button.ok:hover  { background: #185FA5; }
+.numpad button.ok:active { background: #185FA5; }
+.numpad.blocked { opacity: 0.35; pointer-events: none; }
 
-.subtitle {
-  font-size: 0.8rem;
-  color: rgba(200,240,216,0.5);
-  margin-bottom: 24px;
-  line-height: 1.5;
+/* ── RADIO OPCIONES ── */
+.radio-group { display: flex; gap: 8px; margin-top: 4px; }
+.radio-opt {
+  flex: 1; padding: 9px 10px;
+  border: 1px solid #d1d5db; border-radius: 8px;
+  text-align: center; cursor: pointer;
+  font-size: 13px; color: #6b7280;
+  transition: all 0.15s; user-select: none;
 }
-
-/* ============================================================
-   CAMPOS DE FORMULARIO
-   ============================================================ */
-.field {
-  margin-bottom: 16px;
+.radio-opt.selected {
+  background: #EFF6FF; border-color: #185FA5;
+  color: #0C447C; font-weight: 500;
 }
-
-.field label {
-  display: block;
-  font-size: 0.7rem;
-  letter-spacing: 1.5px;
-  color: rgba(0,255,136,0.6);
-  margin-bottom: 6px;
-  font-family: var(--mono);
+.login-help {
+  font-size: 12px; color: #6b7280;
+  margin-top: 10px; text-align: center; line-height: 1.5;
 }
-
-.field input,
-.field select {
-  width: 100%;
-  background: rgba(0,255,136,0.04);
-  border: 1px solid rgba(0,255,136,0.2);
-  border-radius: 8px;
-  padding: 12px 16px;
-  color: var(--green);
-  font-family: var(--mono);
-  font-size: 1rem;
-  outline: none;
-  transition: border 0.2s, box-shadow 0.2s;
-  -webkit-appearance: none;
-}
-
-.field input:focus,
-.field select:focus {
-  border-color: var(--green);
-  box-shadow: 0 0 0 3px var(--green-glow);
-}
-
-.field input[type=password] {
-  letter-spacing: 6px;
-  font-size: 1.2rem;
-}
-
-.field select option {
-  background: #0d1a1f;
-  color: var(--green);
-}
-
-.field input::placeholder {
-  color: rgba(0,255,136,0.2);
-  letter-spacing: 1px;
-}
-
-.field-error {
-  font-size: 0.7rem;
-  color: var(--red);
-  margin-top: 5px;
-  font-family: var(--mono);
-  display: none;
-}
-
-.field-error.show {
-  display: block;
-}
-
-/* ============================================================
-   BOTONES
-   ============================================================ */
-.btn {
-  width: 100%;
-  padding: 13px;
-  border-radius: 8px;
-  border: none;
-  font-family: var(--sans);
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 2px;
-  cursor: pointer;
-  transition: all 0.2s;
-  margin-top: 6px;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--green-dim), var(--green));
-  color: #061018;
-  box-shadow: 0 4px 20px rgba(0,255,136,0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 30px rgba(0,255,136,0.4);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
-}
-
-.btn-secondary {
-  background: transparent;
-  color: rgba(200,240,216,0.6);
-  border: 1px solid rgba(200,240,216,0.15);
+.pending-list {
+  display: flex; flex-wrap: wrap; gap: 8px;
   margin-top: 10px;
 }
-
-.btn-secondary:hover {
-  border-color: rgba(200,240,216,0.4);
-  color: #fff;
+.pending-pill {
+  background: #EFF6FF; border: 1px solid #93c5fd;
+  color: #0C447C; border-radius: 999px;
+  padding: 6px 10px; font-size: 12px; font-weight: 500;
 }
 
-.btn-danger {
-  background: linear-gradient(135deg, var(--red-dim), var(--red));
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(255,51,85,0.3);
+/* ── BOTONES ── */
+.btn-primary {
+  width: 100%; margin-top: 16px; padding: 11px;
+  background: #0C447C; color: white; border: none;
+  border-radius: 8px; font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: background 0.15s, transform 0.1s;
+}
+.btn-primary:hover  { background: #185FA5; }
+.btn-primary:active { transform: scale(0.99); }
+
+/* ── BARRA DE SALDO ── */
+.saldo-bar {
+  background: #f9fafb; border-radius: 8px;
+  padding: 10px 14px; margin-bottom: 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  border: 1px solid #e5e7eb;
+}
+.saldo-bar span:first-child { font-size: 12px; color: #6b7280; }
+.saldo-bar span:last-child  { font-size: 15px; font-weight: 500; color: #111827; }
+
+/* ── ALERTA INFO ── */
+.alert-box {
+  border-radius: 8px; padding: 10px 14px;
+  font-size: 13px; margin-bottom: 12px; border: 1px solid;
+}
+.alert-box.info {
+  background: #EFF6FF; color: #1e3a5f; border-color: #93c5fd;
 }
 
-/* ============================================================
-   ALERTAS
-   ============================================================ */
-.alert {
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: 0.8rem;
-  font-family: var(--mono);
-  margin-bottom: 16px;
-  line-height: 1.5;
+/* ── BILLETES GRID ── */
+.billetes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.billete-card {
+  border-radius: 8px; border: 1px solid #e5e7eb;
+  padding: 10px 6px; text-align: center; background: #f9fafb;
 }
+.billete-card.active { border-color: #185FA5; background: #EFF6FF; }
+.billete-card.zero   { opacity: 0.3; }
+.billete-val  { font-size: 10px; color: #6b7280; }
+.billete-num  { font-size: 22px; font-weight: 500; color: #111827; margin: 2px 0; }
+.billete-num.blue { color: #0C447C; }
+.billete-label { font-size: 10px; color: #6b7280; }
 
-.alert-red {
-  background: rgba(255,51,85,0.1);
-  border: 1px solid rgba(255,51,85,0.3);
-  color: var(--red);
+/* ── TICKET FINAL ── */
+.ticket {
+  background: #fff; border: 1px solid #d1d5db;
+  border-radius: 12px; overflow: hidden; margin-bottom: 12px;
 }
-
-.alert-green {
-  background: rgba(0,255,136,0.07);
-  border: 1px solid rgba(0,255,136,0.25);
-  color: var(--green);
+.ticket-header {
+  background: #0C447C; padding: 14px 16px; text-align: center;
 }
+.ticket-header .t-logo  { color: rgba(255,255,255,0.5); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+.ticket-header .t-title { color: white; font-size: 17px; font-weight: 500; margin: 4px 0 2px; }
+.ticket-header .t-ref   { color: rgba(255,255,255,0.6); font-size: 12px; }
 
-.alert-gold {
-  background: rgba(255,204,0,0.07);
-  border: 1px solid rgba(255,204,0,0.3);
-  color: var(--gold);
+.ticket-body { padding: 14px 16px; }
+.t-section-label {
+  font-size: 10px; color: #9ca3af;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin: 14px 0 6px;
+  border-top: 1px dashed #e5e7eb; padding-top: 12px;
 }
-
-/* ============================================================
-   INDICADOR DE INTENTOS DE PIN
-   ============================================================ */
-.attempt-bar {
-  display: flex;
-  gap: 6px;
-  margin-bottom: 16px;
+.t-section-label:first-child { border-top: none; margin-top: 0; padding-top: 0; }
+.t-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 4px 0; font-size: 13px;
 }
-
-.attempt-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: rgba(255,51,85,0.2);
-  border: 1px solid rgba(255,51,85,0.4);
-  transition: background 0.3s;
+.t-row .lbl { color: #6b7280; }
+.t-row .val { color: #111827; font-weight: 500; }
+.t-row .val.green { color: #0F6E56; }
+.t-row .val.red   { color: #A32D2D; }
+.t-row.total-row {
+  border-top: 1px solid #e5e7eb; margin-top: 8px; padding-top: 10px;
 }
+.t-row.total-row .lbl { font-size: 14px; font-weight: 500; color: #111827; }
+.t-row.total-row .val { font-size: 16px; font-weight: 500; color: #0C447C; }
 
-.attempt-dot.used {
-  background: var(--red);
-  box-shadow: 0 0 6px rgba(255,51,85,0.5);
+/* ── BADGE DONACIÓN ── */
+.donacion-badge {
+  display: flex; align-items: center; gap: 10px;
+  border-radius: 8px; padding: 10px 14px;
+  margin-top: 8px; font-size: 13px; border: 1px solid;
 }
+.donacion-badge.confirmed { background: #E1F5EE; border-color: #5DCAA5; color: #085041; }
+.donacion-badge.declined  { background: #f9fafb; border-color: #e5e7eb; color: #6b7280; }
+.donacion-badge .db-icon {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.donacion-badge.confirmed .db-icon { background: #5DCAA5; }
+.donacion-badge.declined  .db-icon { background: #d1d5db; }
+.donacion-badge .db-icon svg { width: 14px; height: 14px; fill: white; }
+.donacion-badge .db-main { font-weight: 500; }
+.donacion-badge .db-sub  { font-size: 11px; opacity: 0.7; margin-top: 1px; }
 
-/* ============================================================
-   MENÚ EN CUADRÍCULA
-   ============================================================ */
+.ticket-footer {
+  background: #f9fafb; border-top: 1px dashed #e5e7eb;
+  padding: 10px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.ticket-footer span { font-size: 11px; color: #9ca3af; }
+
+/* ── ÍCONO ÉXITO ── */
+.success-icon {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: #E1F5EE; border: 1px solid #5DCAA5;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 10px;
+}
+.success-icon svg { width: 24px; height: 24px; fill: #0F6E56; }
+
+/* ── MENÚ PRINCIPAL ── */
+.menu-title {
+  text-align: center; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.15em; color: #9ca3af;
+  text-transform: uppercase; padding: 4px 0 10px;
+  border-bottom: 1px dashed #e5e7eb; margin-bottom: 10px;
+}
 .menu-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 8px;
-}
-
-.menu-btn {
-  background: rgba(0,255,136,0.04);
-  border: 1px solid rgba(0,255,136,0.15);
-  border-radius: 10px;
-  padding: 16px 12px;
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: grid; grid-template-columns: 1fr 1fr;
   gap: 8px;
 }
-
-.menu-btn .icon {
-  font-size: 1.6rem;
+.menu-btn {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; padding: 14px 8px;
+  background: #f9fafb; border: 1px solid #e5e7eb;
+  border-radius: 10px; cursor: pointer;
+  transition: all 0.15s; text-align: center;
+  color: #374151; font-size: 12px; font-weight: 500;
 }
+.menu-btn:hover  { background: #EFF6FF; border-color: #185FA5; color: #0C447C; }
+.menu-btn:active { transform: scale(0.97); }
+.menu-btn .mb-num {
+  font-size: 10px; color: #9ca3af; font-weight: 400;
+}
+.menu-btn .mb-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: #e0eaf6; display: flex;
+  align-items: center; justify-content: center;
+}
+.menu-btn .mb-icon svg { width: 16px; height: 16px; fill: #0C447C; }
+.menu-btn:hover .mb-icon { background: #185FA5; }
+.menu-btn:hover .mb-icon svg { fill: white; }
 
-.menu-btn:hover {
-  background: rgba(0,255,136,0.1);
-  border-color: var(--green);
-  color: var(--green);
+/* ── PANTALLAS OPCIONES SIMPLES ── */
+.opcion-form { padding: 4px 0; }
+.opcion-form .field-label { margin-top: 10px; }
+
+/* ── SELECTOR TIPO CAJERO ── */
+.tipo-cajero-title {
+  text-align: center;
+  font-size: 13px; font-weight: 600;
+  letter-spacing: 0.12em; color: #9ca3af;
+  text-transform: uppercase;
+  padding: 2px 0 14px;
+  border-bottom: 1px dashed #e5e7eb;
+  margin-bottom: 16px;
+}
+.tipo-cajero-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.tipo-cajero-card {
+  border: 2px solid #e5e7eb; border-radius: 14px;
+  padding: 20px 10px; text-align: center; cursor: pointer;
+  background: #f9fafb; transition: all 0.18s;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.tipo-cajero-card:hover {
+  border-color: #185FA5; background: #EFF6FF;
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,255,136,0.15);
+  box-shadow: 0 4px 14px rgba(12,68,124,0.12);
 }
-
-.menu-btn.exit {
-  grid-column: 1 / -1;
-  border-color: rgba(255,51,85,0.2);
-  color: rgba(255,51,85,0.7);
+.tipo-cajero-card:active { transform: scale(0.97); }
+.tipo-cajero-card .tc-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: #e0eaf6;
+  display: flex; align-items: center; justify-content: center;
 }
-
-.menu-btn.exit:hover {
-  background: rgba(255,51,85,0.08);
-  border-color: var(--red);
-  color: var(--red);
+.tipo-cajero-card .tc-icon svg { width: 26px; height: 26px; fill: #0C447C; }
+.tipo-cajero-card .tc-label {
+  font-size: 13px; font-weight: 600; color: #111827;
 }
-
-/* ============================================================
-   TARJETA DE SALDO
-   ============================================================ */
-.saldo-card {
-  background: rgba(0,255,136,0.04);
-  border: 1px solid rgba(0,255,136,0.2);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  margin-bottom: 20px;
+.tipo-cajero-card .tc-sub {
+  font-size: 11px; color: #6b7280; line-height: 1.4;
 }
+.tipo-cajero-card.sin-tarjeta:hover { border-color: #0C447C; }
+.tipo-cajero-card.con-tarjeta:hover { border-color: #0F6E56; }
+.tipo-cajero-card.con-tarjeta .tc-icon { background: #d1fae5; }
+.tipo-cajero-card.con-tarjeta .tc-icon svg { fill: #0F6E56; }
+.tipo-cajero-card.con-tarjeta:hover { background: #ecfdf5; }
 
-.saldo-label {
-  font-size: 0.65rem;
-  letter-spacing: 3px;
-  color: rgba(0,255,136,0.5);
-  font-family: var(--mono);
+/* ── INSERTAR TARJETA ── */
+.tarjeta-wrap {
+  text-align: center; padding: 8px 0 4px;
 }
-
-.saldo-amount {
-  font-size: 2.2rem;
-  font-weight: 900;
-  color: var(--green);
-  text-shadow: 0 0 20px rgba(0,255,136,0.4);
-  font-family: var(--mono);
-  margin: 8px 0 4px;
+.tarjeta-anim {
+  width: 80px; height: 52px;
+  background: linear-gradient(135deg, #185FA5, #0C447C);
+  border-radius: 8px; margin: 0 auto 14px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 14px rgba(12,68,124,0.3);
+  animation: tarjetaPulse 1.8s ease-in-out infinite;
 }
-
-.saldo-type {
-  font-size: 0.7rem;
-  color: rgba(200,240,216,0.4);
+.tarjeta-anim svg { width: 32px; height: 32px; fill: rgba(255,255,255,0.85); }
+@keyframes tarjetaPulse {
+  0%, 100% { transform: translateY(0); box-shadow: 0 4px 14px rgba(12,68,124,0.3); }
+  50%       { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(12,68,124,0.4); }
 }
-
-/* ============================================================
-   DESGLOSE DE BILLETES
-   ============================================================ */
-.billetes-grid {
-  margin: 16px 0;
+.tarjeta-title {
+  font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 6px;
 }
-
-.billete-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 14px;
-  border-bottom: 1px solid rgba(0,255,136,0.07);
-  font-family: var(--mono);
-  font-size: 0.85rem;
+.tarjeta-msg {
+  font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 14px;
 }
+.tarjeta-numero-wrap { margin-bottom: 4px; }
 
-.billete-denom { color: rgba(200,240,216,0.6); }
-.billete-qty   { color: var(--green); font-weight: 700; }
-.billete-sub   { color: rgba(200,240,216,0.4); font-size: 0.75rem; }
-
-/* ============================================================
-   RECIBO / COMPROBANTE
-   ============================================================ */
-.receipt {
-  background: rgba(255,255,255,0.03);
-  border: 1px dashed rgba(0,255,136,0.2);
-  border-radius: 10px;
-  padding: 16px;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  line-height: 1.8;
-  color: rgba(200,240,216,0.7);
+/* ── DESPEDIDA ── */
+.farewell-wrap {
+  text-align: center; padding: 10px 0 6px;
 }
-
-.receipt .r-line {
-  display: flex;
-  justify-content: space-between;
+.farewell-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: linear-gradient(135deg, #0C447C, #185FA5);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+  box-shadow: 0 4px 14px rgba(12,68,124,0.3);
 }
-
-.receipt .r-line.highlight {
-  color: var(--green);
+.farewell-icon svg { width: 28px; height: 28px; fill: white; }
+.farewell-title {
+  font-size: 16px; font-weight: 600; color: #111827; margin-bottom: 6px;
 }
-
-.receipt .r-divider {
-  border-top: 1px dashed rgba(0,255,136,0.15);
-  margin: 8px 0;
+.farewell-msg {
+  font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 16px;
 }
-
-.receipt .r-title {
-  text-align: center;
-  color: var(--green);
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  margin-bottom: 12px;
+.farewell-badge {
+  background: #EFF6FF; border: 1px solid #93c5fd;
+  border-radius: 8px; padding: 10px 14px;
+  font-size: 12px; color: #1e40af; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
 }
-
-/* ============================================================
-   PANTALLA DE BLOQUEO
-   ============================================================ */
-.lock-screen {
-  text-align: center;
-  padding: 40px 24px;
-}
-
-.lock-icon {
-  font-size: 3.5rem;
-  margin-bottom: 16px;
-  animation: shake 0.5s ease;
-}
-
-@keyframes shake {
-  0%,  100% { transform: translateX(0); }
-  20%        { transform: translateX(-8px); }
-  40%        { transform: translateX(8px); }
-  60%        { transform: translateX(-6px); }
-  80%        { transform: translateX(6px); }
-}
-
-/* ============================================================
-   PIE DE PÁGINA
-   ============================================================ */
-.atm-footer {
-  padding: 10px 24px 16px;
-  text-align: center;
-  font-size: 0.6rem;
-  letter-spacing: 2px;
-  color: rgba(0,255,136,0.2);
-  font-family: var(--mono);
-}
-
-/* ============================================================
-   SEPARADOR
-   ============================================================ */
-.divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(0,255,136,0.2), transparent);
-  margin: 16px 0;
-}
-
-/* ============================================================
-   TOGGLE DE DONACIÓN
-   ============================================================ */
-.toggle-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(255,204,0,0.04);
-  border: 1px solid rgba(255,204,0,0.2);
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-bottom: 16px;
-  cursor: pointer;
-}
-
-.toggle-label {
-  font-size: 0.8rem;
-  color: var(--gold);
-}
-
-.toggle-sub {
-  font-size: 0.65rem;
-  color: rgba(255,204,0,0.5);
-}
-
-.toggle-switch {
-  width: 38px;
-  height: 20px;
-  background: rgba(255,204,0,0.15);
-  border-radius: 10px;
-  position: relative;
-  transition: background 0.3s;
-  flex-shrink: 0;
-}
-
-.toggle-switch::after {
-  content: '';
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  background: rgba(255,204,0,0.5);
-  border-radius: 50%;
-  top: 3px;
-  left: 3px;
-  transition: transform 0.3s, background 0.3s;
-}
-
-.toggle-switch.on {
-  background: rgba(255,204,0,0.3);
-}
-
-.toggle-switch.on::after {
-  transform: translateX(18px);
-  background: var(--gold);
-  box-shadow: 0 0 6px rgba(255,204,0,0.6);
-}
-
-/* ============================================================
-   UTILIDADES
-   ============================================================ */
-.mt8  { margin-top: 8px; }
-.mt16 { margin-top: 16px; }
-.center { text-align: center; }
-.mono { font-family: var(--mono); }
+.farewell-badge svg { width: 14px; height: 14px; fill: #1e40af; flex-shrink: 0; }
