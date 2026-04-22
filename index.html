@@ -2,58 +2,255 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Cajero</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cajero Automático — UniRemington</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<div class="container" id="login">
+<div class="atm-shell">
 
-    <!-- SIN TARJETA -->
-    <div class="card">
-        <h2>Sin Tarjeta</h2>
-        <input id="cedula" placeholder="Cédula">
-        <input id="pin1" type="password" placeholder="PIN">
-        <input id="saldoInput" type="number" placeholder="Saldo inicial">
-        
-        <select id="tipoCuenta">
-            <option value="">Tipo de cuenta</option>
-            <option>Ahorro</option>
-            <option>Corriente</option>
+  <div class="atm-header">
+    <div>
+      <div class="bank-name">UNIREMINGTON</div>
+      <div class="bank-sub">BANCO DIGITAL</div>
+    </div>
+    <div class="status-dot"></div>
+  </div>
+
+  <div class="screen">
+
+    <!-- VIEW 0: INICIO -->
+    <div class="view active" id="view-inicio">
+      <div class="logo-container">
+        <img src="logo.png" alt="UniRemington" class="logo-img">
+      </div>
+      <div class="screen-title">// SISTEMA CAJERO v2.0</div>
+      <h2>Bienvenido al<br>Cajero Automático</h2>
+      <p class="subtitle">Selecciona tu método de acceso al sistema bancario.</p>
+      <div class="divider"></div>
+      <button class="btn btn-primary" onclick="goTo('view-cedula')" style="margin-bottom:10px">
+        🪪 &nbsp;ACCESO SIN TARJETA 
+      </button>
+      <button class="btn btn-secondary" onclick="goTo('view-tarjeta')">
+        💳 &nbsp;ACCESO CON TARJETA 
+      </button>
+    </div>
+
+    <!-- VIEW CEDULA -->
+    <div class="view" id="view-cedula">
+      <div class="screen-title">// ACCESO SIN TARJETA</div>
+      <h2>Ingresa tu Cédula</h2>
+      <p class="subtitle">Validaremos tu identidad en el banco.</p>
+      <div class="field">
+        <label>NÚMERO DE CÉDULA</label>
+        <input type="text" id="cedula-input" placeholder="Ej: 1234567890" maxlength="15">
+        <div class="field-error" id="cedula-error">⚠ Ingresa una cédula válida (solo números, min. 6 dígitos)</div>
+      </div>
+      <button class="btn btn-primary" onclick="validarCedula()">CONTINUAR →</button>
+      <button class="btn btn-secondary" onclick="goTo('view-inicio')">← VOLVER</button>
+    </div>
+
+    <!-- VIEW TARJETA -->
+    <div class="view" id="view-tarjeta">
+      <div class="screen-title">// ACCESO CON TARJETA</div>
+      <h2>Inserta tu Tarjeta</h2>
+      <p class="subtitle">Ingresa el número de tarjeta para simular la inserción.</p>
+      <div class="field">
+        <label>NÚMERO DE TARJETA</label>
+        <input type="text" id="tarjeta-input" placeholder="XXXX-XXXX-XXXX-XXXX" maxlength="19" oninput="formatCard(this)">
+        <div class="field-error" id="tarjeta-error">⚠ Ingresa los 16 dígitos de tu tarjeta</div>
+      </div>
+      <button class="btn btn-primary" onclick="validarTarjeta()">CONTINUAR →</button>
+      <button class="btn btn-secondary" onclick="goTo('view-inicio')">← VOLVER</button>
+    </div>
+
+    <!-- VIEW PIN -->
+    <div class="view" id="view-pin">
+      <div class="screen-title">// VALIDACIÓN DE SEGURIDAD</div>
+      <h2>Ingresa tu PIN</h2>
+      <p class="subtitle">Código de 4 dígitos. Tienes 3 intentos.</p>
+      <div class="attempt-bar">
+        <div class="attempt-dot" id="dot1"></div>
+        <div class="attempt-dot" id="dot2"></div>
+        <div class="attempt-dot" id="dot3"></div>
+      </div>
+      <div class="field">
+        <label>PIN (4 DÍGITOS)</label>
+        <input type="password" id="pin-input" placeholder="••••" maxlength="4" inputmode="numeric">
+        <div class="field-error" id="pin-error">⚠ El PIN debe ser exactamente 4 dígitos numéricos</div>
+      </div>
+      <div id="pin-wrong-alert" class="alert alert-red" style="display:none"></div>
+      <button class="btn btn-primary" onclick="validarPIN()">VALIDAR PIN →</button>
+      <button class="btn btn-secondary" onclick="cancelar()">✕ CANCELAR</button>
+    </div>
+
+    <!-- VIEW BLOQUEADO -->
+    <div class="view" id="view-bloqueado">
+      <div class="lock-screen">
+        <div class="lock-icon">🔒</div>
+        <h2 style="color:var(--red);margin-bottom:8px">Cuenta Bloqueada</h2>
+        <p class="subtitle">Has superado los 3 intentos de PIN permitidos. Tu cuenta ha sido bloqueada por seguridad.</p>
+        <div class="alert alert-red">Dirígete a una oficina de UniRemington para desbloquear tu cuenta.</div>
+        <button class="btn btn-secondary mt16" onclick="resetAll()">↩ INICIO</button>
+      </div>
+    </div>
+
+    <!-- VIEW MENU PRINCIPAL -->
+    <div class="view" id="view-menu">
+      <div class="screen-title">// MENÚ PRINCIPAL</div>
+      <h2>¿Qué deseas hacer?</h2>
+      <p class="subtitle" id="menu-welcome"></p>
+      <div class="menu-grid">
+        <button class="menu-btn" onclick="goTo('view-saldo')">
+          <span class="icon">📊</span>
+          Consultar Saldo
+        </button>
+        <button class="menu-btn" onclick="goTo('view-retiro')">
+          <span class="icon">💵</span>
+          Retirar Dinero
+        </button>
+        <button class="menu-btn" onclick="goTo('view-deposito')">
+          <span class="icon">🏦</span>
+          Depositar Dinero
+        </button>
+        <button class="menu-btn" onclick="goTo('view-servicios')">
+          <span class="icon">🧾</span>
+          Pagar Servicios
+        </button>
+        <button class="menu-btn" onclick="goTo('view-cambio-clave')">
+          <span class="icon">🔑</span>
+          Cambiar Clave
+        </button>
+        <button class="menu-btn exit" onclick="salir()">
+          <span class="icon">🚪</span>
+          Salir
+        </button>
+      </div>
+    </div>
+
+    <!-- VIEW SALDO -->
+    <div class="view" id="view-saldo">
+      <div class="screen-title">// CONSULTA DE SALDO</div>
+      <h2>Tu Saldo Actual</h2>
+      <div class="saldo-card" style="margin-top:16px">
+        <div class="saldo-label">SALDO DISPONIBLE</div>
+        <div class="saldo-amount" id="saldo-display">$0</div>
+        <div class="saldo-type" id="saldo-tipo-display"></div>
+      </div>
+      <button class="btn btn-secondary" onclick="goTo('view-menu')">← VOLVER AL MENÚ</button>
+    </div>
+
+    <!-- VIEW RETIRO -->
+    <div class="view" id="view-retiro">
+      <div class="screen-title">// RETIRO DE DINERO</div>
+      <h2>Retiro de Efectivo</h2>
+      <p class="subtitle">Ingresa el monto a retirar. El sistema desglosará en billetes de $50.000, $20.000 y $10.000.</p>
+      <div class="field">
+        <label>MONTO A RETIRAR ($)</label>
+        <input type="number" id="monto-input" placeholder="Ej: 150000" min="10000" step="10000">
+        <div class="field-error" id="monto-error">⚠ Error en monto</div>
+      </div>
+
+      <div class="toggle-row" onclick="toggleDonacion()" id="donacion-toggle">
+        <div>
+          <div class="toggle-label">❤️ Donar $1.000 a Unicef</div>
+          <div class="toggle-sub">Contribuye con la educación infantil</div>
+        </div>
+        <div class="toggle-switch" id="toggle-sw"></div>
+      </div>
+
+      <button class="btn btn-primary" onclick="procesarRetiro()">PROCESAR RETIRO →</button>
+      <button class="btn btn-secondary" onclick="goTo('view-menu')">← VOLVER</button>
+    </div>
+
+    <!-- VIEW COMPROBANTE -->
+    <div class="view" id="view-comprobante">
+      <div class="screen-title">// COMPROBANTE DE TRANSACCIÓN</div>
+      <h2>Retiro Exitoso ✓</h2>
+      <div id="comprobante-content" class="receipt"></div>
+      <div id="billetes-section" class="billetes-grid"></div>
+      <button class="btn btn-primary mt16" onclick="goTo('view-menu')">← NUEVO MOVIMIENTO</button>
+      <button class="btn btn-secondary" onclick="salir()">🚪 FINALIZAR Y SALIR</button>
+    </div>
+
+    <!-- VIEW DEPOSITO -->
+    <div class="view" id="view-deposito">
+      <div class="screen-title">// DEPÓSITO</div>
+      <h2>Depositar Dinero</h2>
+      <div class="field">
+        <label>MONTO A DEPOSITAR ($)</label>
+        <input type="number" id="deposito-input" placeholder="Ej: 200000" min="1">
+        <div class="field-error" id="deposito-error">⚠ Ingresa un monto válido (mayor a $0)</div>
+      </div>
+      <button class="btn btn-primary" onclick="procesarDeposito()">DEPOSITAR →</button>
+      <button class="btn btn-secondary" onclick="goTo('view-menu')">← VOLVER</button>
+    </div>
+
+    <!-- VIEW SERVICIOS -->
+    <div class="view" id="view-servicios">
+      <div class="screen-title">// PAGO DE SERVICIOS</div>
+      <h2>Pagar Servicios</h2>
+      <div class="field">
+        <label>TIPO DE SERVICIO</label>
+        <select id="servicio-tipo">
+          <option value="">— Seleccionar —</option>
+          <option value="Electricidad">Electricidad</option>
+          <option value="Agua">Agua</option>
+          <option value="Gas">Gas</option>
+          <option value="Internet">Internet</option>
+          <option value="Telefonía">Telefonía</option>
         </select>
-
-        <input id="montoInput" type="number" placeholder="Monto a retirar">
-
-        <select id="donacion">
-            <option value="">¿Donar $1000?</option>
-            <option value="si">Sí</option>
-            <option value="no">No</option>
-        </select>
-
-        <button class="green" onclick="loginSinTarjeta()">INGRESAR</button>
+        <div class="field-error" id="servicio-tipo-error">⚠ Selecciona un servicio</div>
+      </div>
+      <div class="field">
+        <label>MONTO A PAGAR ($)</label>
+        <input type="number" id="servicio-monto" placeholder="Ej: 80000" min="1">
+        <div class="field-error" id="servicio-monto-error">⚠ Ingresa un monto válido</div>
+      </div>
+      <button class="btn btn-primary" onclick="procesarServicio()">PAGAR →</button>
+      <button class="btn btn-secondary" onclick="goTo('view-menu')">← VOLVER</button>
     </div>
 
-    <!-- CON TARJETA -->
-    <div class="card">
-        <h2>Con Tarjeta</h2>
-        <p>Inserte su tarjeta</p>
-        <input id="pin2" type="password" placeholder="PIN">
-        <button class="blue" onclick="loginConTarjeta()">INGRESAR</button>
+    <!-- VIEW CAMBIO CLAVE -->
+    <div class="view" id="view-cambio-clave">
+      <div class="screen-title">// CAMBIO DE CLAVE</div>
+      <h2>Cambiar Clave</h2>
+      <div class="field">
+        <label>PIN ACTUAL</label>
+        <input type="password" id="pin-actual" placeholder="••••" maxlength="4" inputmode="numeric">
+        <div class="field-error" id="pin-actual-error">⚠ PIN incorrecto</div>
+      </div>
+      <div class="field">
+        <label>NUEVO PIN</label>
+        <input type="password" id="pin-nuevo" placeholder="••••" maxlength="4" inputmode="numeric">
+        <div class="field-error" id="pin-nuevo-error">⚠ El PIN debe tener 4 dígitos numéricos</div>
+      </div>
+      <div class="field">
+        <label>CONFIRMAR NUEVO PIN</label>
+        <input type="password" id="pin-confirm" placeholder="••••" maxlength="4" inputmode="numeric">
+        <div class="field-error" id="pin-confirm-error">⚠ Los PINs no coinciden</div>
+      </div>
+      <button class="btn btn-primary" onclick="procesarCambioClave()">CAMBIAR CLAVE →</button>
+      <button class="btn btn-secondary" onclick="goTo('view-menu')">← VOLVER</button>
     </div>
 
-</div>
-
-<!-- MENÚ -->
-<div id="menu">
-    <div class="menu-box">
-        <h2>Menú</h2>
-        <button onclick="consultarSaldo()">Consultar saldo</button>
-        <button onclick="retirar()">Retirar dinero</button>
-        <button onclick="salir()">Salir</button>
-        <div id="resultado"></div>
+    <!-- VIEW OK GENERICO -->
+    <div class="view" id="view-ok">
+      <div class="lock-screen">
+        <div class="lock-icon" id="ok-icon">✅</div>
+        <h2 style="color:var(--green);margin-bottom:8px" id="ok-title">Operación Exitosa</h2>
+        <p class="subtitle" id="ok-msg"></p>
+        <button class="btn btn-primary mt16" onclick="goTo('view-menu')">← VOLVER AL MENÚ</button>
+      </div>
     </div>
-</div>
+
+  </div><!-- /screen -->
+
+  <div class="atm-footer">TECNOLOGÍA QUE SIMPLIFICA · SEGURIDAD QUE TE ACOMPAÑA</div>
+
+</div><!-- /atm-shell -->
 
 <script src="script.js"></script>
 </body>
