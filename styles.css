@@ -1,53 +1,591 @@
+/* ============================================================
+   VARIABLES GLOBALES
+   ============================================================ */
+:root {
+  --green: #00ff88;
+  --green-dim: #00cc66;
+  --green-glow: rgba(0,255,136,0.25);
+  --red: #ff3355;
+  --red-dim: #cc2244;
+  --blue: #0088ff;
+  --gold: #ffcc00;
+  --bg: #060d10;
+  --panel: #0d1a1f;
+  --panel2: #0a1418;
+  --border: rgba(0,255,136,0.2);
+  --text: #c8f0d8;
+  --mono: 'Share Tech Mono', monospace;
+  --sans: 'Exo 2', sans-serif;
+}
+
+/* ============================================================
+   RESET Y BASE
+   ============================================================ */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
 body {
-    font-family: Arial;
-    background: linear-gradient(#0f172a,#1e3a8a);
-    color:white;
+  background: var(--bg);
+  font-family: var(--sans);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0,255,136,0.07) 0%, transparent 70%),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(0,255,136,0.03) 39px, rgba(0,255,136,0.03) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(0,255,136,0.03) 39px, rgba(0,255,136,0.03) 40px);
 }
 
-.container {
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+/* ============================================================
+   CARCASA DEL CAJERO
+   ============================================================ */
+.atm-shell {
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(160deg, #1a2830 0%, #0d1a1f 50%, #0a1218 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(0,255,136,0.15);
+  box-shadow:
+    0 0 60px rgba(0,255,136,0.08),
+    0 40px 80px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  overflow: hidden;
 }
 
-.card {
-    background:#ffffff20;
-    padding:20px;
-    margin:10px;
-    border-radius:10px;
-    width:250px;
-    text-align:center;
+/* ============================================================
+   CABECERA
+   ============================================================ */
+.atm-header {
+  background: linear-gradient(90deg, #061018, #0d2030, #061018);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,255,136,0.15);
 }
 
-input, select {
-    width:90%;
-    padding:8px;
-    margin:5px;
+.bank-name {
+  font-family: var(--sans);
+  font-weight: 900;
+  font-size: 1.1rem;
+  letter-spacing: 2px;
+  color: var(--green);
+  text-shadow: 0 0 12px var(--green-glow);
 }
 
-button {
-    width:90%;
-    padding:10px;
-    margin-top:10px;
-    border:none;
-    color:white;
+.bank-sub {
+  font-size: 0.6rem;
+  color: rgba(0,255,136,0.5);
+  letter-spacing: 3px;
 }
 
-.green { background:green; }
-.blue { background:blue; }
-
-#menu {
-    display:none;
-    text-align:center;
-    margin-top:50px;
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
 }
 
-.menu-box {
-    background:white;
-    color:black;
-    padding:20px;
-    width:300px;
-    margin:auto;
-    border-radius:10px;
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
+
+/* ============================================================
+   PANTALLA
+   ============================================================ */
+.screen {
+  margin: 16px;
+  background: var(--panel2);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  min-height: 380px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,136,0.05);
+}
+
+.screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,255,136,0.015) 2px,
+    rgba(0,255,136,0.015) 3px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ============================================================
+   VISTAS
+   ============================================================ */
+.view {
+  display: none;
+  padding: 28px 24px;
+  animation: fadeIn 0.3s ease;
+}
+
+.view.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   TIPOGRAFÍA
+   ============================================================ */
+.screen-title {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: rgba(0,255,136,0.5);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  font-family: var(--mono);
+}
+
+h2 {
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: #fff;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: rgba(200,240,216,0.5);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+/* ============================================================
+   CAMPOS DE FORMULARIO
+   ============================================================ */
+.field {
+  margin-bottom: 16px;
+}
+
+.field label {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 1.5px;
+  color: rgba(0,255,136,0.6);
+  margin-bottom: 6px;
+  font-family: var(--mono);
+}
+
+.field input,
+.field select {
+  width: 100%;
+  background: rgba(0,255,136,0.04);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s, box-shadow 0.2s;
+  -webkit-appearance: none;
+}
+
+.field input:focus,
+.field select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px var(--green-glow);
+}
+
+.field input[type=password] {
+  letter-spacing: 6px;
+  font-size: 1.2rem;
+}
+
+.field select option {
+  background: #0d1a1f;
+  color: var(--green);
+}
+
+.field input::placeholder {
+  color: rgba(0,255,136,0.2);
+  letter-spacing: 1px;
+}
+
+.field-error {
+  font-size: 0.7rem;
+  color: var(--red);
+  margin-top: 5px;
+  font-family: var(--mono);
+  display: none;
+}
+
+.field-error.show {
+  display: block;
+}
+
+/* ============================================================
+   BOTONES
+   ============================================================ */
+.btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: 8px;
+  border: none;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 6px;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--green-dim), var(--green));
+  color: #061018;
+  box-shadow: 0 4px 20px rgba(0,255,136,0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 30px rgba(0,255,136,0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: rgba(200,240,216,0.6);
+  border: 1px solid rgba(200,240,216,0.15);
+  margin-top: 10px;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(200,240,216,0.4);
+  color: #fff;
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, var(--red-dim), var(--red));
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(255,51,85,0.3);
+}
+
+/* ============================================================
+   ALERTAS
+   ============================================================ */
+.alert {
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.alert-red {
+  background: rgba(255,51,85,0.1);
+  border: 1px solid rgba(255,51,85,0.3);
+  color: var(--red);
+}
+
+.alert-green {
+  background: rgba(0,255,136,0.07);
+  border: 1px solid rgba(0,255,136,0.25);
+  color: var(--green);
+}
+
+.alert-gold {
+  background: rgba(255,204,0,0.07);
+  border: 1px solid rgba(255,204,0,0.3);
+  color: var(--gold);
+}
+
+/* ============================================================
+   INDICADOR DE INTENTOS DE PIN
+   ============================================================ */
+.attempt-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.attempt-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255,51,85,0.2);
+  border: 1px solid rgba(255,51,85,0.4);
+  transition: background 0.3s;
+}
+
+.attempt-dot.used {
+  background: var(--red);
+  box-shadow: 0 0 6px rgba(255,51,85,0.5);
+}
+
+/* ============================================================
+   MENÚ EN CUADRÍCULA
+   ============================================================ */
+.menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.menu-btn {
+  background: rgba(0,255,136,0.04);
+  border: 1px solid rgba(0,255,136,0.15);
+  border-radius: 10px;
+  padding: 16px 12px;
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu-btn .icon {
+  font-size: 1.6rem;
+}
+
+.menu-btn:hover {
+  background: rgba(0,255,136,0.1);
+  border-color: var(--green);
+  color: var(--green);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,255,136,0.15);
+}
+
+.menu-btn.exit {
+  grid-column: 1 / -1;
+  border-color: rgba(255,51,85,0.2);
+  color: rgba(255,51,85,0.7);
+}
+
+.menu-btn.exit:hover {
+  background: rgba(255,51,85,0.08);
+  border-color: var(--red);
+  color: var(--red);
+}
+
+/* ============================================================
+   TARJETA DE SALDO
+   ============================================================ */
+.saldo-card {
+  background: rgba(0,255,136,0.04);
+  border: 1px solid rgba(0,255,136,0.2);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.saldo-label {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  color: rgba(0,255,136,0.5);
+  font-family: var(--mono);
+}
+
+.saldo-amount {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--green);
+  text-shadow: 0 0 20px rgba(0,255,136,0.4);
+  font-family: var(--mono);
+  margin: 8px 0 4px;
+}
+
+.saldo-type {
+  font-size: 0.7rem;
+  color: rgba(200,240,216,0.4);
+}
+
+/* ============================================================
+   DESGLOSE DE BILLETES
+   ============================================================ */
+.billetes-grid {
+  margin: 16px 0;
+}
+
+.billete-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(0,255,136,0.07);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+
+.billete-denom { color: rgba(200,240,216,0.6); }
+.billete-qty   { color: var(--green); font-weight: 700; }
+.billete-sub   { color: rgba(200,240,216,0.4); font-size: 0.75rem; }
+
+/* ============================================================
+   RECIBO / COMPROBANTE
+   ============================================================ */
+.receipt {
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(0,255,136,0.2);
+  border-radius: 10px;
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  line-height: 1.8;
+  color: rgba(200,240,216,0.7);
+}
+
+.receipt .r-line {
+  display: flex;
+  justify-content: space-between;
+}
+
+.receipt .r-line.highlight {
+  color: var(--green);
+}
+
+.receipt .r-divider {
+  border-top: 1px dashed rgba(0,255,136,0.15);
+  margin: 8px 0;
+}
+
+.receipt .r-title {
+  text-align: center;
+  color: var(--green);
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   PANTALLA DE BLOQUEO
+   ============================================================ */
+.lock-screen {
+  text-align: center;
+  padding: 40px 24px;
+}
+
+.lock-icon {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%,  100% { transform: translateX(0); }
+  20%        { transform: translateX(-8px); }
+  40%        { transform: translateX(8px); }
+  60%        { transform: translateX(-6px); }
+  80%        { transform: translateX(6px); }
+}
+
+/* ============================================================
+   PIE DE PÁGINA
+   ============================================================ */
+.atm-footer {
+  padding: 10px 24px 16px;
+  text-align: center;
+  font-size: 0.6rem;
+  letter-spacing: 2px;
+  color: rgba(0,255,136,0.2);
+  font-family: var(--mono);
+}
+
+/* ============================================================
+   SEPARADOR
+   ============================================================ */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,255,136,0.2), transparent);
+  margin: 16px 0;
+}
+
+/* ============================================================
+   TOGGLE DE DONACIÓN
+   ============================================================ */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255,204,0,0.04);
+  border: 1px solid rgba(255,204,0,0.2);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  cursor: pointer;
+}
+
+.toggle-label {
+  font-size: 0.8rem;
+  color: var(--gold);
+}
+
+.toggle-sub {
+  font-size: 0.65rem;
+  color: rgba(255,204,0,0.5);
+}
+
+.toggle-switch {
+  width: 38px;
+  height: 20px;
+  background: rgba(255,204,0,0.15);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.3s;
+  flex-shrink: 0;
+}
+
+.toggle-switch::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  background: rgba(255,204,0,0.5);
+  border-radius: 50%;
+  top: 3px;
+  left: 3px;
+  transition: transform 0.3s, background 0.3s;
+}
+
+.toggle-switch.on {
+  background: rgba(255,204,0,0.3);
+}
+
+.toggle-switch.on::after {
+  transform: translateX(18px);
+  background: var(--gold);
+  box-shadow: 0 0 6px rgba(255,204,0,0.6);
+}
+
+/* ============================================================
+   UTILIDADES
+   ============================================================ */
+.mt8  { margin-top: 8px; }
+.mt16 { margin-top: 16px; }
+.center { text-align: center; }
+.mono { font-family: var(--mono); }
