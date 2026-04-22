@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cajero Automático</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="atm">
+
+    <div class="screen">
+
+        <!-- LOGIN -->
+        <div id="login">
+            <h2>Acceso</h2>
+
+            <input id="pin" type="password" placeholder="PIN (4 dígitos)">
+            <input id="saldo" type="number" placeholder="Saldo inicial">
+
+            <select id="tipoCuenta">
+                <option value="">Tipo de cuenta</option>
+                <option>Ahorro</option>
+                <option>Corriente</option>
+            </select>
+
+            <input id="monto" type="number" placeholder="Monto a retirar">
+
+            <select id="donacion">
+                <option value="">¿Donar $1000?</option>
+                <option value="si">Sí</option>
+                <option value="no">No</option>
+            </select>
+
+            <button onclick="validar()">Ingresar</button>
+            <p id="error"></p>
+        </div>
+
+        <!-- MENU -->
+        <div id="menu" class="hidden">
+            <h2>Menú</h2>
+
+            <button onclick="consultar()">Consultar saldo</button>
+            <button onclick="retirar()">Retirar dinero</button>
+            <button onclick="salir()">Salir</button>
+
+            <div id="resultado"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
