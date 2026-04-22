@@ -1,60 +1,83 @@
-body{
-    margin:0;
-    font-family: Arial;
-    background:#0f172a;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.atm{
-    width:380px;
-    background:#111827;
-    padding:20px;
-    border-radius:15px;
-    box-shadow:0 0 20px black;
+body {
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+    color: white;
 }
 
-.screen{
-    background:#020617;
-    padding:20px;
-    border-radius:10px;
-    color:white;
-    text-align:center;
+/* CONTENEDOR */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-input, select{
-    width:90%;
-    padding:10px;
-    margin:5px;
-    border-radius:5px;
-    border:none;
+/* TARJETAS */
+.card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    margin: 10px;
+    border-radius: 15px;
+    width: 260px;
+    text-align: center;
 }
 
-button{
-    width:90%;
-    padding:10px;
-    margin:5px;
-    background:#1d4ed8;
-    color:white;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
+.card h2 {
+    margin-bottom: 15px;
 }
 
-button:hover{
-    background:#2563eb;
+/* INPUTS */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: none;
 }
 
-.hidden{
-    display:none;
+/* BOTONES */
+button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: bold;
 }
 
-#resultado{
-    margin-top:10px;
-    background:black;
-    padding:10px;
-    border-radius:5px;
-    white-space:pre-line;
+.green { background: #22c55e; color: white; }
+.blue { background: #3b82f6; color: white; }
+
+/* MENU */
+#menu {
+    display: none;
+    text-align: center;
+    padding-top: 50px;
+}
+
+.menu-box {
+    background: white;
+    color: black;
+    width: 300px;
+    margin: auto;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.menu-box h2 {
+    margin-bottom: 15px;
+}
+
+.menu-box button {
+    background: #1e3a8a;
+    color: white;
+    margin: 8px 0;
 }
