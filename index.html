@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
+<!-- saved from url=(0179)file:///C:/Users/User-PC/AppData/Local/Packages/5319275A.WhatsAppDesktop_cv1g1gvanyjgm/LocalState/sessions/53E9E5CC9A9097FF50A9422FA4EA026E19CCF81E/transfers/2026-17/index(1).html -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cajero Automático Uniremington</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="file:///C:/Users/User-PC/AppData/Local/Packages/5319275A.WhatsAppDesktop_cv1g1gvanyjgm/LocalState/sessions/53E9E5CC9A9097FF50A9422FA4EA026E19CCF81E/transfers/2026-17/styles.css">
 </head>
 <body>
 
@@ -15,12 +15,12 @@
     <div class="header-icon">
       <svg viewBox="0 0 24 24">
         <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1
-                 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path>
       </svg>
     </div>
     <div>
       <h1>Cajero Automático Uniremington</h1>
-      <p>Tecnología que simplifica,seguridad que te acompaña</p>
+      <p>Tecnología que simplifica, seguridad que te acompaña</p>
     </div>
   </div>
 
@@ -38,7 +38,7 @@
   <!-- PANTALLA LCD -->
   <div class="screen">
     <div class="screen-label" id="screenLabel">Bienvenido</div>
-    <div class="screen-text"  id="screenText">Seleccione cómo desea acceder al cajero.</div>
+    <div class="screen-text" id="screenText">Seleccione cómo desea acceder al cajero.</div>
   </div>
 
   <div class="body">
@@ -48,23 +48,23 @@
       <div class="tipo-cajero-title">⬇ Seleccione tipo de acceso</div>
       <div class="tipo-cajero-grid">
 
-        <div class="tipo-cajero-card sin-tarjeta" onclick="seleccionarTipoCajero('sinTarjeta')">
+        <div class="tipo-cajero-card sin-tarjeta" onclick="seleccionarTipoCajero(&#39;sinTarjeta&#39;)">
           <div class="tc-icon">
             <svg viewBox="0 0 24 24">
               <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1
                        0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V6h16v12zM6
-                       10h5v2H6zm0 3h5v2H6zm7-3h3v5h-3z"/>
+                       10h5v2H6zm0 3h5v2H6zm7-3h3v5h-3z"></path>
             </svg>
           </div>
           <span class="tc-label">Sin Tarjeta</span>
           <span class="tc-sub">Acceso con<br>cédula y PIN</span>
         </div>
 
-        <div class="tipo-cajero-card con-tarjeta" onclick="seleccionarTipoCajero('conTarjeta')">
+        <div class="tipo-cajero-card con-tarjeta" onclick="seleccionarTipoCajero(&#39;conTarjeta&#39;)">
           <div class="tc-icon">
             <svg viewBox="0 0 24 24">
               <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16
-                       c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                       c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path>
             </svg>
           </div>
           <span class="tc-label">Con Tarjeta</span>
@@ -83,7 +83,7 @@
         <div class="tarjeta-anim">
           <svg viewBox="0 0 24 24">
             <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16
-                     c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+                     c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path>
           </svg>
         </div>
         <div class="tarjeta-title">Inserte su tarjeta</div>
@@ -93,23 +93,19 @@
       </div>
       <div class="tarjeta-numero-wrap">
         <div class="field-label">Número de tarjeta (16 dígitos)</div>
-        <input type="text" id="tarjetaNumero" inputmode="numeric" autocomplete="off"
-               placeholder="XXXX XXXX XXXX XXXX" maxlength="19"
-               oninput="formatTarjeta(this)">
+        <input type="text" id="tarjetaNumero" inputmode="numeric" autocomplete="off" placeholder="XXXX XXXX XXXX XXXX" maxlength="19" oninput="formatTarjeta(this)">
         <div class="error-msg" id="tarjetaError"></div>
       </div>
       <button class="btn-primary" onclick="confirmarTarjeta()">Validar tarjeta</button>
-      <button class="btn-primary"
-              style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;"
-              onclick="volverTipoCajero()">← Cambiar tipo de acceso</button>
+      <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;" onclick="volverTipoCajero()">← Cambiar tipo de acceso</button>
     </div>
 
     <!-- ══ PASO 1: CÉDULA / PIN ══ -->
     <div class="step" id="step1">
       <div class="field-label">Elegir ingreso</div>
-      <div class="radio-group">
-        <div class="radio-opt selected" id="modoCedula" onclick="setModoIngreso('cedula')">Cédula</div>
-        <div class="radio-opt"          id="modoPin"    onclick="setModoIngreso('pin')">PIN</div>
+      <div class="radio-group" id="radioModoGroup">
+        <div class="radio-opt selected" id="modoCedula" onclick="setModoIngreso(&#39;cedula&#39;)">Cédula</div>
+        <div class="radio-opt" id="modoPin" onclick="setModoIngreso(&#39;pin&#39;)">PIN</div>
       </div>
       <div class="login-help" id="loginHelp">Ingrese su cédula de 8 dígitos.</div>
       <div class="pin-dots">
@@ -124,22 +120,20 @@
       </div>
       <div class="error-msg" id="pinError"></div>
       <div class="numpad" id="numpadGrid">
-        <button onclick="np('1')">1</button>
-        <button onclick="np('2')">2</button>
-        <button onclick="np('3')">3</button>
-        <button onclick="np('4')">4</button>
-        <button onclick="np('5')">5</button>
-        <button onclick="np('6')">6</button>
-        <button onclick="np('7')">7</button>
-        <button onclick="np('8')">8</button>
-        <button onclick="np('9')">9</button>
+        <button onclick="np(&#39;1&#39;)">1</button>
+        <button onclick="np(&#39;2&#39;)">2</button>
+        <button onclick="np(&#39;3&#39;)">3</button>
+        <button onclick="np(&#39;4&#39;)">4</button>
+        <button onclick="np(&#39;5&#39;)">5</button>
+        <button onclick="np(&#39;6&#39;)">6</button>
+        <button onclick="np(&#39;7&#39;)">7</button>
+        <button onclick="np(&#39;8&#39;)">8</button>
+        <button onclick="np(&#39;9&#39;)">9</button>
         <button class="del" onclick="nd()">⌫</button>
-        <button onclick="np('0')">0</button>
+        <button onclick="np(&#39;0&#39;)">0</button>
         <button class="ok" onclick="confirmAcceso()">OK</button>
       </div>
-      <button class="btn-primary"
-              style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:10px;font-size:12px;"
-              onclick="volverTipoCajero()">← Cambiar tipo de acceso</button>
+      <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:10px;font-size:12px;" onclick="volverTipoCajero()">← Cambiar tipo de acceso</button>
     </div>
 
     <!-- ══ PASO 2: DATOS USUARIO ══ -->
@@ -172,60 +166,60 @@
       <div class="menu-title">═══ MENÚ ═══</div>
       <div class="menu-grid">
 
-        <button class="menu-btn" onclick="irOpcion('consultar')">
+        <button class="menu-btn" onclick="irOpcion(&#39;consultar&#39;)">
           <div class="mb-icon">
             <svg viewBox="0 0 24 24">
-              <path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"/>
+              <path d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.34 8-7 8-11.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2v-2h2v2zm0-4h-2c0-3.25 3-3 3-5 0-1.1-.9-2-2-2s-2 .9-2 2h-2c0-2.21 1.79-4 4-4s4 1.79 4 4c0 2.5-3 2.75-3 5z"></path>
             </svg>
           </div>
           <span>Consultar saldo</span>
           <span class="mb-num">Opción 1</span>
         </button>
 
-        <button class="menu-btn" onclick="irOpcion('retirar')">
+        <button class="menu-btn" onclick="irOpcion(&#39;retirar&#39;)">
           <div class="mb-icon">
             <svg viewBox="0 0 24 24">
-              <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/>
+              <path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"></path>
             </svg>
           </div>
           <span>Retirar</span>
           <span class="mb-num">Opción 2</span>
         </button>
 
-        <button class="menu-btn" onclick="irOpcion('pagar')">
+        <button class="menu-btn" onclick="irOpcion(&#39;pagar&#39;)">
           <div class="mb-icon">
             <svg viewBox="0 0 24 24">
-              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/>
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"></path>
             </svg>
           </div>
           <span>Pagar servicio</span>
           <span class="mb-num">Opción 3</span>
         </button>
 
-        <button class="menu-btn" onclick="irOpcion('depositar')">
+        <button class="menu-btn" onclick="irOpcion(&#39;depositar&#39;)">
           <div class="mb-icon">
             <svg viewBox="0 0 24 24">
-              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+              <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"></path>
             </svg>
           </div>
           <span>Depositar</span>
           <span class="mb-num">Opción 4</span>
         </button>
 
-        <button class="menu-btn" onclick="reiniciar()">
+        <button class="menu-btn" onclick="irOpcion(&#39;cambiarClave&#39;)">
           <div class="mb-icon">
             <svg viewBox="0 0 24 24">
-              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+              <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path>
             </svg>
           </div>
-          <span>Cambiar usuario</span>
+          <span>Cambiar clave</span>
           <span class="mb-num">Opción 5</span>
         </button>
 
-        <button class="menu-btn" onclick="irOpcion('salir')" style="border-color:#fca5a5;color:#dc2626;">
+        <button class="menu-btn" onclick="irOpcion(&#39;salir&#39;)" style="border-color:#fca5a5;color:#dc2626;">
           <div class="mb-icon" style="background:#fee2e2;">
             <svg viewBox="0 0 24 24" style="fill:#dc2626;">
-              <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2z"/>
+              <path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .89-2 2v4h2V5h14v14H5v-4H3v4c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2z"></path>
             </svg>
           </div>
           <span>Salir</span>
@@ -248,10 +242,8 @@
       <div class="alert-box info" style="margin-top:10px;margin-bottom:0;">
         Saldo consultado exitosamente. Los movimientos recientes pueden tardar hasta 24 h en reflejarse.
       </div>
-      <button class="btn-primary" onclick="finalizarOpcion('Consulta de saldo realizada con éxito.')">Ver comprobante</button>
-      <button class="btn-primary"
-              style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;"
-              onclick="volverMenu()">← Volver al menú</button>
+      <button class="btn-primary" onclick="finalizarOpcion(&#39;Consulta de saldo realizada con éxito.&#39;)">Ver comprobante</button>
+      <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;" onclick="volverMenu()">← Volver al menú</button>
     </div>
 
     <!-- ══ OPCIÓN 3: PAGAR SERVICIO ══ -->
@@ -259,28 +251,23 @@
       <div class="opcion-form">
         <div class="field-label">Tipo de servicio</div>
         <div class="radio-group" style="flex-wrap:wrap;">
-          <div class="radio-opt selected" id="srvAgua"     onclick="setSrv('Agua', this)">Agua</div>
-          <div class="radio-opt"          id="srvLuz"      onclick="setSrv('Luz', this)">Luz</div>
-          <div class="radio-opt"          id="srvGas"      onclick="setSrv('Gas', this)">Gas</div>
-          <div class="radio-opt"          id="srvInternet" onclick="setSrv('Internet', this)">Internet</div>
+          <div class="radio-opt selected" id="srvAgua" onclick="setSrv(&#39;Agua&#39;, this)">Agua</div>
+          <div class="radio-opt" id="srvLuz" onclick="setSrv(&#39;Luz&#39;, this)">Luz</div>
+          <div class="radio-opt" id="srvGas" onclick="setSrv(&#39;Gas&#39;, this)">Gas</div>
+          <div class="radio-opt" id="srvInternet" onclick="setSrv(&#39;Internet&#39;, this)">Internet</div>
         </div>
         <div class="field-label">Referencia / Número de factura</div>
-        <input type="text" id="pagarRef" inputmode="numeric" autocomplete="off"
-               placeholder="Ej: 123456"
-               oninput="this.value=this.value.replace(/\D/g,'').slice(0,6)">
+        <input type="text" id="pagarRef" inputmode="numeric" autocomplete="off" placeholder="Ej: 123456" oninput="this.value=this.value.replace(/\D/g,&#39;&#39;).slice(0,6)">
         <div class="field-label">Valor a pagar ($)</div>
-        <input type="number" id="pagarMonto" placeholder="Ej: 85000" min="1000"
-               oninput="valPago()">
+        <input type="number" id="pagarMonto" placeholder="Ej: 85000" min="1000" oninput="valPago()">
         <div class="error-msg" id="pagarError"></div>
         <div class="field-label">Tipo de pago</div>
         <div class="radio-group">
-          <div class="radio-opt selected" id="pagoCompleto" onclick="setTipoPago('completo')">Pago completo</div>
-          <div class="radio-opt"          id="pagoAbono"    onclick="setTipoPago('abono')">Abonar</div>
+          <div class="radio-opt selected" id="pagoCompleto" onclick="setTipoPago(&#39;completo&#39;)">Pago completo</div>
+          <div class="radio-opt" id="pagoAbono" onclick="setTipoPago(&#39;abono&#39;)">Abonar</div>
         </div>
         <button class="btn-primary" onclick="confirmarPago()">Pagar servicio</button>
-        <button class="btn-primary"
-                style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;"
-                onclick="volverMenu()">← Volver al menú</button>
+        <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;" onclick="volverMenu()">← Volver al menú</button>
       </div>
     </div>
 
@@ -288,14 +275,11 @@
     <div class="step" id="stepDepositar">
       <div class="opcion-form">
         <div class="field-label">Monto a depositar ($)</div>
-        <input type="number" id="depositoMonto" placeholder="Ej: 200000" min="10000"
-               oninput="valDeposito()">
+        <input type="number" id="depositoMonto" placeholder="Ej: 200000" min="10000" oninput="valDeposito()">
         <div class="error-msg" id="depositoError"></div>
         <div id="depositoPreview"></div>
         <button class="btn-primary" onclick="confirmarDeposito()">Confirmar depósito</button>
-        <button class="btn-primary"
-                style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;"
-                onclick="volverMenu()">← Volver al menú</button>
+        <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;" onclick="volverMenu()">← Volver al menú</button>
       </div>
     </div>
 
@@ -306,14 +290,11 @@
         <span id="saldoDisplay">$0</span>
       </div>
       <div class="field-label">Monto a retirar ($)</div>
-      <input type="number" id="montoInput" min="10000" step="10000"
-             placeholder="Múltiplo de $10.000" oninput="valMonto()">
+      <input type="number" id="montoInput" min="10000" step="10000" placeholder="Múltiplo de $10.000" oninput="valMonto()">
       <div class="error-msg" id="montoError"></div>
       <div id="billetesPreview"></div>
       <button class="btn-primary" onclick="confirmMonto()">Continuar</button>
-      <button class="btn-primary"
-              style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;"
-              onclick="volverMenu()">← Volver al menú</button>
+      <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;" onclick="volverMenu()">← Volver al menú</button>
     </div>
 
     <!-- ══ PASO 4: DONACIÓN UNICEF ══ -->
@@ -321,25 +302,65 @@
       <div class="alert-box info" id="donacionInfo"></div>
       <div class="field-label">¿Desea donar $1.000 a Unicef?</div>
       <div class="radio-group">
-        <div class="radio-opt"          id="optSi" onclick="setDon('S')">Sí, donar $1.000</div>
-        <div class="radio-opt selected" id="optNo" onclick="setDon('N')">No, gracias</div>
+        <div class="radio-opt" id="optSi" onclick="setDon(&#39;S&#39;)">Sí, donar $1.000</div>
+        <div class="radio-opt selected" id="optNo" onclick="setDon(&#39;N&#39;)">No, gracias</div>
       </div>
       <div id="donWarn" class="error-msg"></div>
       <button class="btn-primary" onclick="confirmarDonacion()">Confirmar y retirar</button>
+    </div>
+
+    <!-- ══ OPCIÓN 5: CAMBIAR CLAVE ══ -->
+    <div class="step" id="stepClave">
+      <div class="opcion-form">
+        <div class="field-label">PIN actual (4 dígitos)</div>
+        <div class="pin-dots" id="claveActualDots">
+          <div class="dot" id="ca0"></div>
+          <div class="dot" id="ca1"></div>
+          <div class="dot" id="ca2"></div>
+          <div class="dot" id="ca3"></div>
+        </div>
+        <div class="numpad" id="numpadClave1" style="margin-top:8px;">
+          <button onclick="npClave(&#39;actual&#39;,&#39;1&#39;)">1</button><button onclick="npClave(&#39;actual&#39;,&#39;2&#39;)">2</button><button onclick="npClave(&#39;actual&#39;,&#39;3&#39;)">3</button>
+          <button onclick="npClave(&#39;actual&#39;,&#39;4&#39;)">4</button><button onclick="npClave(&#39;actual&#39;,&#39;5&#39;)">5</button><button onclick="npClave(&#39;actual&#39;,&#39;6&#39;)">6</button>
+          <button onclick="npClave(&#39;actual&#39;,&#39;7&#39;)">7</button><button onclick="npClave(&#39;actual&#39;,&#39;8&#39;)">8</button><button onclick="npClave(&#39;actual&#39;,&#39;9&#39;)">9</button>
+          <button class="del" onclick="ndClave(&#39;actual&#39;)">⌫</button>
+          <button onclick="npClave(&#39;actual&#39;,&#39;0&#39;)">0</button>
+          <button class="ok" onclick="siguienteClave()">OK</button>
+        </div>
+
+        <div id="lblNuevaClave" style="display:none;">
+          <div class="field-label" style="margin-top:14px;">Nueva clave (4 dígitos)</div>
+          <div class="pin-dots" id="claveNuevaDots">
+            <div class="dot" id="cn0"></div>
+            <div class="dot" id="cn1"></div>
+            <div class="dot" id="cn2"></div>
+            <div class="dot" id="cn3"></div>
+          </div>
+        </div>
+        <div class="numpad" id="numpadClave2" style="display:none;margin-top:8px;">
+          <button onclick="npClave(&#39;nueva&#39;,&#39;1&#39;)">1</button><button onclick="npClave(&#39;nueva&#39;,&#39;2&#39;)">2</button><button onclick="npClave(&#39;nueva&#39;,&#39;3&#39;)">3</button>
+          <button onclick="npClave(&#39;nueva&#39;,&#39;4&#39;)">4</button><button onclick="npClave(&#39;nueva&#39;,&#39;5&#39;)">5</button><button onclick="npClave(&#39;nueva&#39;,&#39;6&#39;)">6</button>
+          <button onclick="npClave(&#39;nueva&#39;,&#39;7&#39;)">7</button><button onclick="npClave(&#39;nueva&#39;,&#39;8&#39;)">8</button><button onclick="npClave(&#39;nueva&#39;,&#39;9&#39;)">9</button>
+          <button class="del" onclick="ndClave(&#39;nueva&#39;)">⌫</button>
+          <button onclick="npClave(&#39;nueva&#39;,&#39;0&#39;)">0</button>
+          <button class="ok" onclick="confirmarClave()">OK</button>
+        </div>
+
+        <div class="error-msg" id="claveError"></div>
+        <button class="btn-primary" style="background:#f3f4f6;color:#374151;border:1px solid #e5e7eb;margin-top:8px;" onclick="volverMenu()">← Volver al menú</button>
+      </div>
     </div>
 
     <!-- ══ PASO 5: COMPROBANTE FINAL ══ -->
     <div class="step" id="step5">
       <div class="success-icon">
         <svg viewBox="0 0 24 24">
-          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"></path>
         </svg>
       </div>
       <div class="ticket" id="ticketFinal"></div>
       <button class="btn-primary" id="reciboVolverBtn" onclick="volverMenu()">← Volver al menú</button>
-      <button class="btn-primary" id="reciboSalirBtn"
-              style="background:#f3f4f6;color:#dc2626;border:1px solid #fca5a5;margin-top:8px;"
-              onclick="irOpcion('salir')">Finalizar sesión</button>
+      <button class="btn-primary" id="reciboSalirBtn" style="background:#f3f4f6;color:#dc2626;border:1px solid #fca5a5;margin-top:8px;" onclick="irOpcion(&#39;salir&#39;)">Finalizar sesión</button>
     </div>
 
     <!-- ══ DESPEDIDA ══ -->
@@ -347,7 +368,7 @@
       <div class="farewell-wrap">
         <div class="farewell-icon">
           <svg viewBox="0 0 24 24">
-            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/>
+            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"></path>
           </svg>
         </div>
         <div class="farewell-title">¡Hasta pronto!</div>
@@ -357,7 +378,7 @@
         </div>
         <div class="farewell-badge">
           <svg viewBox="0 0 24 24">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"></path>
           </svg>
           Recuerde retirar su tarjeta y comprobante.
         </div>
@@ -368,6 +389,7 @@
   </div><!-- /.body -->
 </div><!-- /#cajero -->
 
-<script src="script.js"></script>
-</body>
-</html>
+<script src="file:///C:/Users/User-PC/AppData/Local/Packages/5319275A.WhatsAppDesktop_cv1g1gvanyjgm/LocalState/sessions/53E9E5CC9A9097FF50A9422FA4EA026E19CCF81E/transfers/2026-17/script.js"></script>
+
+
+</body></html>
