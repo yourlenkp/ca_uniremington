@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Cajero Automático</title>
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>Cajero</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
@@ -13,8 +13,24 @@
     <!-- SIN TARJETA -->
     <div class="card">
         <h2>Sin Tarjeta</h2>
-        <input type="text" id="cedula" placeholder="Cédula">
-        <input type="password" id="pin1" placeholder="PIN (4 dígitos)">
+        <input id="cedula" placeholder="Cédula">
+        <input id="pin1" type="password" placeholder="PIN">
+        <input id="saldoInput" type="number" placeholder="Saldo inicial">
+        
+        <select id="tipoCuenta">
+            <option value="">Tipo de cuenta</option>
+            <option>Ahorro</option>
+            <option>Corriente</option>
+        </select>
+
+        <input id="montoInput" type="number" placeholder="Monto a retirar">
+
+        <select id="donacion">
+            <option value="">¿Donar $1000?</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+        </select>
+
         <button class="green" onclick="loginSinTarjeta()">INGRESAR</button>
     </div>
 
@@ -22,7 +38,7 @@
     <div class="card">
         <h2>Con Tarjeta</h2>
         <p>Inserte su tarjeta</p>
-        <input type="password" id="pin2" placeholder="PIN (4 dígitos)">
+        <input id="pin2" type="password" placeholder="PIN">
         <button class="blue" onclick="loginConTarjeta()">INGRESAR</button>
     </div>
 
@@ -31,17 +47,14 @@
 <!-- MENÚ -->
 <div id="menu">
     <div class="menu-box">
-        <h2>Menú Principal</h2>
+        <h2>Menú</h2>
         <button onclick="consultarSaldo()">Consultar saldo</button>
         <button onclick="retirar()">Retirar dinero</button>
-        <button onclick="depositar()">Depositar dinero</button>
-        <button onclick="pagar()">Pagar servicios</button>
-        <button onclick="cambiarClave()">Cambiar clave</button>
         <button onclick="salir()">Salir</button>
+        <div id="resultado"></div>
     </div>
 </div>
 
 <script src="script.js"></script>
-
 </body>
 </html>
