@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cajero Automático Completo</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #f4f4f4;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    margin: 40px auto;
+    width: 350px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+button {
+    margin: 5px;
+    padding: 10px;
+    width: 80%;
+}
+
+input, select {
+    padding: 8px;
+    width: 90%;
+    margin: 5px;
+}
+
+.hidden { display: none; }
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>Cajero Automático</h2>
+
+<!-- MODO -->
+<div id="modo">
+    <button onclick="modoAcceso('tarjeta')">Con Tarjeta</button>
+    <button onclick="modoAcceso('cedula')">Sin Tarjeta</button>
+</div>
+
+<!-- LOGIN -->
+<div id="login" class="hidden">
+    <input id="usuario" placeholder="Cédula o Tarjeta">
+    <input id="pin" placeholder="PIN (4 dígitos)">
+    <select id="tipoCuenta">
+        <option value="">Tipo de cuenta</option>
+        <option>Ahorros</option>
+        <option>Corriente</option>
+    </select>
+    <button onclick="login()">Ingresar</button>
+</div>
+
+<!-- MENU -->
+<div id="menu" class="hidden">
+    <button onclick="consultar()">Consultar saldo</button>
+    <button onclick="retirar()">Retirar</button>
+    <button onclick="depositar()">Depositar</button>
+    <button onclick="salir()">Salir</button>
+</div>
+
+<p id="msg"></p>
+
+</div>
+
+<script>
+
+let usuarioValido = "1234";
+let pinValido = "1111";
+let saldo = 500000;
+
+let intentos = 0;
+let bloqueado = false;
+
+// LOGIN
+function login(){
+
+    if(bloqueado){
+        mostrar("Cuenta bloqueada");
+        return;
+    }
+
+    let user = usuario.value;
+    let pin = document.getElementById("pin").value;
+    let tipo = document.getElementById("tipoCuenta").value;
+
+    // VALIDACIONES
+    if(user === "" || pin === "" || tipo === ""){
+        mostrar("Complete todos los campos");
+        return;
+    }
+
+    if(pin.length !== 4 || isNaN(pin)){
+        mostrar("PIN inválido");
+        return;
+    }
+
+    if(user !== usuarioValido){
+        mostrar("Usuario no existe");
+        return;
+    }
+
+    if(pin !== pinValido){
+        intentos++;
+
+        if(intentos >= 3){
+            bloqueado = true;
+            mostrar("Cuenta bloqueada por 3 intentos");
+        } else {
+            mostrar("PIN incorrecto");
+        }
+        return;
+    }
+
+    intentos = 0;
+    mostrar("Bienvenido - Cuenta " + tipo);
+
+    loginDiv.classList.add("hidden");
+    menu.classList.remove("hidden");
+}
+
+// CONSULTAR
+function consultar(){
+    mostrar("Saldo actual: $" + saldo);
+}
+
+// RETIRAR CON DESGLOSE
+function retirar(){
+
+    let monto = prompt("Monto a retirar");
+
+    if(isNaN(monto) || monto <= 0){
+        mostrar("Monto inválido");
+        return;
+    }
+
+    if(monto > saldo){
+        mostrar("Fondos insuficientes");
+        return;
+    }
+
+    // DESGLOSE DE BILLETES
+    let b50 = Math.floor(monto / 50000);
+    monto %= 50000;
+
+    let b20 = Math.floor(monto / 20000);
+    monto %= 20000;
+
+    let b10 = Math.floor(monto / 10000);
+
+    saldo -= (b50*50000 + b20*20000 + b10*10000);
+
+    // DONACION
+    let donar = confirm("¿Desea donar $1000 a Unicef?");
+
+    if(donar){
+        saldo -= 1000;
+    }
+
+    mostrar(
+        "Retiro exitoso\n" +
+        "50k: " + b50 + "\n20k: " + b20 + "\n10k: " + b10 +
+        "\nSaldo: $" + saldo
+    );
+}
+
+// DEPOSITAR
+function depositar(){
+
+    let monto = prompt("Monto a depositar");
+
+    if(isNaN(monto) || monto <= 0){
+        mostrar("Monto inválido");
+        return;
+    }
+
+    saldo += parseInt(monto);
+
+    mostrar("Depósito exitoso. Saldo: $" + saldo);
+}
+
+// SALIR
+function salir(){
+    location.reload();
+}
+
+// MENSAJE
+function mostrar(t){
+    document.getElementById("msg").innerText = t;
+}
+
+// MODO
+function modoAcceso(){
+    document.getElementById("modo").classList.add("hidden");
+    document.getElementById("login").classList.remove("hidden");
+}
+
+</script>
+
+</body>
+</html>
