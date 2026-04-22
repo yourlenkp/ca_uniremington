@@ -1,6 +1,5 @@
 /* ═══════════════════════════════════════════
-   BancoCajero — Grupo 4
-   styles.css
+   BancoCajero — Grupo 4  |  styles.css
 ═══════════════════════════════════════════ */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -155,6 +154,31 @@ body {
 }
 .radio-opt:hover   { border-color: #93c5fd; }
 .radio-opt.selected { border-color: #0C447C; background: #eff6ff; color: #0C447C; }
+.radio-opt.pendiente {
+  border-color: #f59e0b;
+  background: #fffbeb;
+  color: #92400e;
+  font-weight: 700;
+  position: relative;
+}
+.radio-opt.pendiente::after {
+  content: '⚠ Pendiente';
+  display: block;
+  font-size: 9px;
+  font-weight: 600;
+  color: #b45309;
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+}
+.radio-opt.sin-recibo {
+  border-color: #e5e7eb;
+  background: #f9fafb;
+  color: #d1d5db;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.radio-opt.sin-recibo:hover { border-color: #e5e7eb; }
 
 /* ── LOGIN HELP ── */
 .login-help { font-size: 12px; color: #6b7280; margin-bottom: 10px; text-align: center; }
@@ -375,6 +399,9 @@ input:focus { border-color: #0C447C; box-shadow: 0 0 0 3px rgba(12,68,124,0.1); 
 
 /* ── OPCION FORM ── */
 .opcion-form { display: flex; flex-direction: column; gap: 2px; }
+
+/* ── CLAVE ── */
+#stepClave .pin-dots { margin: 8px 0 4px; }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 460px) {
