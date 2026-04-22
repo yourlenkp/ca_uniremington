@@ -1,8 +1,6 @@
 /* ═══════════════════════════════════════════
-   BancoCajero — Grupo 4
-   script.js
+   BancoCajero — Grupo 4  |  script.js
 ═══════════════════════════════════════════ */
-
 "use strict";
 
 // ═══════════════════════════════════════
@@ -43,8 +41,8 @@ const usuarios = {
 // ═══════════════════════════════════════
 // ESTADO GLOBAL
 // ═══════════════════════════════════════
-let tipoCajero    = null;   // 'sinTarjeta' | 'conTarjeta'
-let modoIngreso   = 'cedula'; // 'cedula' | 'pin'
+let tipoCajero    = null;
+let modoIngreso   = 'cedula';
 let inputBuffer   = '';
 let pinBuffer     = '';
 let cedulaBuffer  = '';
@@ -59,14 +57,9 @@ let tarjetaValida = null;
 let claveActualBuf = '';
 let claveNuevaBuf  = '';
 
-// Pasos de progreso
 const stepNames = [
-  'Tipo de acceso',
-  'Identificación',
-  'Validar datos',
-  'Menú principal',
-  'Operación',
-  'Finalizar'
+  'Tipo de acceso','Identificación','Validar datos',
+  'Menú principal','Operación','Finalizar'
 ];
 
 // ═══════════════════════════════════════
@@ -91,7 +84,7 @@ function setProgress(stepIndex, label) {
   const dots = document.querySelectorAll('.step-dot');
   dots.forEach((d, i) => {
     d.classList.remove('current', 'done');
-    if (i < stepIndex)       d.classList.add('done');
+    if (i < stepIndex)        d.classList.add('done');
     else if (i === stepIndex) d.classList.add('current');
   });
   document.getElementById('stepLabel').textContent = label || stepNames[stepIndex] || '';
@@ -128,6 +121,10 @@ function seleccionarTipoCajero(tipo) {
     setProgress(1, 'Identificación');
     modoIngreso = 'cedula';
     resetIngreso();
+    // Restaurar radio group
+    document.getElementById('modoCedula').style.display = '';
+    document.getElementById('modoPin').style.display    = '';
+    document.getElementById('radioModoGroup').style.display = '';
     showStep('step1');
   }
 }
@@ -154,7 +151,6 @@ function confirmarTarjeta() {
     showError('tarjetaError', 'El número de tarjeta debe tener 16 dígitos.');
     return;
   }
-  // Buscar usuario que tenga esa tarjeta
   let encontrado = null;
   for (const [ced, u] of Object.entries(usuarios)) {
     if (u.tarjetas && u.tarjetas.includes(raw)) {
@@ -167,13 +163,13 @@ function confirmarTarjeta() {
     return;
   }
   tarjetaValida = encontrado;
-  // Pasar directo a ingresar PIN (modo pin ya que tenemos la tarjeta)
   modoIngreso = 'pin';
   resetIngreso();
+  // Ocultar selector cédula/PIN al venir de tarjeta
+  document.getElementById('modoCedula').style.display    = 'none';
+  document.getElementById('modoPin').style.display       = 'none';
+  document.getElementById('radioModoGroup').style.display = 'none';
   setModoIngreso('pin');
-  document.getElementById('modoCedula').style.display = 'none';
-  document.getElementById('modoPin').style.display = 'none';
-  document.querySelector('.radio-group').style.display = 'none';
   setScreen('PIN', 'Ingrese su PIN de 4 dígitos.');
   setProgress(1, 'Ingresar PIN');
   showStep('step1');
@@ -186,11 +182,6 @@ function resetIngreso() {
   inputBuffer = '';
   updateDots();
   clearError('pinError');
-  // Restaurar vista radio
-  document.getElementById('modoCedula').style.display = '';
-  document.getElementById('modoPin').style.display = '';
-  const rg = document.querySelector('.radio-group');
-  if (rg) rg.style.display = '';
 }
 
 function setModoIngreso(modo) {
@@ -202,13 +193,12 @@ function setModoIngreso(modo) {
   document.getElementById('modoCedula').classList.toggle('selected', modo === 'cedula');
   document.getElementById('modoPin').classList.toggle('selected', modo === 'pin');
 
-  const maxLen = modo === 'cedula' ? 8 : 4;
   const help = document.getElementById('loginHelp');
   help.textContent = modo === 'cedula'
     ? 'Ingrese su cedula de 8 digitos.'
     : 'Ingrese su PIN de 4 digitos.';
 
-  // Mostrar/ocultar dots según longitud
+  const maxLen = modo === 'cedula' ? 8 : 4;
   for (let i = 0; i < 8; i++) {
     const dot = document.getElementById('dot' + i);
     dot.style.display = i < maxLen ? '' : 'none';
@@ -245,8 +235,8 @@ function confirmAcceso() {
       return;
     }
     cedulaBuffer = inputBuffer;
-    inputBuffer = '';
-    modoIngreso = 'pin';
+    inputBuffer  = '';
+    modoIngreso  = 'pin';
     setModoIngreso('pin');
     document.getElementById('loginHelp').textContent = 'Ahora ingrese su PIN de 4 dígitos.';
     return;
@@ -259,7 +249,6 @@ function confirmAcceso() {
   }
   pinBuffer = inputBuffer;
 
-  // Validar
   let cedula, usuario;
   if (tarjetaValida) {
     cedula  = tarjetaValida.cedula;
@@ -282,7 +271,6 @@ function confirmAcceso() {
     return;
   }
 
-  // Éxito
   usuarioActual = { cedula, ...usuario };
   cargarPaso2();
 }
@@ -302,7 +290,7 @@ function cargarPaso2() {
   const resumen = document.getElementById('usuarioRecibosResumen');
 
   if (recibos.length === 0) {
-    resumen.textContent = 'No tiene recibos pendientes. ✓';
+    resumen.textContent   = 'No tiene recibos pendientes. ✓';
     resumen.style.display = '';
     lista.style.display   = 'none';
   } else {
@@ -331,10 +319,10 @@ function cargarMenu() {
   const recibos = usuarioActual.recibos || [];
   const alertEl = document.getElementById('menuRecibosAlert');
   if (recibos.length > 0) {
-    alertEl.textContent = `⚠ Tiene ${recibos.length} recibo(s) pendiente(s) de pago.`;
-    alertEl.style.display = '';
+    alertEl.textContent    = `⚠ Tiene ${recibos.length} recibo(s) pendiente(s) de pago.`;
+    alertEl.style.display  = '';
   } else {
-    alertEl.style.display = 'none';
+    alertEl.style.display  = 'none';
   }
   showStep('stepMenu');
 }
@@ -354,7 +342,7 @@ function irOpcion(op) {
       break;
     case 'retirar':
       document.getElementById('saldoDisplay').textContent = fmt(usuarioActual.saldo);
-      document.getElementById('montoInput').value = '';
+      document.getElementById('montoInput').value         = '';
       document.getElementById('billetesPreview').style.display = 'none';
       clearError('montoError');
       setScreen('Retiro', 'Ingrese el monto a retirar.');
@@ -364,6 +352,8 @@ function irOpcion(op) {
       clearError('pagarError');
       document.getElementById('pagarRef').value   = '';
       document.getElementById('pagarMonto').value = '';
+      // Resaltar recibos pendientes y deshabilitar los que no se deben
+      actualizarServiciosPagar();
       setScreen('Pagar servicio', 'Complete los datos del pago.');
       showStep('stepPagar');
       break;
@@ -374,6 +364,18 @@ function irOpcion(op) {
       setScreen('Depositar', 'Ingrese el monto a depositar.');
       showStep('stepDepositar');
       break;
+    case 'cambiarClave':
+      claveActualBuf = '';
+      claveNuevaBuf  = '';
+      updClaveDotsA();
+      updClaveDotsN();
+      clearError('claveError');
+      document.getElementById('lblNuevaClave').style.display  = 'none';
+      document.getElementById('numpadClave1').style.display   = '';
+      document.getElementById('numpadClave2').style.display   = 'none';
+      setScreen('Cambiar clave', 'Ingrese su clave actual.');
+      showStep('stepClave');
+      break;
     case 'salir':
       setProgress(5, 'Finalizar');
       setScreen('Hasta pronto', 'Sesión finalizada. Gracias.');
@@ -383,34 +385,20 @@ function irOpcion(op) {
 }
 
 // ═══════════════════════════════════════
-// OPCIÓN 1 — CONSULTAR
-// ═══════════════════════════════════════
-// (manejado en irOpcion)
-
-// ═══════════════════════════════════════
 // OPCIÓN 2 — RETIRO
 // ═══════════════════════════════════════
 function valMonto() {
   clearError('montoError');
-  const v = parseInt(document.getElementById('montoInput').value) || 0;
+  const v       = parseInt(document.getElementById('montoInput').value) || 0;
   const preview = document.getElementById('billetesPreview');
 
-  if (v <= 0) { preview.style.display = 'none'; return; }
-  if (v % 10000 !== 0) {
-    showError('montoError', 'El monto debe ser múltiplo de $10.000.');
-    preview.style.display = 'none'; return;
-  }
-  if (v > usuarioActual.saldo) {
-    showError('montoError', 'Saldo insuficiente.');
-    preview.style.display = 'none'; return;
-  }
-  if (v > 2000000) {
-    showError('montoError', 'Máximo permitido: $2.000.000 por retiro.');
-    preview.style.display = 'none'; return;
-  }
+  if (v <= 0)           { preview.style.display = 'none'; return; }
+  if (v % 10000 !== 0)  { showError('montoError', 'El monto debe ser múltiplo de $10.000.'); preview.style.display = 'none'; return; }
+  if (v > usuarioActual.saldo) { showError('montoError', 'Saldo insuficiente.'); preview.style.display = 'none'; return; }
+  if (v > 2000000)      { showError('montoError', 'Máximo permitido: $2.000.000 por retiro.'); preview.style.display = 'none'; return; }
 
   const billetes = calcBilletes(v);
-  preview.innerHTML = '<strong>Billetes a dispensar:</strong><br>' + billetes;
+  preview.innerHTML    = '<strong>Billetes a dispensar:</strong><br>' + billetes;
   preview.style.display = '';
 }
 
@@ -447,7 +435,7 @@ function confirmMonto() {
 
 function setDon(v) {
   donacion = (v === 'S');
-  document.getElementById('optSi').classList.toggle('selected', donacion);
+  document.getElementById('optSi').classList.toggle('selected',  donacion);
   document.getElementById('optNo').classList.toggle('selected', !donacion);
   clearError('donWarn');
 }
@@ -485,44 +473,99 @@ function confirmarDonacion() {
 // ═══════════════════════════════════════
 // OPCIÓN 3 — PAGAR SERVICIO
 // ═══════════════════════════════════════
+
+// Resalta servicios con recibo pendiente y deshabilita los que no se deben
+function actualizarServiciosPagar() {
+  const servicios = ['Agua', 'Luz', 'Gas', 'Internet'];
+  const ids       = { Agua: 'srvAgua', Luz: 'srvLuz', Gas: 'srvGas', Internet: 'srvInternet' };
+  const recibos   = usuarioActual.recibos || [];
+  const pendientes = recibos.map(r => r.servicio);
+
+  let primerPendiente = null;
+
+  servicios.forEach(srv => {
+    const el = document.getElementById(ids[srv]);
+    // Limpiar clases anteriores
+    el.classList.remove('selected', 'pendiente', 'sin-recibo');
+
+    if (pendientes.includes(srv)) {
+      el.classList.add('pendiente');
+      if (!primerPendiente) primerPendiente = srv;
+    } else {
+      el.classList.add('sin-recibo');
+    }
+  });
+
+  // Seleccionar automáticamente el primer servicio pendiente
+  if (primerPendiente) {
+    servicioSel = primerPendiente;
+    const elSel = document.getElementById(ids[primerPendiente]);
+    elSel.classList.remove('pendiente');
+    elSel.classList.add('selected', 'pendiente');
+    // Autorellenar referencia si solo hay un recibo de ese servicio
+    const recibo = recibos.find(r => r.servicio === primerPendiente);
+    if (recibo) {
+      document.getElementById('pagarRef').value   = recibo.referencia;
+      document.getElementById('pagarMonto').value = recibo.monto;
+    }
+  }
+}
+
 function setSrv(srv, el) {
+  // Ignorar si el elemento está deshabilitado
+  if (el && el.classList.contains('sin-recibo')) return;
+
+  const ids = { Agua: 'srvAgua', Luz: 'srvLuz', Gas: 'srvGas', Internet: 'srvInternet' };
+  const recibos = usuarioActual.recibos || [];
+  const pendientes = recibos.map(r => r.servicio);
+
+  // Quitar selected de todos, pero conservar pendiente/sin-recibo
+  Object.values(ids).forEach(id => {
+    document.getElementById(id).classList.remove('selected');
+  });
+
   servicioSel = srv;
-  document.querySelectorAll('#stepPagar .radio-opt').forEach(e => e.classList.remove('selected'));
-  if (el) el.classList.add('selected');
+  el.classList.add('selected');
+
+  // Autorellenar referencia y monto del recibo si existe
+  const recibo = recibos.find(r => r.servicio === srv);
+  if (recibo) {
+    document.getElementById('pagarRef').value   = recibo.referencia;
+    document.getElementById('pagarMonto').value = recibo.monto;
+  } else {
+    document.getElementById('pagarRef').value   = '';
+    document.getElementById('pagarMonto').value = '';
+  }
+  clearError('pagarError');
 }
 
 function setTipoPago(t) {
   tipoPago = t;
   document.getElementById('pagoCompleto').classList.toggle('selected', t === 'completo');
-  document.getElementById('pagoAbono').classList.toggle('selected', t === 'abono');
+  document.getElementById('pagoAbono').classList.toggle('selected',    t === 'abono');
 }
 
-function valPago() {
-  clearError('pagarError');
-}
+function valPago() { clearError('pagarError'); }
 
 function confirmarPago() {
   clearError('pagarError');
   const ref   = document.getElementById('pagarRef').value.trim();
   const monto = parseFloat(document.getElementById('pagarMonto').value) || 0;
 
-  if (!ref || ref.length < 4) { showError('pagarError', 'Ingrese una referencia válida (mín. 4 dígitos).'); return; }
-  if (monto < 1000)            { showError('pagarError', 'El valor mínimo a pagar es $1.000.'); return; }
-  if (monto > usuarioActual.saldo) { showError('pagarError', 'Saldo insuficiente para realizar el pago.'); return; }
+  if (!ref || ref.length < 4)      { showError('pagarError', 'Ingrese una referencia válida (mín. 4 dígitos).'); return; }
+  if (monto < 1000)                 { showError('pagarError', 'El valor mínimo a pagar es $1.000.'); return; }
+  if (monto > usuarioActual.saldo)  { showError('pagarError', 'Saldo insuficiente para realizar el pago.'); return; }
 
-  // Descontar de recibo pendiente si existe
   const idx = (usuarioActual.recibos || []).findIndex(
     r => r.servicio === servicioSel && r.referencia === ref
   );
-
   if (idx !== -1) {
-    const recibo = usuarioActual.recibos[idx];
     if (tipoPago === 'completo') {
       usuarioActual.recibos.splice(idx, 1);
       usuarios[usuarioActual.cedula].recibos.splice(idx, 1);
     } else {
-      usuarioActual.recibos[idx].monto   -= monto;
-      usuarios[usuarioActual.cedula].recibos[idx].monto -= monto;
+      usuarioActual.recibos[idx].monto                    -= monto;
+      usuarios[usuarioActual.cedula].recibos[idx].monto   -= monto;
       if (usuarioActual.recibos[idx].monto <= 0) {
         usuarioActual.recibos.splice(idx, 1);
         usuarios[usuarioActual.cedula].recibos.splice(idx, 1);
@@ -553,10 +596,10 @@ function confirmarPago() {
 // ═══════════════════════════════════════
 function valDeposito() {
   clearError('depositoError');
-  const v = parseFloat(document.getElementById('depositoMonto').value) || 0;
+  const v       = parseFloat(document.getElementById('depositoMonto').value) || 0;
   const preview = document.getElementById('depositoPreview');
   if (v < 10000) { preview.style.display = 'none'; return; }
-  preview.innerHTML = `Nuevo saldo tras depósito: <strong>${fmt(usuarioActual.saldo + v)}</strong>`;
+  preview.innerHTML    = `Nuevo saldo tras depósito: <strong>${fmt(usuarioActual.saldo + v)}</strong>`;
   preview.style.display = '';
 }
 
@@ -575,6 +618,74 @@ function confirmarDeposito() {
     `Cuenta   : ${usuarioActual.tipo}\n` +
     `Depósito : ${fmt(v)}\n` +
     `Saldo    : ${fmt(usuarioActual.saldo)}\n` +
+    `─────────────────────\n` +
+    `Fecha    : ${now()}\n` +
+    `Cajero   : Grupo 4`
+  );
+}
+
+// ═══════════════════════════════════════
+// OPCIÓN 5 — CAMBIAR CLAVE
+// ═══════════════════════════════════════
+function npClave(campo, d) {
+  if (campo === 'actual' && claveActualBuf.length < 4) {
+    claveActualBuf += d;
+    clearError('claveError');
+    updClaveDotsA();
+  } else if (campo === 'nueva' && claveNuevaBuf.length < 4) {
+    claveNuevaBuf += d;
+    clearError('claveError');
+    updClaveDotsN();
+  }
+}
+
+function ndClave(campo) {
+  if (campo === 'actual' && claveActualBuf.length > 0) {
+    claveActualBuf = claveActualBuf.slice(0, -1); updClaveDotsA();
+  } else if (campo === 'nueva' && claveNuevaBuf.length > 0) {
+    claveNuevaBuf = claveNuevaBuf.slice(0, -1); updClaveDotsN();
+  }
+}
+
+function updClaveDotsA() {
+  for (let i = 0; i < 4; i++)
+    document.getElementById('ca' + i).classList.toggle('filled', i < claveActualBuf.length);
+}
+
+function updClaveDotsN() {
+  for (let i = 0; i < 4; i++)
+    document.getElementById('cn' + i).classList.toggle('filled', i < claveNuevaBuf.length);
+}
+
+function siguienteClave() {
+  if (claveActualBuf.length < 4) {
+    showError('claveError', 'Ingrese los 4 dígitos completos.'); return;
+  }
+  if (claveActualBuf !== usuarioActual.pin) {
+    showError('claveError', 'Clave actual incorrecta.');
+    claveActualBuf = ''; updClaveDotsA(); return;
+  }
+  clearError('claveError');
+  document.getElementById('lblNuevaClave').style.display  = 'block';
+  document.getElementById('numpadClave2').style.display   = 'grid';
+  document.getElementById('numpadClave1').style.display   = 'none';
+  setScreen('Cambiar clave', 'Ingrese su nueva clave de 4 dígitos.');
+}
+
+function confirmarClave() {
+  if (claveNuevaBuf.length < 4) {
+    showError('claveError', 'Ingrese los 4 dígitos de la nueva clave.'); return;
+  }
+  if (claveNuevaBuf === usuarioActual.pin) {
+    showError('claveError', 'La nueva clave debe ser diferente a la actual.'); return;
+  }
+  usuarios[usuarioActual.cedula].pin = claveNuevaBuf;
+  usuarioActual.pin = claveNuevaBuf;
+  mostrarTicket(
+    `CAMBIO DE CLAVE\n` +
+    `─────────────────────\n` +
+    `Titular  : ${usuarioActual.nombre}\n` +
+    `Estado   : Clave actualizada correctamente\n` +
     `─────────────────────\n` +
     `Fecha    : ${now()}\n` +
     `Cajero   : Grupo 4`
@@ -617,12 +728,12 @@ function reiniciar() {
   montoRetiro   = 0;
   donacion      = false;
   tarjetaValida = null;
+  claveActualBuf = '';
+  claveNuevaBuf  = '';
 
-  // Restaurar radio group de step1
-  document.getElementById('modoCedula').style.display = '';
-  document.getElementById('modoPin').style.display    = '';
-  const rg = document.querySelector('#step1 .radio-group');
-  if (rg) rg.style.display = '';
+  document.getElementById('modoCedula').style.display      = '';
+  document.getElementById('modoPin').style.display         = '';
+  document.getElementById('radioModoGroup').style.display  = '';
 
   setProgress(0, 'Tipo de acceso');
   setScreen('Bienvenido', 'Seleccione cómo desea acceder al cajero.');
