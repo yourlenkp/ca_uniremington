@@ -1,50 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Cajero Automático</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <title>Cajero Automático</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-<div class="container">
+<div class="container" id="login">
 
-  <!-- ACCESO SIN TARJETA -->
-  <div class="card green">
-    <h3>ACCESO SIN TARJETA</h3>
-    <p>(Cédula y PIN)</p>
+    <!-- SIN TARJETA -->
+    <div class="card">
+        <h2>Sin Tarjeta</h2>
+        <input type="text" id="cedula" placeholder="Cédula">
+        <input type="password" id="pin1" placeholder="PIN (4 dígitos)">
+        <button class="green" onclick="loginSinTarjeta()">INGRESAR</button>
+    </div>
 
-    <input type="text" placeholder="Ingrese su cédula" id="cedula">
-    <input type="password" placeholder="Ingrese su PIN" id="pin1">
-
-    <button onclick="login()">INGRESAR</button>
-  </div>
-
-  <!-- ACCESO CON TARJETA -->
-  <div class="card blue">
-    <h3>ACCESO CON TARJETA</h3>
-    <p>(Tarjeta y PIN)</p>
-
-    <input type="text" placeholder="Número de tarjeta">
-    <input type="password" placeholder="Ingrese su PIN" id="pin2">
-
-    <button onclick="login()">INGRESAR</button>
-  </div>
-
-  <!-- MENÚ PRINCIPAL -->
-  <div class="card menu">
-    <h3>MENÚ PRINCIPAL</h3>
-
-    <button onclick="accion('Saldo: $5000')">Consultar saldo</button>
-    <button onclick="accion('Retiro exitoso')">Retirar dinero</button>
-    <button onclick="accion('Depósito exitoso')">Depositar dinero</button>
-    <button onclick="accion('Pago realizado')">Pagar servicios</button>
-    <button onclick="accion('Clave cambiada')">Cambiar clave</button>
-    <button onclick="accion('Sesión cerrada')">Salir</button>
-  </div>
+    <!-- CON TARJETA -->
+    <div class="card">
+        <h2>Con Tarjeta</h2>
+        <p>Inserte su tarjeta</p>
+        <input type="password" id="pin2" placeholder="PIN (4 dígitos)">
+        <button class="blue" onclick="loginConTarjeta()">INGRESAR</button>
+    </div>
 
 </div>
 
+<!-- MENÚ -->
+<div id="menu">
+    <div class="menu-box">
+        <h2>Menú Principal</h2>
+        <button onclick="consultarSaldo()">Consultar saldo</button>
+        <button onclick="retirar()">Retirar dinero</button>
+        <button onclick="depositar()">Depositar dinero</button>
+        <button onclick="pagar()">Pagar servicios</button>
+        <button onclick="cambiarClave()">Cambiar clave</button>
+        <button onclick="salir()">Salir</button>
+    </div>
+</div>
+
 <script src="script.js"></script>
+
 </body>
 </html>
