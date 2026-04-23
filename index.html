@@ -3,22 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BancoCajero — Grupo 4</title>
+  <title>Cajero Automático Uniremington — Grupo 4</title>
   <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- FONDO BANCO ESTILO IMAGEN -->
+  <!-- FONDO BANCO -->
   <div class="bank-bg">
     <div class="bg-header-bar">
       <div class="bg-logo-area">
         <div class="bg-logo-icon">
           <svg viewBox="0 0 24 24"><path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zM11.5 1L2 6v2h19V6l-9.5-5z"/></svg>
         </div>
-        <div>
-          <div class="bg-logo-name">Cajero Automático Uniremington</div>
-        </div>
+        <div class="bg-logo-name">Cajero Automático Uniremington</div>
       </div>
       <div class="bg-datetime" id="bgDateTime"></div>
     </div>
@@ -85,7 +83,6 @@
 
         <!-- PASO 1A: CÉDULA -->
         <div class="step" id="step1cedula">
-          <!-- Cabecera estilo imagen: icono + título -->
           <div class="auth-header">
             <div class="auth-icon-wrap">
               <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
@@ -121,7 +118,7 @@
               <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
             </div>
             <div class="auth-title" id="pinTitle">Identificación de usuario</div>
-            <div class="auth-sub" id="loginHelpPin">Ingrese su PIN de 4 dígitos para acceder a nuestros servicios</div>
+            <div class="auth-sub" id="loginHelpPin">Ingrese su PIN de 4 dígitos para acceder</div>
           </div>
           <div class="pin-dots">
             <div class="dot" id="dp0"></div><div class="dot" id="dp1"></div>
@@ -137,14 +134,11 @@
           </div>
           <div class="security-note">
             <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
-            Su seguridad es importante — Nadie del banco está autorizado para solicitar su PIN.
+            Nadie del banco está autorizado para solicitar su PIN.
           </div>
           <div class="intentos-note">
             <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-            <div>
-              <strong>Máximo 3 intentos</strong><br>
-              Después de 3 intentos incorrectos, su tarjeta será retenida.
-            </div>
+            <div><strong>Máximo 3 intentos</strong><br>Después de 3 intentos incorrectos, su tarjeta será retenida.</div>
             <div class="intentos-dots">
               <span class="i-dot" id="id0"></span>
               <span class="i-dot" id="id1"></span>
@@ -181,7 +175,7 @@
             <button class="btn-primary uv-btn" onclick="confirmSaldo()">Continuar al menú &nbsp;›</button>
             <div class="uv-security-row">
               <div class="uv-sec-item"><svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg><div><strong>Su seguridad es nuestra prioridad</strong><br>Todos sus datos están protegidos.</div></div>
-              <div class="uv-sec-item"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg><div>Esta sesión cerrará<br>después de 60 segundos de inactividad.</div></div>
+              <div class="uv-sec-item"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg><div>Sesión cierra después de 60 s de inactividad.</div></div>
             </div>
           </div>
         </div>
@@ -206,7 +200,7 @@
               <span>Depositar</span><span class="mb-num">Opción 4</span>
             </button>
             <button class="menu-btn" onclick="reiniciar()">
-              <div class="mb-icon"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div>
+              <div class="mb-icon"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
               <span>Cambiar usuario</span><span class="mb-num">Opción 5</span>
             </button>
             <button class="menu-btn salir-btn" onclick="irOpcion('salir')">
@@ -224,37 +218,91 @@
           <button class="btn-primary" onclick="volverMenu()">← Volver al menú</button>
         </div>
 
-        <!-- SELECCIONAR RECIBO -->
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- PAGO DE SERVICIOS — NUEVA INTERFAZ IMAGEN  -->
+        <!-- ═══════════════════════════════════════════ -->
         <div class="step" id="stepPagarSeleccionar">
-          <div class="alert-box info" id="pagarRecibosInfo">Seleccione un recibo para pagar o abonar.</div>
-          <div class="recibos-lista" id="recibosLista"></div>
+          <div class="pago-screen-header">
+            <div class="pago-screen-label">PAGO DE SERVICIO</div>
+            <div class="pago-screen-desc">Seleccione el servicio, ingrese la referencia y confirme el pago.</div>
+          </div>
+
+          <div class="pago-section-title">Seleccionar servicio</div>
+          <div class="servicios-grid" id="serviciosGrid">
+            <!-- Generado por JS -->
+          </div>
+
+          <div class="pago-form-area" id="pagoFormArea" style="display:none;">
+            <div class="field-label">Referencia / Número de factura</div>
+            <div class="input-icon-wrap">
+              <input type="text" id="pagarRef" inputmode="numeric" autocomplete="off" placeholder="Ej: 123456" maxlength="6" oninput="this.value=this.value.replace(/\D/g,'').slice(0,6); autoGenRef();">
+              <span class="input-icon-right">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-2 .89-2 2v12c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4V6h16v12zM6 10h5v2H6zm0 3h5v2H6zm7-3h3v5h-3z"/></svg>
+              </span>
+            </div>
+
+            <div class="field-label">Valor a pagar ($)</div>
+            <div class="valor-pagar-wrap">
+              <div class="valor-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </div>
+              <div class="valor-amount" id="valorServicioDisplay">$0</div>
+            </div>
+            <div class="alert-box info pago-info-msg">
+              <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:#1e3a5f;flex-shrink:0;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+              El valor del servicio ya está establecido. Solo debe ingresar la referencia y pagar.
+            </div>
+
+            <div class="field-label">Tipo de pago</div>
+            <div class="radio-group">
+              <div class="radio-opt selected" id="pagoCompleto" onclick="setTipoPago('completo')">Pago completo</div>
+              <div class="radio-opt" id="pagoAbono" onclick="setTipoPago('abono')">Abonar</div>
+            </div>
+            <div class="field-label" id="labelMonto" style="display:none;">Monto a abonar ($)</div>
+            <input type="number" id="pagarMonto" placeholder="Ej: 85000" min="1000" oninput="valPago()" style="display:none;">
+            <div class="error-msg" id="pagarError"></div>
+          </div>
+
           <div class="error-msg" id="seleccionError"></div>
-          <button class="btn-primary" onclick="irAPagarRecibo()">Continuar con recibo seleccionado</button>
-          <button class="btn-secondary" onclick="volverMenu()">← Volver al menú</button>
+
+          <button class="btn-primary pago-btn-main" id="btnPagarServicio" onclick="confirmarPago()" style="display:none;">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            Pagar servicio
+          </button>
+          <button class="btn-secondary" onclick="volverMenu()">← Cambiar recibo</button>
+          <div class="pago-footer-note">
+            <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+            Transacciones seguras y protegidas
+          </div>
         </div>
 
-        <!-- FORMULARIO PAGO -->
-        <div class="step" id="stepPagarForm">
-          <div class="recibo-pagar-header">
-            <div class="rph-icon" id="rphIcon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
-            <div><div class="rph-nombre" id="rphNombre">Servicio</div><div class="rph-sub" id="rphSub">Ingrese los datos del pago</div></div>
-          </div>
-          <div class="field-label">Referencia / Número de factura</div>
-          <input type="text" id="pagarRef" inputmode="numeric" autocomplete="off" placeholder="Ej: 123456" maxlength="6" oninput="this.value=this.value.replace(/\D/g,'').slice(0,6)">
-          <div class="field-label">Valor a pagar ($)</div>
-          <input type="number" id="pagarMonto" placeholder="Ej: 85000" min="1000" oninput="valPago()">
-          <div class="error-msg" id="pagarError"></div>
-          <div class="field-label">Tipo de pago</div>
-          <div class="radio-group">
-            <div class="radio-opt selected" id="pagoCompleto" onclick="setTipoPago('completo')">Pago completo</div>
-            <div class="radio-opt" id="pagoAbono" onclick="setTipoPago('abono')">Abonar</div>
-          </div>
-          <button class="btn-primary" onclick="confirmarPago()">Pagar servicio</button>
-          <button class="btn-secondary" onclick="volverSeleccionRecibos()">← Cambiar recibo</button>
-        </div>
-
-        <!-- DEPOSITAR -->
+        <!-- DEPOSITAR — NUEVA VERSIÓN -->
         <div class="step" id="stepDepositar">
+          <div class="dep-header">
+            <div class="dep-header-icon">
+              <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+            <div>
+              <div class="dep-title">Depósito de dinero</div>
+              <div class="dep-sub">Transfiera desde su cuenta a otra cuenta</div>
+            </div>
+          </div>
+
+          <div class="field-label">Cuenta origen (su cuenta)</div>
+          <div class="radio-group">
+            <div class="radio-opt selected" id="depCuentaAhorro" onclick="setDepCuenta('Ahorro')">💳 Ahorro</div>
+            <div class="radio-opt" id="depCuentaCorriente" onclick="setDepCuenta('Corriente')">🏦 Corriente</div>
+          </div>
+          <div class="saldo-bar" style="margin-top:8px;"><span>Saldo disponible</span><span id="saldoDepDisplay" class="saldo-valor">$0</span></div>
+
+          <div class="field-label">Número de cuenta destino</div>
+          <div class="input-icon-wrap">
+            <input type="text" id="numeroCuentaDest" inputmode="numeric" autocomplete="off" placeholder="Ej: 2001234567" maxlength="10" oninput="this.value=this.value.replace(/\D/g,'').slice(0,10); valDeposito();">
+            <span class="input-icon-right">
+              <svg viewBox="0 0 24 24"><path d="M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zM11.5 1L2 6v2h19V6l-9.5-5z"/></svg>
+            </span>
+          </div>
+
           <div class="field-label">Monto a depositar ($)</div>
           <input type="number" id="depositoMonto" placeholder="Ej: 200000" min="10000" oninput="valDeposito()">
           <div class="error-msg" id="depositoError"></div>
@@ -317,31 +365,9 @@
           </div>
           <div id="botonesPostRecibo" style="display:none;">
             <button class="btn-primary" id="reciboVolverBtn" onclick="volverMenu()" style="display:none;">← Volver al menú</button>
-            <button class="btn-primary" id="reciboVolverRecibosBtn" onclick="volverSeleccionRecibos()" style="display:none;background:#185FA5;">← Pagar otro recibo</button>
+            <button class="btn-primary" id="reciboVolverRecibosBtn" onclick="volverSeleccionRecibos()" style="display:none;background:#185FA5;">← Pagar otro servicio</button>
             <button class="btn-danger" id="reciboSalirBtn" onclick="irOpcion('salir')">Finalizar sesión</button>
           </div>
-        </div>
-
-        <!-- CAMBIAR CLAVE -->
-        <div class="step" id="stepClave">
-          <div class="field-label">PIN actual</div>
-          <div class="pin-dots"><div class="dot" id="ca0"></div><div class="dot" id="ca1"></div><div class="dot" id="ca2"></div><div class="dot" id="ca3"></div></div>
-          <div class="numpad" id="numpadClave1" style="margin-top:8px;">
-            <button onclick="npClave('actual','1')">1</button><button onclick="npClave('actual','2')">2</button><button onclick="npClave('actual','3')">3</button>
-            <button onclick="npClave('actual','4')">4</button><button onclick="npClave('actual','5')">5</button><button onclick="npClave('actual','6')">6</button>
-            <button onclick="npClave('actual','7')">7</button><button onclick="npClave('actual','8')">8</button><button onclick="npClave('actual','9')">9</button>
-            <button class="del" onclick="ndClave('actual')">⌫</button><button onclick="npClave('actual','0')">0</button><button class="ok" onclick="siguienteClave()">OK</button>
-          </div>
-          <div class="error-msg" id="claveError"></div>
-          <div class="field-label" id="lblNuevaClave" style="display:none;">Nueva clave (4 dígitos)</div>
-          <div class="pin-dots" id="claveNuevaDots" style="display:none;"><div class="dot" id="cn0"></div><div class="dot" id="cn1"></div><div class="dot" id="cn2"></div><div class="dot" id="cn3"></div></div>
-          <div class="numpad" id="numpadClave2" style="margin-top:8px;display:none;">
-            <button onclick="npClave('nueva','1')">1</button><button onclick="npClave('nueva','2')">2</button><button onclick="npClave('nueva','3')">3</button>
-            <button onclick="npClave('nueva','4')">4</button><button onclick="npClave('nueva','5')">5</button><button onclick="npClave('nueva','6')">6</button>
-            <button onclick="npClave('nueva','7')">7</button><button onclick="npClave('nueva','8')">8</button><button onclick="npClave('nueva','9')">9</button>
-            <button class="del" onclick="ndClave('nueva')">⌫</button><button onclick="npClave('nueva','0')">0</button><button class="ok" onclick="confirmarClave()">OK</button>
-          </div>
-          <button class="btn-secondary" onclick="volverMenu()">← Volver al menú</button>
         </div>
 
         <!-- DESPEDIDA -->
