@@ -360,8 +360,12 @@ function renderServiciosGrid() {
     const badge = tienePendiente
       ? `<div style="position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#ef4444;border:1px solid white;"></div>`
       : "";
+    // Guardar el color de borde en data-attr para usarlo al seleccionar, NO en style inline
+    const estiloBase = tienePendiente ? "position:relative;" : "position:relative;opacity:0.55;";
     return `
-      <div class="servicio-card" id="sc_${s.id}" onclick="seleccionarServicio('${s.id}')" style="position:relative;${tienePendiente ? `border-color:${s.border};` : "opacity:0.55;"}">
+      <div class="servicio-card" id="sc_${s.id}" onclick="seleccionarServicio('${s.id}')"
+           data-border="${s.border}" data-pendiente="${tienePendiente}"
+           style="${estiloBase}">
         ${badge}
         <div class="servicio-icon" style="background:${s.color};">${s.emoji}</div>
         <div class="servicio-nombre">${s.label}</div>
@@ -373,13 +377,25 @@ function renderServiciosGrid() {
 function seleccionarServicio(id) {
   const pendientes = usuarioActual?.serviciosPendientes || {};
 
-  // Resaltar seleccionado
+  // Quitar selección y borde de color de TODOS los servicios
   CATALOGO_SERVICIOS.forEach(s => {
     const el = document.getElementById("sc_" + s.id);
-    if (el) el.classList.remove("seleccionado");
+    if (el) {
+      el.classList.remove("seleccionado");
+      // Restaurar estilo base según si tiene pendiente o no
+      const tienePendiente = el.dataset.pendiente === "true";
+      el.style.borderColor = "";  // Limpiar borde coloreado
+      el.style.opacity = tienePendiente ? "" : "0.55";
+    }
   });
-  const el = document.getElementById("sc_" + id);
-  if (el) el.classList.add("seleccionado");
+
+  // Remarcar SOLO el servicio seleccionado
+  const elSel = document.getElementById("sc_" + id);
+  if (elSel) {
+    elSel.classList.add("seleccionado");
+    elSel.style.borderColor = elSel.dataset.border || "";
+    elSel.style.opacity = "";
+  }
 
   servicioSelPago = id;
   document.getElementById("seleccionError").textContent = "";
@@ -392,9 +408,8 @@ function seleccionarServicio(id) {
   const formArea = document.getElementById("pagoFormArea");
   formArea.style.display = "block";
 
-  // Auto-generar referencia basada en el código
-  const refBase = codigoServicio.replace(/[^0-9]/g, "").slice(0, 6).padStart(6, "0");
-  document.getElementById("pagarRef").value = refBase;
+  // Mostrar el código del servicio como referencia sugerida (editable)
+  document.getElementById("pagarRef").value = codigoServicio;
   document.getElementById("valorServicioDisplay").textContent = fmtCOP(montoServicio);
   document.getElementById("pagarError").textContent = "";
   document.getElementById("pagarMonto").value = "";
@@ -439,7 +454,7 @@ function confirmarPago() {
   const ref = document.getElementById("pagarRef").value.trim();
   const err = document.getElementById("pagarError");
 
-  if (!/^\d{6}$/.test(ref)) { err.textContent = "La referencia debe tener exactamente 6 dígitos."; return; }
+  if (!ref || ref.length < 1) { err.textContent = "Ingrese un número de referencia o factura."; return; }
 
   const pendientes = usuarioActual?.serviciosPendientes || {};
   const info = pendientes[servicioSelPago];
