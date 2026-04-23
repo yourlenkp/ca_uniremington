@@ -1,3 +1,4 @@
+
 /* ══════════════════════════════════════════
    BancoCajero — Grupo 4 | script.js
    ══════════════════════════════════════════ */
@@ -11,6 +12,8 @@ const BASE_USUARIOS = {
     nombre: "JUAN PÉREZ",
     pin: "7731",
     saldo: 2200000,
+    saldoAhorro: 2200000,
+    saldoCorriente: 850000,
     tipo: "Ahorro",
     numeroCuenta: "2001001001",
     serviciosPendientes: {
@@ -25,6 +28,8 @@ const BASE_USUARIOS = {
     nombre: "MARIA JOSE",
     pin: "1234",
     saldo: 1500000,
+    saldoAhorro: 1500000,
+    saldoCorriente: 420000,
     tipo: "Ahorro",
     numeroCuenta: "2001002002",
     serviciosPendientes: {
@@ -39,6 +44,8 @@ const BASE_USUARIOS = {
     nombre: "JOSE ANDRES",
     pin: "5678",
     saldo: 500000,
+    saldoAhorro: 500000,
+    saldoCorriente: 1200000,
     tipo: "Ahorro",
     numeroCuenta: "2001003003",
     serviciosPendientes: {
@@ -53,6 +60,8 @@ const BASE_USUARIOS = {
     nombre: "LUISA FERNANDA",
     pin: "9101",
     saldo: 3000000,
+    saldoAhorro: 3000000,
+    saldoCorriente: 1750000,
     tipo: "Ahorro",
     numeroCuenta: "2001004004",
     serviciosPendientes: {
@@ -86,7 +95,7 @@ const CATALOGO_SERVICIOS = [
 /* ═══════════════ ESTADO ═══════════════ */
 let cedulaIng = "", pinIng = "";
 let usuarioPorCedula = null, usuarioActual = null;
-let saldo = 0, tipo = "Ahorro", monto = 0, don = "N";
+let saldo = 0, saldoAhorro = 0, saldoCorriente = 0, tipo = "Ahorro", monto = 0, don = "N";
 let tipoCajero = "", tarjetaIng = "";
 let intentosFallidos = 0;
 let countdownTimer = null;
@@ -300,7 +309,7 @@ function cargarUsuario(u) {
     ...u,
     serviciosPendientes: JSON.parse(JSON.stringify(u.serviciosPendientes || {}))
   };
-  saldo = u.saldo; tipo = u.tipo;
+  saldo = u.saldo; saldoAhorro = u.saldoAhorro || u.saldo; saldoCorriente = u.saldoCorriente || 0; tipo = u.tipo;
   document.getElementById("usuarioNombreDisplay").textContent = u.nombre;
   document.getElementById("usuarioCedulaDisplay").textContent = u.cedula;
   const primer = u.nombre.split(" ")[0];
@@ -320,6 +329,7 @@ function confirmSaldo() {
 function irOpcion(op) {
   if (op === "retirar") {
     resetRetiro();
+    saldo = saldoAhorro; // Iniciar con saldo Ahorro
     document.getElementById("saldoDisplay").textContent = fmtCOP(saldo);
     scr("Retiro de efectivo", "Seleccione tipo de cuenta y monto.");
     showStep("step3");
@@ -334,6 +344,7 @@ function irOpcion(op) {
     showStep("stepPagarSeleccionar");
   } else if (op === "depositar") {
     resetDeposito();
+    saldo = saldoAhorro; // Iniciar con saldo Ahorro
     document.getElementById("saldoDepDisplay").textContent = fmtCOP(saldo);
     scr("Depósito", "Ingrese la cuenta destino y el monto.");
     showStep("stepDepositar");
@@ -357,16 +368,11 @@ function renderServiciosGrid() {
 
   grid.innerHTML = CATALOGO_SERVICIOS.map(s => {
     const tienePendiente = !!pendientes[s.id];
-    const badge = tienePendiente
-      ? `<div style="position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#ef4444;border:1px solid white;"></div>`
-      : "";
-    // Guardar el color de borde en data-attr para usarlo al seleccionar, NO en style inline
     const estiloBase = tienePendiente ? "position:relative;" : "position:relative;opacity:0.55;";
     return `
       <div class="servicio-card" id="sc_${s.id}" onclick="seleccionarServicio('${s.id}')"
            data-border="${s.border}" data-pendiente="${tienePendiente}"
            style="${estiloBase}">
-        ${badge}
         <div class="servicio-icon" style="background:${s.color};">${s.emoji}</div>
         <div class="servicio-nombre">${s.label}</div>
         ${tienePendiente ? `<div style="font-size:9px;color:#059669;font-weight:700;">Pendiente</div>` : `<div style="font-size:9px;color:#9ca3af;">Al día</div>`}
@@ -522,6 +528,13 @@ function setDepCuenta(c) {
   depCuenta = c;
   document.getElementById("depCuentaAhorro").className    = "radio-opt" + (c === "Ahorro"    ? " selected" : "");
   document.getElementById("depCuentaCorriente").className = "radio-opt" + (c === "Corriente" ? " selected" : "");
+  // Actualizar saldo activo y display según cuenta elegida
+  saldo = c === "Ahorro" ? saldoAhorro : saldoCorriente;
+  document.getElementById("saldoDepDisplay").textContent = fmtCOP(saldo);
+  // Limpiar preview y error al cambiar cuenta
+  const dm = document.getElementById("depositoMonto");   if (dm) dm.value = "";
+  const de = document.getElementById("depositoError");   if (de) de.textContent = "";
+  const dp = document.getElementById("depositoPreview"); if (dp) dp.innerHTML = "";
 }
 
 function valDeposito() {
@@ -585,6 +598,13 @@ function setRetCuenta(c) {
   retCuenta = c;
   document.getElementById("retCuentaAhorro").className    = "radio-opt" + (c === "Ahorro"    ? " selected" : "");
   document.getElementById("retCuentaCorriente").className = "radio-opt" + (c === "Corriente" ? " selected" : "");
+  // Actualizar saldo activo y display según cuenta elegida
+  saldo = c === "Ahorro" ? saldoAhorro : saldoCorriente;
+  document.getElementById("saldoDisplay").textContent = fmtCOP(saldo);
+  // Limpiar monto y errores al cambiar cuenta
+  const mi = document.getElementById("montoInput"); if (mi) mi.value = "";
+  const me = document.getElementById("montoError"); if (me) me.textContent = "";
+  ["qb50","qb100","qb200","qbOtro"].forEach(id => { const el = document.getElementById(id); if (el) el.classList.remove("active"); });
 }
 function setQuick(v) {
   ["qb50","qb100","qb200","qbOtro"].forEach(id => document.getElementById(id).classList.remove("active"));
@@ -727,7 +747,7 @@ function volverMenu() {
 function reiniciar() {
   if (countdownTimer) { clearInterval(countdownTimer); countdownTimer = null; }
   cedulaIng = ""; pinIng = ""; usuarioPorCedula = null; usuarioActual = null;
-  saldo = 0; tipo = "Ahorro"; tipoCajero = ""; tarjetaIng = ""; servicioSelPago = null; intentosFallidos = 0;
+  saldo = 0; saldoAhorro = 0; saldoCorriente = 0; tipo = "Ahorro"; tipoCajero = ""; tarjetaIng = ""; servicioSelPago = null; intentosFallidos = 0;
   updDotsCed(); updDotsPin(); updIntentosDots();
   ["cedulaError","pinError","saldoError"].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = ""; });
   document.getElementById("usuarioNombreDisplay").textContent = "-";
