@@ -1,4 +1,3 @@
-
 /* ══════════════════════════════════════════
    BancoCajero — Grupo 4 | script.js
    ══════════════════════════════════════════ */
@@ -488,13 +487,12 @@ function confirmarPago() {
 
   const serv = CATALOGO_SERVICIOS.find(s => s.id === servicioSelPago);
   const fecha = new Date().toLocaleString("es-CO", { hour:"2-digit", minute:"2-digit", day:"2-digit", month:"short", year:"numeric" });
-  const refOp = Math.floor(Math.random() * 900000 + 100000);
 
   document.getElementById("ticketFinal").innerHTML = `
     <div class="ticket-header">
       <div class="t-logo">Cajero Uniremington • Comprobante</div>
       <div class="t-title">${tipoPago === "abono" ? "Abono de servicio" : "Pago de servicio"}</div>
-      <div class="t-ref">Ref. #${refOp} &nbsp;|&nbsp; ${fecha}</div>
+      <div class="t-ref">${fecha}</div>
     </div>
     <div class="ticket-body">
       <div class="t-section-label">Detalle del pago</div>
@@ -568,13 +566,12 @@ function confirmarDeposito() {
   saldo -= v;
 
   const fecha = new Date().toLocaleString("es-CO", { hour:"2-digit", minute:"2-digit", day:"2-digit", month:"short", year:"numeric" });
-  const refOp = Math.floor(Math.random() * 900000 + 100000);
 
   document.getElementById("ticketFinal").innerHTML = `
     <div class="ticket-header">
       <div class="t-logo">Cajero Uniremington • Comprobante</div>
       <div class="t-title">Depósito realizado</div>
-      <div class="t-ref">Ref. #${refOp} &nbsp;|&nbsp; ${fecha}</div>
+      <div class="t-ref">${fecha}</div>
     </div>
     <div class="ticket-body">
       <div class="t-section-label">Detalle del depósito</div>
